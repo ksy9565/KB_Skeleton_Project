@@ -6,6 +6,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { debounce } from 'lodash-es'; // 또는 직접 구현
 import { useTransactionStore } from '@/stores/transactionStore';
 import { useAuthStore } from '@/stores/authStore';
+import { useBaseStore } from '@/stores/commonStore';
 import { storeToRefs } from 'pinia';
 
 // Chart.js 필수 구성 요소 등록
@@ -13,8 +14,10 @@ ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 const transactionStore = useTransactionStore();
 const authStore = useAuthStore();
-const { transactions, isLoading, categories } = storeToRefs(transactionStore);
+const baseStore = useBaseStore();
 
+const { transactions, isLoading } = storeToRefs(transactionStore);
+const { categories } = storeToRefs(baseStore);
 // 현재 화면 상태
 const windowWidth = ref(window.innerWidth);
 const isMobile = computed(() => windowWidth.value <= 768);
@@ -39,6 +42,7 @@ const loadCategoryData = async () => {
 onMounted(loadCategoryData);
 
 const items = computed(() => {
+  // 전체 중 지출만 남김
   const expenses = transactions.value.filter((t) => t.type === 'expense');
 
   // 전체 지출 합계 계산
@@ -53,40 +57,24 @@ const items = computed(() => {
     return acc;
   }, {});
 
-  return Object.keys(categoryMap).map((catId) => {
-    // categories 배열에서 일치하는 카테고리 정보 찾기
-    const categoryInfo = categories.value.find((c) => c.id === Number(catId));
-    const amount = categoryMap[catId];
+  return Object.keys(categoryMap)
+    .map((catId) => {
+      // categories 배열에서 일치하는 카테고리 정보 찾기
+      const categoryInfo = categories.value.find((c) => c.id === Number(catId));
+      const amount = categoryMap[catId];
 
-    // 퍼센티지 계산 (소수점 첫째 자리까지)
-    const percentage = Number(((amount / totalExpense) * 100).toFixed(1));
+      // 퍼센티지 계산 (소수점 첫째 자리까지)
+      const percentage = Number(((amount / totalExpense) * 100).toFixed(1));
 
-    return {
-      label: categoryInfo ? categoryInfo.name : '미분류',
-      value: percentage,
-      color: categoryInfo ? categoryInfo.color : '#C9CBCF', // 색상이 없을 경우 기본색
-    };
-  });
+      return {
+        label: categoryInfo ? categoryInfo.name : '미분류',
+        value: percentage,
+        color: categoryInfo ? categoryInfo.color : '#C9CBCF', // 색상이 없을 경우 기본색
+      };
+    })
+    .sort((a, b) => b.value - a.value);
 });
 
-const backgroundColors = ref([
-  '#5b21b6',
-  '#4c1d95',
-  '#6d28d9',
-  '#7c3aed',
-  '#8b5cf6',
-  '#a78bfa',
-  '#c4b5fd',
-  '#ddd6fe',
-  '#ede9fe',
-  '#4338ca',
-  '#6366f1',
-  '#818cf8',
-  '#a5b4fc',
-  '#c7d2fe',
-  '#7e22ce',
-  '#9333ea',
-]);
 const chartData = computed(() => {
   if (items.value.length === 0) {
     // 데이터 없을 시
@@ -97,9 +85,7 @@ const chartData = computed(() => {
     datasets: [
       {
         data: items.value.map((i) => i.value),
-        backgroundColor: items.value.map((_, index) => {
-          return backgroundColors.value[index % backgroundColors.value.length];
-        }),
+        backgroundColor: items.value.map((i) => i.color),
         borderWidth: 0,
         hoverOffset: 0,
       },
@@ -124,26 +110,30 @@ const chartOptions = computed(() => ({
       },
     },
     datalabels: {
-      // 모바일일 때 데이터레이블 설정
-      display: isMobile.value,
+      display: true,
       color: '#000', // 글자 색상
       font: {
         size: 11,
       },
       // 레이블 내용 설정 (항목명 + 퍼센트)
       formatter: (value, context) => {
-        const label = context.chart.data.labels[context.dataIndex];
-        return `${label}\n${value}%`;
+        // value를 숫자로 변환 (이미 숫자라면 생략 가능)
+        const numericValue = Number(value);
+
+        // 10.0 이상인 경우에만 레이블 표시
+        if (numericValue >= 9.0) {
+          const label = context.chart.data.labels[context.dataIndex];
+          return `${label}\n${numericValue}%`;
+        }
+
+        // 10.0 미만인 경우 아무것도 표시하지 않음
+        return '';
       },
       textAlign: 'center',
       // 화면 너비가 768px 미만일 때만 레이블 표시
     },
   },
 }));
-
-const chartKey = computed(() =>
-  isMobile.value ? 'mobile-chart' : 'desktop-chart',
-);
 </script>
 
 <template>
@@ -169,13 +159,18 @@ const chartKey = computed(() =>
       </div>
 
       <!-- 반응형 그리드 범례 -->
-      <div class="category-legend" v-if="!isMobile && items.length > 0">
+      <div class="category-legend" v-if="items.length > 0">
         <div
-          v-for="category in items"
+          v-for="(category, index) in items"
           :key="category.label"
           class="category-row"
         >
-          <span class="category-swatch"></span>
+          <span
+            class="category-swatch"
+            :style="{
+              backgroundColor: category.color,
+            }"
+          ></span>
           <div class="category-info">
             <strong class="label">{{ category.label }}</strong>
             <p class="value">{{ category.value }}%</p>
