@@ -65,13 +65,7 @@ const recentTransactions = [
   { type: '지출', title: '정기 구독', amount: '-15,000원', date: '2026-04-01' },
 ];
 
-const weeklyBars = [
-  { label: '1주', income: 42, expense: 28 },
-  { label: '2주', income: 56, expense: 32 },
-  { label: '3주', income: 49, expense: 24 },
-  { label: '4주', income: 64, expense: 36 },
-  { label: '5주', income: 48, expense: 29 },
-];
+const weeklyBars = computed(() => transactionStore.getWeeklyStats());
 
 const monthlyBars = [
   { label: '1월', income: 36, expense: 18 },
