@@ -10,6 +10,19 @@ import DashboardWeeklyChart from '@/components/mainPage/DashboardWeeklyChart.vue
 
 import '@/styles/mainPage/logined.css';
 
+import { computed, onMounted } from 'vue';
+import { useTransactionStore } from '@/stores/transactionStore';
+import { useAuthStore } from '@/stores/authStore';
+
+const transactionStore = useTransactionStore()
+const authStore = useAuthStore();
+
+onMounted(async () => {
+  if (authStore.currentUser) {
+    await transactionStore.fetchTransactions();
+  }
+});
+
 const navigationGroups = [
   {
     title: '계정',
@@ -21,26 +34,20 @@ const navigationGroups = [
   },
 ];
 
-const summaryCards = [
+const summaryCards = computed(() => [
   {
     title: '수입',
-    value: '3,000,000원',
-    change: '+ 8.4% 지난 달 대비',
-    tone: 'positive',
+    value: `${transactionStore.monthlyIncome.toLocaleString()}원`,
   },
   {
     title: '지출',
-    value: '386,000원',
-    change: '- 12.0% 지난 달 대비',
-    tone: 'negative',
+    value: `${transactionStore.monthlyExpense.toLocaleString()}원`,
   },
   {
     title: '잔액',
-    value: '2,614,000원',
-    change: '이번 달 목표 대비 여유 있음',
-    tone: 'accent',
+    value: `${(transactionStore.monthlyIncome - transactionStore.monthlyExpense).toLocaleString()}원`,
   },
-];
+]);
 
 const calendarDays = [
   ['', '', '', '1', '2', '3', '4'],
@@ -58,13 +65,7 @@ const recentTransactions = [
   { type: '지출', title: '정기 구독', amount: '-15,000원', date: '2026-04-01' },
 ];
 
-const weeklyBars = [
-  { label: '1주', income: 42, expense: 28 },
-  { label: '2주', income: 56, expense: 32 },
-  { label: '3주', income: 49, expense: 24 },
-  { label: '4주', income: 64, expense: 36 },
-  { label: '5주', income: 48, expense: 29 },
-];
+const weeklyBars = computed(() => transactionStore.getWeeklyStats());
 
 const monthlyBars = [
   { label: '1월', income: 36, expense: 18 },
@@ -96,10 +97,9 @@ const fixedExpenses = [
     <section class="content-area">
       <DashboardTopSummary
         title="이번 달 자산 흐름"
-        month="2026년 4월"
+        :month="transactionStore.currentMonth.replace('-', '년 ') + '월'"
         balance-label="잔액"
-        balance-value="2,614,000원"
-        description="디자인 템플릿의 카드형 구조를 유지하면서, 이후 컴포넌트 분리가 쉬운 레이아웃으로 구성했습니다."
+        :balance-value="`${transactionStore.totalBalance.toLocaleString()}원`"
         :summary-cards="summaryCards"
       />
 

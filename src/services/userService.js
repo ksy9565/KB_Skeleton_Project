@@ -1,12 +1,11 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://api.your-domain.com',
-  timeout: 5000,
+  baseURL: 'http://localhost:3000',
 });
 
+// 유저 정보 가져오기
 export const fetchUserInfoApi = async (userId) => {
-  // 실제 백엔드 엔드포인트에 맞춰 수정하세요
   const response = await api.get(`/users/${userId}`);
   return response.data;
 };

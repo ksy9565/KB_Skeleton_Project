@@ -1,17 +1,14 @@
 {
   "users": [
-    {
-      "id": 1,
-      "username": "test123",
-      "password": "1234",
-      "name": "최이초",
-      "balance": 100000000,
-      "layoutId": 1
-    }
+    { "id": "user1", "name": "철수", "balance": 1000000 },
+    { "id": "user2", "name": "영희", "balance": 500000 }
   ],
   "transactions": [
+    { "id": 1, "userId": "user1", "type": "income", "amount": 50000, "date": "2026-04-01", "title": "용돈" },
+    { "id": 2, "userId": "user1", "type": "expense", "amount": 10000, "date": "2026-04-02", "title": "커피" },
+    { "id": 3, "userId": "user2", "type": "income", "amount": 200000, "date": "2026-04-01", "title": "월급" }
     {
-      "id": 1,
+      "id": 39,
       "userId": 1,
       "type": "expense",
       "amount": 15000,
@@ -22,7 +19,7 @@
       "isFixed": false
     },
     {
-      "id": 2,
+      "id": 38,
       "userId": 1,
       "type": "income",
       "amount": 2500000,
@@ -33,7 +30,7 @@
       "isFixed": true
     },
     {
-      "id": 3,
+      "id": 37,
       "userId": 1,
       "type": "expense",
       "amount": 5500,
