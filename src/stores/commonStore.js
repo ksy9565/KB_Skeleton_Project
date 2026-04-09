@@ -101,17 +101,23 @@ export const useBaseStore = defineStore('base', () => {
   ]);
 
   const paymentMethods = ref([
-    { id: 1, userId: 1, name: '체크카드' },
-    { id: 2, userId: 1, name: '현금' },
-    { id: 3, userId: 1, name: '신용카드' },
+    { name: '신용카드', color: '#3498db' },
+    { name: '체크카드', color: '#2ecc71' },
+    { name: '현금', color: '	#95a5a6' },
+    { name: '계좌이체', color: '#e67e22' },
   ]);
 
   // ID로 이름을 찾아주는 Getter 함수들
   const getCategoryName = (id) =>
     categories.value.find((c) => c.id === id)?.name;
 
-  const getPaymentMethodsName = (id) =>
-    paymentMethods.value.find((c) => c.id === id)?.name;
+  const getPaymentMethodsColor = (name) =>
+    paymentMethods.value.find((c) => c.name === name)?.color;
 
-  return { categories, paymentMethods, getCategoryName, getPaymentMethodsName };
+  return {
+    categories,
+    paymentMethods,
+    getCategoryName,
+    getPaymentMethodsColor,
+  };
 });

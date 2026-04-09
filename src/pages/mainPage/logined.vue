@@ -7,6 +7,7 @@ import DashboardRecentTransactions from '@/components/mainPage/DashboardRecentTr
 import DashboardSidebar from '@/components/mainPage/DashboardSidebar.vue';
 import DashboardTopSummary from '@/components/mainPage/DashboardTopSummary.vue';
 import DashboardWeeklyChart from '@/components/mainPage/DashboardWeeklyChart.vue';
+import DashboardPaymentMethodsChart from '@/components/mainPage/DashboardPaymentMethodsChart.vue';
 
 import '@/styles/mainPage/logined.css';
 
@@ -14,7 +15,7 @@ import { computed, onMounted } from 'vue';
 import { useTransactionStore } from '@/stores/transactionStore';
 import { useAuthStore } from '@/stores/authStore';
 
-const transactionStore = useTransactionStore()
+const transactionStore = useTransactionStore();
 const authStore = useAuthStore();
 
 onMounted(async () => {
@@ -74,14 +75,6 @@ const monthlyBars = [
   { label: '4월', income: 55, expense: 26 },
 ];
 
-const categorySeries = [
-  { label: '식비', value: 41, color: '#7c3aed' },
-  { label: '교통', value: 21, color: '#9f67ff' },
-  { label: '주거', value: 14, color: '#bba9ff' },
-  { label: '쇼핑', value: 11, color: '#d5ccff' },
-  { label: '기타', value: 13, color: '#ece7ff' },
-];
-
 const fixedExpenses = [
   { label: '주거', value: '월세', amount: '~', helper: '자동이체' },
   { label: '쇼핑', value: '정기 구독', amount: '~', helper: '정기 결제' },
@@ -114,7 +107,8 @@ const fixedExpenses = [
       </section>
 
       <section class="panel-grid lower-grid final-grid">
-        <DashboardCategoryChart :items="categorySeries" />
+        <DashboardCategoryChart />
+        <DashboardPaymentMethodsChart />
         <DashboardFixedExpenseCard :items="fixedExpenses" />
       </section>
     </section>

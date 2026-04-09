@@ -190,7 +190,6 @@ export const useTransactionStore = defineStore('transaction', () => {
     monthlyIncome,
     monthlyExpense,
     totalBalance,
-    categories,
     fetchTransactions,
     addTransaction,
     deleteTransaction,
