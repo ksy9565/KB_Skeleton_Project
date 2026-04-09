@@ -1,0 +1,101 @@
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
+
+export const useBaseStore = defineStore('base', () => {
+  const categories = ref([
+    {
+      id: 1,
+      name: '급여',
+    },
+
+    {
+      id: 2,
+      name: '상여',
+    },
+
+    {
+      id: 3,
+      name: '용돈',
+    },
+
+    {
+      id: 4,
+      name: '부동산',
+    },
+
+    {
+      id: 5,
+      name: '금융',
+    },
+
+    {
+      id: 6,
+      name: '기타',
+    },
+
+    {
+      id: 7,
+      name: '식비',
+    },
+
+    {
+      id: 8,
+      name: '패션/쇼핑',
+    },
+
+    {
+      id: 9,
+      name: '뷰티/미용',
+    },
+
+    {
+      id: 10,
+      name: '교통',
+    },
+
+    {
+      id: 11,
+      name: '주거/통신',
+    },
+
+    {
+      id: 12,
+      name: '의료/건강',
+    },
+
+    {
+      id: 13,
+      name: '문화/여행',
+    },
+
+    {
+      id: 14,
+      name: '경조/선물',
+    },
+
+    {
+      id: 15,
+      name: '반려동물',
+    },
+
+    {
+      id: 16,
+      name: '기타',
+    },
+  ]);
+
+  const paymentMethods = ref([
+    { id: 1, userId: 1, name: '체크카드' },
+    { id: 2, userId: 1, name: '현금' },
+    { id: 3, userId: 1, name: '신용카드' },
+  ]);
+
+  // ID로 이름을 찾아주는 Getter 함수들
+  const getCategoryName = (id) =>
+    categories.value.find((c) => c.id === id)?.name;
+
+  const getPaymentMethodsName = (id) =>
+    paymentMethods.value.find((c) => c.id === id)?.name;
+
+  return { categories, paymentMethods, getCategoryName, getPaymentMethodsName };
+});
