@@ -12,10 +12,15 @@ import '@/styles/mainPage/logined.css';
 
 import { computed, onMounted } from 'vue';
 import { useTransactionStore } from '@/stores/transactionStore';
+import { useAuthStore } from '@/stores/authStore';
 
 const transactionStore = useTransactionStore()
-onMounted(() => {
-  transactionStore.fetchTransactions();
+const authStore = useAuthStore();
+
+onMounted(async () => {
+  if (authStore.currentUser) {
+    await transactionStore.fetchTransactions();
+  }
 });
 
 const navigationGroups = [
