@@ -16,10 +16,6 @@ defineProps({
     type: String,
     required: true,
   },
-  description: {
-    type: String,
-    required: true,
-  },
   summaryCards: {
     type: Array,
     required: true,
@@ -31,14 +27,8 @@ defineProps({
   <header class="page-top-summary">
     <div class="page-header">
       <div>
-        <p class="section-label">대시보드</p>
+        <p class="section-label"></p>
         <h1>{{ title }}</h1>
-        <p class="section-description">{{ description }}</p>
-      </div>
-
-      <div class="header-summary">
-        <span>{{ month }}</span>
-        <strong>{{ balanceLabel }} : {{ balanceValue }}</strong>
       </div>
     </div>
 
@@ -47,11 +37,10 @@ defineProps({
         v-for="card in summaryCards"
         :key="card.title"
         class="summary-card"
-        :class="card.tone"
+        :class="card"
       >
         <p>{{ card.title }}</p>
         <strong>{{ card.value }}</strong>
-        <span>{{ card.change }}</span>
       </article>
     </section>
   </header>
