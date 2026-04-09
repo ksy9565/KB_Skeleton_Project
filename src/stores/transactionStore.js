@@ -74,7 +74,88 @@ export const useTransactionStore = defineStore('transaction', () => {
 
   const getRecentTransactions = computed((limit = 10) => {});
 
-  function getWeeklyStats() {}
+  function getWeeklyStats() {
+    const weeksInMonth = new Map();
+
+    monthlyTransactions.value.forEach((transaction) => {
+      const dayOfMonth = new Date(transaction.date).getDate();
+      const weekNumber = Math.ceil(dayOfMonth / 7);
+
+      if (!weeksInMonth.has(weekNumber)) {
+        weeksInMonth.set(weekNumber, {
+          label: `${weekNumber}주`,
+          income: 0,
+          expense: 0,
+        });
+      }
+
+      const weeklyStat = weeksInMonth.get(weekNumber);
+
+      if (transaction.type === 'income') {
+        weeklyStat.income += transaction.amount;
+      }
+
+      if (transaction.type === 'expense') {
+        weeklyStat.expense += transaction.amount;
+      }
+    });
+
+    const lastDayOfMonth = new Date(
+      Number(currentMonth.value.slice(0, 4)),
+      Number(currentMonth.value.slice(5, 7)),
+      0,
+    ).getDate();
+    const totalWeeks = Math.ceil(lastDayOfMonth / 7);
+
+    return Array.from({ length: totalWeeks }, (_, index) => {
+      const weekNumber = index + 1;
+
+      return (
+        weeksInMonth.get(weekNumber) ?? {
+          label: `${weekNumber}주`,
+          income: 0,
+          expense: 0,
+        }
+      );
+    });
+  }
+
+  function getMonthlyStats() {
+    const monthFormatter = new Intl.DateTimeFormat('ko-KR', { month: 'numeric' });
+    const monthStats = new Map();
+    const [currentYear, currentMonthNumber] = currentMonth.value.split('-').map(Number);
+
+    for (let offset = 3; offset >= 0; offset -= 1) {
+      const date = new Date(currentYear, currentMonthNumber - 1 - offset, 1);
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+
+      monthStats.set(monthKey, {
+        label: `${monthFormatter.format(date)}월`,
+        income: 0,
+        expense: 0,
+      });
+    }
+
+    transactions.value.forEach((transaction) => {
+      const monthKey = transaction.date.slice(0, 7);
+
+      if (!monthStats.has(monthKey)) {
+        return;
+      }
+
+      const monthlyStat = monthStats.get(monthKey);
+
+      if (transaction.type === 'income') {
+        monthlyStat.income += transaction.amount;
+      }
+
+      if (transaction.type === 'expense') {
+        monthlyStat.expense += transaction.amount;
+      }
+    });
+
+    return Array.from(monthStats.values());
+  }
 
   function getCategoryStats() {}
 
@@ -89,5 +170,7 @@ export const useTransactionStore = defineStore('transaction', () => {
     fetchTransactions,
     addTransaction,
     deleteTransaction,
+    getWeeklyStats,
+    getMonthlyStats,
   };
 });
