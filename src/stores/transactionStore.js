@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import axios from 'axios';
+import { transactionService } from '@/services/transactionService';
 
 
 export const useTransactionStore = defineStore('transaction', () => {
@@ -40,9 +40,9 @@ export const useTransactionStore = defineStore('transaction', () => {
   // 1. 거래 가져오기
   async function fetchTransactions(){
     try {
-      const res = await axios.get('http://localhost:3000/transactions');
-      transactions.value = res.data;
-      console.log("데이터 로드 성공: ", res.data);
+      const data = await transactionService.getTransactions();
+      transactions.value = data;
+      console.log("데이터 로드 성공: ", data);
     } catch (error) {
       console.error("데이터 로드 실패: ", error);
     }
