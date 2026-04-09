@@ -4,16 +4,16 @@ import { Pie } from 'vue-chartjs';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { debounce } from 'lodash-es'; // 또는 직접 구현
+import { useTransactionStore } from '@/stores/transactionStore';
+import { useAuthStore } from '@/stores/authStore';
+import { storeToRefs } from 'pinia';
 
 // Chart.js 필수 구성 요소 등록
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-const props = defineProps({
-  items: {
-    type: Array,
-    required: true,
-  },
-});
+const transactionStore = useTransactionStore();
+const authStore = useAuthStore();
+const { transactions, isLoading, categories } = storeToRefs(transactionStore);
 
 // 현재 화면 상태
 const windowWidth = ref(window.innerWidth);
@@ -27,18 +27,85 @@ const updateWidth = debounce(() => {
 onMounted(() => window.addEventListener('resize', updateWidth));
 onUnmounted(() => window.removeEventListener('resize', updateWidth));
 
-// Chart.js 데이터 형식으로 변환
-const chartData = computed(() => ({
-  labels: props.items.map((item) => item.label),
-  datasets: [
-    {
-      backgroundColor: props.items.map((item) => item.color),
-      data: props.items.map((item) => item.value),
-      borderWidth: 0, // 경계선 제거 (깔끔한 디자인)
-      hoverOffset: 0, // 호버 시 조각이 튀어나오는 효과
-    },
-  ],
-}));
+const loadCategoryData = async () => {
+  // const userId = authStore.currentUser?.id;
+  const userId = 1;
+  if (!userId) return;
+
+  //예: 2026년 4월 데이터 조회
+  await transactionStore.getCategoryStats(userId, '2026-04-01', '2026-04-30');
+};
+
+onMounted(loadCategoryData);
+
+const items = computed(() => {
+  const expenses = transactions.value.filter((t) => t.type === 'expense');
+
+  // 전체 지출 합계 계산
+  const totalExpense = expenses.reduce((sum, t) => sum + t.amount, 0);
+
+  // 데이터가 없으면 빈 배열 반환
+  if (totalExpense === 0) return { labels: [], datasets: [] };
+
+  // 카테고리별 금액 합산
+  const categoryMap = expenses.reduce((acc, t) => {
+    acc[t.categoryId] = (acc[t.categoryId] || 0) + t.amount;
+    return acc;
+  }, {});
+
+  return Object.keys(categoryMap).map((catId) => {
+    // categories 배열에서 일치하는 카테고리 정보 찾기
+    const categoryInfo = categories.value.find((c) => c.id === Number(catId));
+    const amount = categoryMap[catId];
+
+    // 퍼센티지 계산 (소수점 첫째 자리까지)
+    const percentage = Number(((amount / totalExpense) * 100).toFixed(1));
+
+    return {
+      label: categoryInfo ? categoryInfo.name : '미분류',
+      value: percentage,
+      color: categoryInfo ? categoryInfo.color : '#C9CBCF', // 색상이 없을 경우 기본색
+    };
+  });
+});
+
+const backgroundColors = ref([
+  '#5b21b6',
+  '#4c1d95',
+  '#6d28d9',
+  '#7c3aed',
+  '#8b5cf6',
+  '#a78bfa',
+  '#c4b5fd',
+  '#ddd6fe',
+  '#ede9fe',
+  '#4338ca',
+  '#6366f1',
+  '#818cf8',
+  '#a5b4fc',
+  '#c7d2fe',
+  '#7e22ce',
+  '#9333ea',
+]);
+const chartData = computed(() => {
+  if (items.value.length === 0) {
+    // 데이터 없을 시
+    return { labels: [], datasets: [] };
+  }
+  return {
+    labels: items.value.map((i) => i.label),
+    datasets: [
+      {
+        data: items.value.map((i) => i.value),
+        backgroundColor: items.value.map((_, index) => {
+          return backgroundColors.value[index % backgroundColors.value.length];
+        }),
+        borderWidth: 0,
+        hoverOffset: 0,
+      },
+    ],
+  };
+});
 
 // Chart.js 옵션 설정
 const chartOptions = computed(() => ({
@@ -51,13 +118,14 @@ const chartOptions = computed(() => ({
       callbacks: {
         label: (context) => {
           const label = context.label || '';
-          const value = context.parsed || 0;
+          const value = context.raw || 0;
           return ` ${label}: ${value}%`;
         },
       },
     },
     datalabels: {
-      // 데이터레이블 설정
+      // 모바일일 때 데이터레이블 설정
+      display: isMobile.value,
       color: '#000', // 글자 색상
       font: {
         size: 11,
@@ -69,10 +137,10 @@ const chartOptions = computed(() => ({
       },
       textAlign: 'center',
       // 화면 너비가 768px 미만일 때만 레이블 표시
-      display: isMobile.value,
     },
   },
 }));
+
 const chartKey = computed(() =>
   isMobile.value ? 'mobile-chart' : 'desktop-chart',
 );
@@ -82,26 +150,32 @@ const chartKey = computed(() =>
   <article class="panel chart-panel">
     <div class="panel-head">
       <p class="panel-label">카테고리별 지출</p>
+      <div v-if="isLoading" class="loader">불러오는 중입니다.</div>
       <button type="button">이번 달</button>
     </div>
 
     <div class="chart-area pie-layout">
       <!-- 차트 컨테이너 -->
       <div class="pie-chart-container">
-        <Pie :key="chartKey" :data="chartData" :options="chartOptions" />
+        <Pie
+          v-if="items.length > 0"
+          :key="chartKey"
+          :data="chartData"
+          :options="chartOptions"
+        />
+        <div v-else-if="!isLoading" class="no-data">
+          이번 달 지출 내역이 없습니다.
+        </div>
       </div>
 
       <!-- 반응형 그리드 범례 -->
-      <div class="category-legend" v-if="!isMobile">
+      <div class="category-legend" v-if="!isMobile && items.length > 0">
         <div
           v-for="category in items"
           :key="category.label"
           class="category-row"
         >
-          <span
-            class="category-swatch"
-            :style="{ background: category.color }"
-          ></span>
+          <span class="category-swatch"></span>
           <div class="category-info">
             <strong class="label">{{ category.label }}</strong>
             <p class="value">{{ category.value }}%</p>
