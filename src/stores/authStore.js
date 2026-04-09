@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
+import { fetchUserInfoApi } from '@/services/userService';
 
 export const useAuthStore = defineStore('auth', () => {
   // State: 사용자 정보 저장 변수
@@ -42,7 +43,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const data = await fetchUserInfoApi(userId);
       // API 응답 데이터를 state에 저장
-      currentUser.value = data;
+      login(data);
     } catch (err) {
       console.error('사용자 정보 로딩 실패:', err);
       error.value = err.message;

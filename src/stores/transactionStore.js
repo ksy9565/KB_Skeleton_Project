@@ -1,13 +1,17 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { transactionService } from '@/services/transactionService';
+import { useAuthStore } from './authStore';
 
 
 export const useTransactionStore = defineStore('transaction', () => {
   // State
+  const authStore = useAuthStore();
   const transactions = ref([]);
   const budgets = ref([]);
   const currentMonth = ref(new Date().toISOString().slice(0, 7));
+
+  console.log(authStore.currentUser);
 
   // Getters
   // 1. 월별 거래내역 필터링
@@ -31,16 +35,24 @@ export const useTransactionStore = defineStore('transaction', () => {
 
   // 4. 총 자산
   const totalBalance = computed(() => {
-    return transactions.value.reduce((acc, cur) => {
+    const initialBalance = authStore.currentUser?.balance || 0;
+    const historySum = transactions.value.reduce((acc, cur) => {
       return cur.type === 'income' ? acc + cur.amount : acc - cur.amount;
     }, 0);
+    return initialBalance + historySum;
   });
 
   // Actions
-  // 1. 거래 가져오기
+  // 1. 현재 로그인한 유저의 거래 내역 가져오기
   async function fetchTransactions(){
+    const userId = authStore.currentUser?.id;
+    if (!userId) {
+      console.warn('로그인한 유저 정보가 없어 내역을 불러올 수 없습니다.');
+      return;
+    }
+
     try {
-      const data = await transactionService.getTransactions();
+      const data = await transactionService.getTransactionsByUserId(userId);
       transactions.value = data;
       console.log("데이터 로드 성공: ", data);
     } catch (error) {
