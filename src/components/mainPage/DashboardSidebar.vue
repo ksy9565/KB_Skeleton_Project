@@ -1,5 +1,6 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
   groups: {
@@ -8,8 +9,41 @@ const props = defineProps({
   },
 });
 
+const router = useRouter();
+const route = useRoute();
 const mobileMenuOpen = ref(false);
 const isMobile = ref(false);
+const DASHBOARD_LABEL = '대시보드';
+const LEDGER_LABEL = '가계부';
+
+const navigateToItem = (item) => {
+  const normalizedItem = item.trim();
+
+  if (normalizedItem === LEDGER_LABEL) {
+    router.push({ name: 'ledger' });
+    closeMenu();
+    return;
+  }
+
+  if (normalizedItem === DASHBOARD_LABEL) {
+    router.push({ name: 'main' });
+    closeMenu();
+  }
+};
+
+const isActiveItem = (item) => {
+  const normalizedItem = item.trim();
+
+  if (normalizedItem === LEDGER_LABEL) {
+    return route.name === 'ledger';
+  }
+
+  if (normalizedItem === DASHBOARD_LABEL) {
+    return route.name === 'main';
+  }
+
+  return false;
+};
 
 const syncViewport = () => {
   isMobile.value = window.innerWidth <= 1180;
@@ -81,7 +115,13 @@ onBeforeUnmount(() => {
         <h3>{{ group.title }}</h3>
         <ul>
           <li v-for="item in group.items" :key="item">
-            <button type="button">{{ item }}</button>
+            <button
+              type="button"
+              :class="{ 'is-active': isActiveItem(item) }"
+              @click="navigateToItem(item)"
+            >
+              {{ item }}
+            </button>
           </li>
         </ul>
       </section>
@@ -123,7 +163,13 @@ onBeforeUnmount(() => {
             <h3>{{ group.title }}</h3>
             <ul>
               <li v-for="item in group.items" :key="item">
-                <button type="button">{{ item }}</button>
+                <button
+                  type="button"
+                  :class="{ 'is-active': isActiveItem(item) }"
+                  @click="navigateToItem(item)"
+                >
+                  {{ item }}
+                </button>
               </li>
             </ul>
           </section>

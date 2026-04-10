@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import MainPage from '../pages/main.vue';
 import LoginPage from '../pages/login/loginPage.vue';
+import LedgerPage from '../pages/ledger/ledgerPage.vue';
 import RegisterPage from '../pages/login/register.vue';
 
 const router = createRouter({
@@ -28,6 +29,11 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: RegisterPage,
+    },
+    {
+      path: '/ledger',
+      name: 'ledger',
+      component: LedgerPage,
     },
   ],
 });
