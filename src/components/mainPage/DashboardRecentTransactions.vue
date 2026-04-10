@@ -1,18 +1,27 @@
 <script setup>
 // 1. 모듈 임포트
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useTransactionStore } from '@/stores/transactionStore';
 import { useAuthStore } from '@/stores/authStore';
 import { storeToRefs } from 'pinia';
-
+import addTransactionModal from '@/pages/subPage/addTransactionModal.vue';
+import { useBaseStore } from '@/stores/commonStore';
+const modalOpen = ref(false);
 // 2. ChartJS 플러그인 등록
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 // 3. 스토어 설정
 const transactionStore = useTransactionStore();
 const authStore = useAuthStore();
+const userId = computed(() => authStore.currentUser?.id || 'guest');
+const baseStore = useBaseStore();
+const { categories, paymentMethods } = storeToRefs(baseStore);
+
+const handleSave = (data) => {
+  modalOpen.value = false;
+};
 
 const { transactions } = storeToRefs(transactionStore);
 
@@ -49,7 +58,9 @@ const items = computed(() => {
   <article class="panel recent-panel">
     <div class="panel-head">
       <p class="panel-label">최근 거래 내역</p>
-      <button type="button" @click="$router.push('/transactions')">상세</button>
+      <button type="button" @click="modalOpen = true" class="btn-add">
+        상세
+      </button>
     </div>
 
     <ul class="transaction-list">
@@ -84,5 +95,12 @@ const items = computed(() => {
       </div>
       <li v-else class="transaction-item no-data">내역이 존재하지 않습니다.</li>
     </ul>
+    <addTransactionModal
+      :is-open="modalOpen"
+      :userId="userId"
+      :categories="categories"
+      :paymentMethods="paymentMethods"
+      @close="modalOpen = false"
+    />
   </article>
 </template>
