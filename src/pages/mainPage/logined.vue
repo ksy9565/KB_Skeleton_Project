@@ -77,8 +77,7 @@ const categorySeries = [
 const fixedExpenses = [
   { label: '주거', value: '월세', amount: '~', helper: '자동이체' },
   { label: '쇼핑', value: '정기 구독', amount: '~', helper: '정기 결제' },
-  { label: '교통', value: '교통카드', amount: '~', helper: '충전 예정' },
-  { label: '총계', value: '고정 지출', amount: '~', helper: '월간 합산' },
+  { label: '교통', value: '교통카드', amount: '~', helper: '충전 예정' }
 ];
 </script>
 
@@ -97,7 +96,7 @@ const fixedExpenses = [
 
       <section class="panel-grid upper-grid">
         <DashboardCalendarPanel/>
-        <DashboardRecentTransactions :items="recentTransactions" />
+        <DashboardRecentTransactions/>
       </section>
 
       <section class="panel-grid lower-grid">
