@@ -1,7 +1,37 @@
 {
   "users": [
-    { "id": "user1", "username": "test1", "password": "1234", "name": "철수", "balance": 1000000, "layoutId": 1},
-    { "id": "user2", "username": "test2", "password": "1234", "name": "영희", "balance": 500000, "layoutId": 2}
+    {
+      "id": "user1",
+      "username": "test1",
+      "password": "1234",
+      "name": "철수",
+      "balance": 1000000,
+      "layoutId": 1
+    },
+    {
+      "id": "user2",
+      "username": "test2",
+      "password": "1234",
+      "name": "영희",
+      "balance": 500000,
+      "layoutId": 2
+    },
+    {
+      "username": "test",
+      "name": "정준",
+      "password": "1234",
+      "balance": 0,
+      "layoutId": 1,
+      "id": "n6K3AIp"
+    },
+    {
+      "username": "jjeong2",
+      "name": "준",
+      "password": "1234",
+      "balance": 0,
+      "layoutId": 1,
+      "id": "-yx5KNy"
+    }
   ],
   "transactions": [
     {
@@ -27,391 +57,6 @@
       "amount": 200000,
       "date": "2026-04-01",
       "title": "월급"
-    },
-    {
-      "id": 39,
-      "userId": 1,
-      "type": "expense",
-      "amount": 15000,
-      "categoryId": 1,
-      "paymentMethod": "현금",
-      "date": "2026-04-08",
-      "memo": "점심 식사",
-      "isFixed": false
-    },
-    {
-      "id": 38,
-      "userId": 1,
-      "type": "income",
-      "amount": 2500000,
-      "categoryId": 1,
-      "paymentMethod": "계좌이체",
-      "date": "2026-04-01",
-      "memo": "4월 급여",
-      "isFixed": true
-    },
-    {
-      "id": 37,
-      "userId": 1,
-      "type": "expense",
-      "amount": 5500,
-      "categoryId": 7,
-      "paymentMethod": "신용카드",
-      "date": "2026-04-01",
-      "memo": "아이스 아메리카노",
-      "isFixed": false
-    },
-    {
-      "id": 4,
-      "userId": 1,
-      "type": "expense",
-      "amount": 45000,
-      "categoryId": 11,
-      "paymentMethod": "체크카드",
-      "date": "2026-04-02",
-      "memo": "통신비 자동이체",
-      "isFixed": true
-    },
-    {
-      "id": 5,
-      "userId": 1,
-      "type": "expense",
-      "amount": 12000,
-      "categoryId": 7,
-      "paymentMethod": "신용카드",
-      "date": "2026-04-02",
-      "memo": "저녁 햄버거 세트",
-      "isFixed": false
-    },
-    {
-      "id": 6,
-      "userId": 1,
-      "type": "expense",
-      "amount": 2500,
-      "categoryId": 10,
-      "paymentMethod": "체크카드",
-      "date": "2026-04-03",
-      "memo": "시내버스 이용",
-      "isFixed": false
-    },
-    {
-      "id": 7,
-      "userId": 1,
-      "type": "expense",
-      "amount": 68000,
-      "categoryId": 8,
-      "paymentMethod": "신용카드",
-      "date": "2026-04-03",
-      "memo": "봄 셔츠 구매",
-      "isFixed": false
-    },
-    {
-      "id": 8,
-      "userId": 1,
-      "type": "expense",
-      "amount": 18500,
-      "categoryId": 7,
-      "paymentMethod": "현금",
-      "date": "2026-04-04",
-      "memo": "친구와 떡볶이",
-      "isFixed": false
-    },
-    {
-      "id": 9,
-      "userId": 1,
-      "type": "income",
-      "amount": 50000,
-      "categoryId": 3,
-      "paymentMethod": "현금",
-      "date": "2026-04-05",
-      "memo": "부모님 용돈",
-      "isFixed": false
-    },
-    {
-      "id": 10,
-      "userId": 1,
-      "type": "expense",
-      "amount": 9500,
-      "categoryId": 12,
-      "paymentMethod": "체크카드",
-      "date": "2026-04-05",
-      "memo": "감기약 구매",
-      "isFixed": false
-    },
-    {
-      "id": 11,
-      "userId": 1,
-      "type": "expense",
-      "amount": 120000,
-      "categoryId": 11,
-      "paymentMethod": "신용카드",
-      "date": "2026-04-06",
-      "memo": "아파트 관리비",
-      "isFixed": true
-    },
-    {
-      "id": 12,
-      "userId": 1,
-      "type": "expense",
-      "amount": 8500,
-      "categoryId": 7,
-      "paymentMethod": "신용카드",
-      "date": "2026-04-07",
-      "memo": "편의점 도시락",
-      "isFixed": false
-    },
-    {
-      "id": 13,
-      "userId": 1,
-      "type": "expense",
-      "amount": 15000,
-      "categoryId": 7,
-      "paymentMethod": "현금",
-      "date": "2026-04-08",
-      "memo": "점심 식사",
-      "isFixed": false
-    },
-    {
-      "id": 14,
-      "userId": 1,
-      "type": "expense",
-      "amount": 32000,
-      "categoryId": 13,
-      "paymentMethod": "신용카드",
-      "date": "2026-04-09",
-      "memo": "영화 관람 및 팝콘",
-      "isFixed": false
-    },
-    {
-      "id": 15,
-      "userId": 1,
-      "type": "expense",
-      "amount": 4500,
-      "categoryId": 10,
-      "paymentMethod": "체크카드",
-      "date": "2026-04-10",
-      "memo": "지하철 환승",
-      "isFixed": false
-    },
-    {
-      "id": 16,
-      "userId": 1,
-      "type": "expense",
-      "amount": 55000,
-      "categoryId": 15,
-      "paymentMethod": "신용카드",
-      "date": "2026-04-11",
-      "memo": "강아지 사료",
-      "isFixed": false
-    },
-    {
-      "id": 17,
-      "userId": 1,
-      "type": "expense",
-      "amount": 9000,
-      "categoryId": 7,
-      "paymentMethod": "현금",
-      "date": "2026-04-12",
-      "memo": "분식집 라면",
-      "isFixed": false
-    },
-    {
-      "id": 18,
-      "userId": 1,
-      "type": "income",
-      "amount": 120000,
-      "categoryId": 5,
-      "paymentMethod": "계좌이체",
-      "date": "2026-04-13",
-      "memo": "주식 배당금",
-      "isFixed": false
-    },
-    {
-      "id": 19,
-      "userId": 1,
-      "type": "expense",
-      "amount": 22000,
-      "categoryId": 9,
-      "paymentMethod": "체크카드",
-      "date": "2026-04-14",
-      "memo": "미용실 커트",
-      "isFixed": false
-    },
-    {
-      "id": 20,
-      "userId": 1,
-      "type": "expense",
-      "amount": 11000,
-      "categoryId": 7,
-      "paymentMethod": "신용카드",
-      "date": "2026-04-15",
-      "memo": "카페 샌드위치",
-      "isFixed": false
-    },
-    {
-      "id": 21,
-      "userId": 1,
-      "type": "expense",
-      "amount": 50000,
-      "categoryId": 14,
-      "paymentMethod": "계좌이체",
-      "date": "2026-04-16",
-      "memo": "친구 결혼식 축의금",
-      "isFixed": false
-    },
-    {
-      "id": 22,
-      "userId": 1,
-      "type": "expense",
-      "amount": 3500,
-      "categoryId": 10,
-      "paymentMethod": "체크카드",
-      "date": "2026-04-17",
-      "memo": "공영 주차장 요금",
-      "isFixed": false
-    },
-    {
-      "id": 23,
-      "userId": 1,
-      "type": "expense",
-      "amount": 75000,
-      "categoryId": 7,
-      "paymentMethod": "신용카드",
-      "date": "2026-04-18",
-      "memo": "마트 장보기",
-      "isFixed": false
-    },
-    {
-      "id": 24,
-      "userId": 1,
-      "type": "expense",
-      "amount": 14000,
-      "categoryId": 13,
-      "paymentMethod": "신용카드",
-      "date": "2026-04-19",
-      "memo": "서점 도서 구매",
-      "isFixed": false
-    },
-    {
-      "id": 25,
-      "userId": 1,
-      "type": "expense",
-      "amount": 6000,
-      "categoryId": 7,
-      "paymentMethod": "현금",
-      "date": "2026-04-20",
-      "memo": "토스트 아침",
-      "isFixed": false
-    },
-    {
-      "id": 26,
-      "userId": 1,
-      "type": "expense",
-      "amount": 80000,
-      "categoryId": 12,
-      "paymentMethod": "신용카드",
-      "date": "2026-04-21",
-      "memo": "치과 진료비",
-      "isFixed": false
-    },
-    {
-      "id": 27,
-      "userId": 1,
-      "type": "income",
-      "amount": 300000,
-      "categoryId": 2,
-      "paymentMethod": "계좌이체",
-      "date": "2026-04-22",
-      "memo": "프로젝트 성과금",
-      "isFixed": false
-    },
-    {
-      "id": 28,
-      "userId": 1,
-      "type": "expense",
-      "amount": 13000,
-      "categoryId": 7,
-      "paymentMethod": "체크카드",
-      "date": "2026-04-23",
-      "memo": "제육덮밥 점심",
-      "isFixed": false
-    },
-    {
-      "id": 29,
-      "userId": 1,
-      "type": "expense",
-      "amount": 28000,
-      "categoryId": 8,
-      "paymentMethod": "신용카드",
-      "date": "2026-04-24",
-      "memo": "양말 세트 구매",
-      "isFixed": false
-    },
-    {
-      "id": 30,
-      "userId": 1,
-      "type": "expense",
-      "amount": 5000,
-      "categoryId": 16,
-      "paymentMethod": "현금",
-      "date": "2026-04-25",
-      "memo": "로또 복권",
-      "isFixed": false
-    },
-    {
-      "id": 31,
-      "userId": 1,
-      "type": "expense",
-      "amount": 42000,
-      "categoryId": 7,
-      "paymentMethod": "신용카드",
-      "date": "2026-04-26",
-      "memo": "주말 외식 (파스타)",
-      "isFixed": false
-    },
-    {
-      "id": 32,
-      "userId": 1,
-      "type": "expense",
-      "amount": 1500,
-      "categoryId": 10,
-      "paymentMethod": "체크카드",
-      "date": "2026-04-27",
-      "memo": "편의점 생수",
-      "isFixed": false
-    },
-    {
-      "id": 33,
-      "userId": 1,
-      "type": "expense",
-      "amount": 110000,
-      "categoryId": 4,
-      "paymentMethod": "계좌이체",
-      "date": "2026-04-28",
-      "memo": "월세 보조금 입금",
-      "isFixed": true
-    },
-    {
-      "id": 34,
-      "userId": 1,
-      "type": "income",
-      "amount": 15000,
-      "categoryId": 6,
-      "paymentMethod": "현금",
-      "date": "2026-04-29",
-      "memo": "당근마켓 물건 판매",
-      "isFixed": false
-    },
-    {
-      "id": 35,
-      "userId": 1,
-      "type": "expense",
-      "amount": 25000,
-      "categoryId": 9,
-      "paymentMethod": "신용카드",
-      "date": "2026-04-30",
-      "memo": "화장품(스킨) 구매",
-      "isFixed": false
     }
   ],
   "catgories": [
@@ -419,77 +64,62 @@
       "id": 1,
       "name": "급여"
     },
-
     {
       "id": 2,
       "name": "상여"
     },
-
     {
       "id": 3,
       "name": "용돈"
     },
-
     {
       "id": 4,
       "name": "부동산"
     },
-
     {
       "id": 5,
       "name": "금융"
     },
-
     {
       "id": 6,
       "name": "기타"
     },
-
     {
       "id": 7,
       "name": "식비"
     },
-
     {
       "id": 8,
       "name": "패션/쇼핑"
     },
-
     {
       "id": 9,
       "name": "뷰티/미용"
     },
-
     {
       "id": 10,
       "name": "교통"
     },
-
     {
       "id": 11,
       "name": "주거/통신"
     },
-
     {
       "id": 12,
       "name": "의료/건강"
     },
-
     {
       "id": 13,
       "name": "문화/여행"
     },
-
     {
       "id": 14,
       "name": "경조/선물"
     },
-
     {
       "id": 15,
       "name": "반려동물"
     },
-
     {
       "id": 16,
       "name": "기타"
@@ -509,13 +139,11 @@
       "userId": 1,
       "name": "체크카드"
     },
-
     {
       "id": 2,
       "userId": 1,
       "name": "현금"
     },
-
     {
       "id": 3,
       "userId": 1,
@@ -527,12 +155,10 @@
       "id": 1,
       "shape": "normal"
     },
-
     {
       "id": 2,
       "shape": "minimal"
     },
-
     {
       "id": 3,
       "shape": "goal"
