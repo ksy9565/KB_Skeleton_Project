@@ -62,26 +62,24 @@ export const useTransactionStore = defineStore('transaction', () => {
   }
 
   function addTransaction(transaction) {
-    // 1. 거래 추가
     transactions.value.push({ ...transaction, id: Date.now() });
-
-    // 2. (선택사항) Auth 스토어의 잔액(balance) 업데이트 로직 연결 가능
   }
 
-  async function updateTransaction(id, data) {
+  const updateTransaction = async (id, updateData) => {
     try {
-      await transactionService.updateTransaction(id, data);
-
+      await transactionService.updateTransaction(id, updateData);
       const index = transactions.value.findIndex((t) => t.id === id);
       if (index !== -1) {
-        transactions.value[index] = { ...transactions.value[index], ...data };
-        console.log('스토어 업데이트 완료:', transactions.value[index]);
+        transactions.value[index] = {
+          ...transactions.value[index],
+          ...updateData,
+        };
       }
     } catch (error) {
-      console.error('스토어 업데이트 실패:', error);
+      console.error('Store update error:', error);
       throw error;
     }
-  }
+  };
   function deleteTransaction(id) {
     transactions.value = transactions.value.filter((t) => t.id !== id);
   }
@@ -190,5 +188,6 @@ export const useTransactionStore = defineStore('transaction', () => {
     deleteTransaction,
     getWeeklyStats,
     getMonthlyStats,
+    updateTransaction,
   };
 });
