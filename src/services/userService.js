@@ -27,3 +27,9 @@ export const loginUserApi = async (username, password) => {
   }
   return null;
 };
+
+// 아이디 중복 검사
+export const checkUsernameApi = async (username) => {
+  const response = await api.get('/users', { params: { username } });
+  return response.data.length > 0;
+};

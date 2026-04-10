@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { fetchUserInfoApi, registerUserApi, loginUserApi } from '@/services/userService';
+import { fetchUserInfoApi, registerUserApi, loginUserApi, checkUsernameApi } from '@/services/userService';
 
 export const useAuthStore = defineStore('auth', () => {
   const currentUser = ref(null); // 현재 로그인한 사용자 객체
@@ -48,16 +48,23 @@ export const useAuthStore = defineStore('auth', () => {
     isLoading.value = true;
     error.value = null;
     try {
+      const isDuplicated = await checkUsernameApi(userData.username);
+      if (isDuplicated) {
+        error.value = "이미 사용 중인 아이디입니다.";
+        return false;
+      }
+
       const newUser = {
         ...userData,
         balance: 0,
         layoutId: 1
       };
-      const result = await registerUserApi(newUser);
-      return result;
+
+      await registerUserApi(newUser);
+      return true;
     } catch (err) {
       error.value = "회원가입에 실패했습니다.";
-      throw err;
+      return false;
     } finally {
       isLoading.value = false;
     }
