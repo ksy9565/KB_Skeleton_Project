@@ -1,10 +1,13 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useTransactionStore } from '@/stores/transactionStore';
 import { useBaseStore } from '@/stores/commonStore';
 
 const transactionStore = useTransactionStore();
 const baseStore = useBaseStore();
+
+const MAX_DISPLAY_COUNT = 5; // 화면에 보여줄 최대 항목 수
+const isModalOpen = ref(false); // 모달 상태
 
 // 1. 고정 지출 항목 필터링
 const fixedExpenses = computed(() => {
@@ -22,25 +25,39 @@ const getDayOnly = (dateString) => {
   const day = new Date(dateString).getDate();
   return `${day}일`;
 };
+
+// 4. 화면에 표시할 만큼만 자른 데이터
+const displayExpenses = computed(() => {
+  return fixedExpenses.value.slice(0, MAX_DISPLAY_COUNT);
+});
+
+console.log('고정지출데이터 로드')
+console.log(fixedExpenses.value);
+
 </script>
 
 <template>
   <article class="panel fixed-expense-panel">
     <div class="panel-head">
       <p class="panel-label">고정 지출</p>
+      <button 
+        v-if="fixedExpenses.length > MAX_DISPLAY_COUNT" 
+        class="more-btn" 
+        @click="isModalOpen = true"
+      >
+        자세히 보기
+      </button>
     </div>
 
     <div class="fixed-expense-list">
-      <div v-for="item in fixedExpenses" :key="item.id" class="fixed-expense-row">
+      <div v-for="item in displayExpenses" :key="item.id" class="fixed-expense-row">
         <div class="row-left">
           <span class="day-text">{{ getDayOnly(item.date) }}</span>
-          
           <div class="info-group">
-            <strong class="memo">{{ item.memo }}</strong>
+            <span class="memo">{{ item.memo }}</span>
             <span class="category">{{ baseStore.getCategoryName(item.categoryId) || '기타' }}</span>
           </div>
         </div>
-
         <div class="row-right">
           <strong class="amount">{{ item.amount.toLocaleString() }}원</strong>
         </div>
@@ -51,11 +68,30 @@ const getDayOnly = (dateString) => {
       </div>
 
       <div class="fixed-expense-row total-row" v-if="fixedExpenses.length > 0">
-        <div>
-          <strong>총 고정 지출</strong>
-        </div>
+        <div><strong>총 고정 지출</strong></div>
         <div class="fixed-expense-value">
           <strong class="total-amount">{{ totalFixedAmount.toLocaleString() }}원</strong>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="isModalOpen" class="modal-overlay" @click.self="isModalOpen = false">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>전체 고정 지출 내역</h3>
+          <button class="close-btn" @click="isModalOpen = false">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div v-for="item in fixedExpenses" :key="item.id" class="fixed-expense-row modal-item">
+            <div class="row-left">
+              <span class="day-text">{{ getDayOnly(item.date) }}</span>
+              <div class="info-group">
+                <strong class="memo">{{ item.memo }}</strong>
+                <span class="category">{{ baseStore.getCategoryName(item.categoryId) || '기타' }}</span>
+              </div>
+            </div>
+            <strong class="amount">{{ item.amount.toLocaleString() }}원</strong>
+          </div>
         </div>
       </div>
     </div>
@@ -76,6 +112,35 @@ const getDayOnly = (dateString) => {
   margin-top: 20px;
 }
 
+.fixed-expense-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: #f8f7ff;
+  border-radius: 18px;
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+/* [추가] 자세히보기 버튼 스타일 */
+.more-btn {
+  background: white;
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  color: #7c3aed;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.more-btn:hover {
+  background: rgba(124, 58, 237, 0.03); /* 아주 연한 보라색 배경 */
+}
+
 .total-row {
   background: rgba(124, 58, 237, 0.05);
   margin-top: 8px;
@@ -93,23 +158,12 @@ const getDayOnly = (dateString) => {
   font-size: 0.9rem;
 }
 
-/* 개별 행 레이아웃 */
-.fixed-expense-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  background: #f8f7ff;
-  border-radius: 18px;
-}
-
 .row-left {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-/* 날짜 스타일 */
 .day-text {
   font-size: 1rem;
   color: #7c3aed;
@@ -126,6 +180,7 @@ const getDayOnly = (dateString) => {
 
 .memo {
   font-size: 1.05rem;
+  font-weight: 500;
   color: #1c1430;
 }
 
@@ -147,9 +202,22 @@ const getDayOnly = (dateString) => {
   margin-top: 4px;
 }
 
-.total-label {
-  font-size: 1.05rem;
-  color: #1c1430;
+/* [추가] 모달 레이아웃 스타일 */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 9999;
 }
-
+.modal-content {
+  background: white;
+  width: 90%; max-width: 500px; max-height: 80vh;
+  border-radius: 24px; padding: 24px;
+  display: flex; flex-direction: column;
+}
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.modal-body { overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.modal-item { background: #f8f7ff; }
+.close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
 </style>

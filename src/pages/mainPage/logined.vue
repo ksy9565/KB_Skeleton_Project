@@ -82,11 +82,6 @@ const categorySeries = [
   { label: '기타', value: 13, color: '#ece7ff' },
 ];
 
-const fixedExpenses = [
-  { label: '주거', value: '월세', amount: '~', helper: '자동이체' },
-  { label: '쇼핑', value: '정기 구독', amount: '~', helper: '정기 결제' },
-  { label: '교통', value: '교통카드', amount: '~', helper: '충전 예정' }
-];
 </script>
 
 <template>
