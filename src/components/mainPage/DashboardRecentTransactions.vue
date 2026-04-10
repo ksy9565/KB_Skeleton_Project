@@ -23,7 +23,11 @@ const { transactions, currentMonth } = storeToRefs(transactionStore);
 const { addTransaction2 } = transactionStore;
 
 const handleSave = async (data) => {
-  addTransaction2(data);
+  await addTransaction2(data);
+  const currentUserId = authStore.currentUser?.id;
+  if (currentUserId) {
+    await transactionStore.getCategoryStats(currentUserId, currentMonth.value);
+  }
   modalOpen.value = false;
 };
 // 초기 데이터 로드

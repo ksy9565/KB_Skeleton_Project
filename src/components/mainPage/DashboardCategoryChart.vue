@@ -51,23 +51,26 @@ const items = computed(() => {
 
   // 카테고리별 금액 합산
   const categoryMap = expenses.reduce((acc, t) => {
-    acc[t.categoryId] = (acc[t.categoryId] || 0) + t.amount;
+    const categoryKey = t.categoryId ?? t.category ?? t.title ?? '미분류';
+    acc[categoryKey] = (acc[categoryKey] || 0) + t.amount;
     return acc;
   }, {});
 
   return Object.keys(categoryMap)
     .map((catId) => {
       // categories 배열에서 일치하는 카테고리 정보 찾기
-      const categoryInfo = categories.value.find((c) => c.id === Number(catId));
+      const categoryInfo = categories.value.find(
+        (c) => c.id === Number(catId) || c.name === catId,
+      );
       const amount = categoryMap[catId];
 
       // 퍼센티지 계산 (소수점 첫째 자리까지)
       const percentage = Number(((amount / totalExpense) * 100).toFixed(1));
 
       return {
-        label: categoryInfo.name,
+        label: categoryInfo?.name || String(catId),
         value: percentage,
-        color: categoryInfo.color, // 색상이 없을 경우 기본색
+        color: categoryInfo?.color || '#b8b3c9',
       };
     })
     .sort((a, b) => b.value - a.value);

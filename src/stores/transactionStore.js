@@ -284,13 +284,30 @@ export const useTransactionStore = defineStore('transaction', () => {
 
   const addTransaction2 = async (formData) => {
     try {
+      const userId = authStore.currentUser?.id;
       // 새 객체 생성
       const newTransaction = {
         ...formData,
+        userId: formData.userId ?? userId ?? null,
+        amount: Number(formData.amount),
       };
 
       // db.json에 POST 요청으로 저장
-      await axios.post('http://localhost:3000/transactions', newTransaction);
+      const response = await axios.post(
+        'http://localhost:3000/transactions',
+        newTransaction,
+      );
+      const created = response.data;
+
+      if (
+        created?.userId === userId &&
+        typeof created?.date === 'string' &&
+        created.date.startsWith(currentMonth.value)
+      ) {
+        transactions.value.unshift(created);
+      }
+
+      return created;
     } catch (error) {
       console.error('거래 내역 저장 실패:', error);
       throw error;

@@ -52,7 +52,8 @@ const items = computed(() => {
 
   // 결제수단별 금액 합산
   const methodsMap = expenses.reduce((acc, t) => {
-    acc[t.paymentMethod] = (acc[t.paymentMethod] || 0) + t.amount;
+    const methodKey = t.paymentMethod || '미분류';
+    acc[methodKey] = (acc[methodKey] || 0) + t.amount;
     return acc;
   }, {});
 

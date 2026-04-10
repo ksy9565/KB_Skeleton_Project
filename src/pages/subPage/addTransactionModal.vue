@@ -57,14 +57,28 @@ watch(
   },
 );
 
+watch(
+  () => [props.isOpen, props.userId],
+  ([isOpen, userId]) => {
+    if (isOpen) {
+      form.value.userId = userId ?? null;
+    }
+  },
+  { immediate: true },
+);
+
 const closeModal = () => {
   form.value = { ...initialForm }; // 폼 초기화
   emit('close');
 };
 
 const saveTransaction = () => {
-  if (!form.value.categoryId || !form.value.amount) {
-    alert('카테고리와 금액을 모두 입력해주세요');
+  if (
+    !form.value.categoryId ||
+    !form.value.paymentMethod ||
+    !form.value.amount
+  ) {
+    alert('카테고리, 결제 수단, 금액을 모두 입력해주세요');
     return;
   }
 
@@ -73,7 +87,10 @@ const saveTransaction = () => {
     form.value.amount = null;
     return;
   }
-  emit('save', { ...form.value });
+  emit('save', {
+    ...form.value,
+    userId: form.value.userId ?? props.userId ?? null,
+  });
   closeModal();
 };
 </script>
