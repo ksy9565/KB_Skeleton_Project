@@ -6,7 +6,6 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useTransactionStore } from '@/stores/transactionStore';
 import { useAuthStore } from '@/stores/authStore';
 import { storeToRefs } from 'pinia';
-import addTransactionModal from '@/pages/subPage/addTransactionModal.vue';
 import { useBaseStore } from '@/stores/commonStore';
 const modalOpen = ref(false);
 // 2. ChartJS 플러그인 등록
@@ -22,14 +21,6 @@ const { categories, paymentMethods } = storeToRefs(baseStore);
 const { transactions, currentMonth } = storeToRefs(transactionStore);
 const { addTransaction2 } = transactionStore;
 
-const handleSave = async (data) => {
-  await addTransaction2(data);
-  const currentUserId = authStore.currentUser?.id;
-  if (currentUserId) {
-    await transactionStore.getCategoryStats(currentUserId, currentMonth.value);
-  }
-  modalOpen.value = false;
-};
 // 초기 데이터 로드
 onMounted(async () => {
   const userId = authStore.currentUser?.id || 1;
@@ -100,14 +91,5 @@ const items = computed(() => {
       </div>
       <li v-else class="transaction-item no-data">내역이 존재하지 않습니다.</li>
     </ul>
-    <addTransactionModal
-      :is-open="modalOpen"
-      :userId="userId"
-      :categories="categories"
-      :paymentMethods="paymentMethods"
-      @close="modalOpen = false"
-      @save="handleSave"
-      ;
-    />
   </article>
 </template>
