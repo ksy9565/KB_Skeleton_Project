@@ -34,7 +34,7 @@ const loadCategoryData = async () => {
   if (!userId) return;
 
   //예: 2026년 4월 데이터 조회
-  await transactionStore.getCategoryStats(userId, currentMonth);
+  await transactionStore.getCategoryStats(userId, currentMonth.value);
 };
 
 onMounted(loadCategoryData);

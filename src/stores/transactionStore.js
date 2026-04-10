@@ -14,7 +14,6 @@ export const useTransactionStore = defineStore('transaction', () => {
   const currentBudget = ref(null);
   const currentMonth = ref(new Date().toISOString().slice(0, 7));
 
-  console.log(authStore.currentUser);
   const isLoading = ref(false);
 
   // Getters
@@ -30,11 +29,8 @@ export const useTransactionStore = defineStore('transaction', () => {
 
   // 2. 이번 달 총 수입
   const monthlyIncome = computed(() =>
-  const monthlyIncome = computed(() =>
     monthlyTransactions.value
       .filter((t) => t.type === 'income')
-      .reduce((sum, t) => sum + t.amount, 0),
-  );
       .reduce((sum, t) => sum + t.amount, 0),
   );
 
@@ -281,7 +277,6 @@ export const useTransactionStore = defineStore('transaction', () => {
       transactions.value = data;
     } catch (error) {
       console.error('거래 내역 로드 실패: ', error);
-      alert('데이터를 가져오는 중 오류가 발생하였습니다.');
     } finally {
       isLoading.value = false;
     }

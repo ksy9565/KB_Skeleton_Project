@@ -30,7 +30,7 @@ const handleSave = async (data) => {
 onMounted(async () => {
   const userId = authStore.currentUser?.id || 1;
   // 임시로 최근 1개월 데이터를 가져온 후 위에서 slice(0, 10) 처리
-  await transactionStore.getCategoryStats(userId, currentMonth);
+  await transactionStore.getCategoryStats(userId, currentMonth.value);
 });
 
 // 템플릿에서 사용할 items 가공 (최근 10개)
