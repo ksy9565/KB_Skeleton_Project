@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { transactionService } from '@/services/transactionService';
 import { useAuthStore } from './authStore';
+import axios from 'axios';
 
 import { fetchTransactionsByDateApi } from '@/services/getCategoryService';
 
@@ -167,10 +168,10 @@ export const useTransactionStore = defineStore('transaction', () => {
 
   // 카테고리별 지출 내역 조회 함수
   // 사용 모듈: src/services/categoryService.js
-  const getCategoryStats = async (userId, startDate, endDate) => {
+  const getCategoryStats = async (userId, yearMonth) => {
     isLoading.value = true;
     try {
-      const data = await fetchTransactionsByDateApi(userId, startDate, endDate);
+      const data = await fetchTransactionsByDateApi(userId, yearMonth);
       //가져온 데이터를 상태에 저장
       transactions.value = data;
     } catch (error) {
@@ -178,6 +179,21 @@ export const useTransactionStore = defineStore('transaction', () => {
       alert('데이터를 가져오는 중 오류가 발생하였습니다.');
     } finally {
       isLoading.value = false;
+    }
+  };
+
+  const addTransaction2 = async (formData) => {
+    try {
+      // 새 객체 생성
+      const newTransaction = {
+        ...formData,
+      };
+
+      // db.json에 POST 요청으로 저장
+      await axios.post('http://localhost:3000/transactions', newTransaction);
+    } catch (error) {
+      console.error('거래 내역 저장 실패:', error);
+      throw error;
     }
   };
 
@@ -196,5 +212,6 @@ export const useTransactionStore = defineStore('transaction', () => {
     getCategoryStats,
     getWeeklyStats,
     getMonthlyStats,
+    addTransaction2,
   };
 });

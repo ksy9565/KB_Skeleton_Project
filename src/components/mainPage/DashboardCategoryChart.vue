@@ -16,7 +16,7 @@ const transactionStore = useTransactionStore();
 const authStore = useAuthStore();
 const baseStore = useBaseStore();
 
-const { transactions, isLoading } = storeToRefs(transactionStore);
+const { transactions, isLoading, currentMonth } = storeToRefs(transactionStore);
 const { categories } = storeToRefs(baseStore);
 // 현재 화면 상태
 const windowWidth = ref(window.innerWidth);
@@ -30,12 +30,11 @@ onMounted(() => window.addEventListener('resize', updateWidth));
 onUnmounted(() => window.removeEventListener('resize', updateWidth));
 
 const loadCategoryData = async () => {
-  // const userId = authStore.currentUser?.id;
-  const userId = 1;
+  const userId = authStore.currentUser?.id;
   if (!userId) return;
 
   //예: 2026년 4월 데이터 조회
-  await transactionStore.getCategoryStats(userId, '2026-04-01', '2026-04-30');
+  await transactionStore.getCategoryStats(userId, currentMonth);
 };
 
 onMounted(loadCategoryData);

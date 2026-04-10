@@ -17,19 +17,20 @@ const transactionStore = useTransactionStore();
 const authStore = useAuthStore();
 const userId = computed(() => authStore.currentUser?.id || 'guest');
 const baseStore = useBaseStore();
-const { categories, paymentMethods } = storeToRefs(baseStore);
 
-const handleSave = (data) => {
+const { categories, paymentMethods } = storeToRefs(baseStore);
+const { transactions, currentMonth } = storeToRefs(transactionStore);
+const { addTransaction2 } = transactionStore;
+
+const handleSave = async (data) => {
+  addTransaction2(data);
   modalOpen.value = false;
 };
-
-const { transactions } = storeToRefs(transactionStore);
-
 // 초기 데이터 로드
 onMounted(async () => {
   const userId = authStore.currentUser?.id || 1;
   // 임시로 최근 1개월 데이터를 가져온 후 위에서 slice(0, 10) 처리
-  await transactionStore.getCategoryStats(userId, '2025-04-01', '2026-04-30');
+  await transactionStore.getCategoryStats(userId, currentMonth);
 });
 
 // 템플릿에서 사용할 items 가공 (최근 10개)
@@ -101,6 +102,8 @@ const items = computed(() => {
       :categories="categories"
       :paymentMethods="paymentMethods"
       @close="modalOpen = false"
+      @save="handleSave"
+      ;
     />
   </article>
 </template>

@@ -6,37 +6,54 @@ const props = defineProps({
   userId: [Number, String],
   categories: Array, // { id, name, color}
   paymentMethods: Array, // { name, color }
+  incomePaymentMethods: Array, // { name, color }
 });
 
 const emit = defineEmits(['close', 'save']);
 
 // 폼 초기 데이터
 const initialForm = {
+  userId: null,
   type: 'expense',
+  amount: null,
   categoryId: '',
   paymentMethod: '',
-  amount: null,
-  description: '',
   date: new Date().toISOString().split('T')[0],
+  memo: '',
+  isFixed: false,
 };
 
 const form = ref({ ...initialForm });
 
 // 수입/지출 선택에 따른 카테고리 필터링
 const filteredCategories = computed(() => {
-  return props.categories.filter((cat) => cat.type === form.type);
+  return props.categories.filter((cat) => {
+    return form.value.type === 'income'
+      ? Number(cat.id) >= 1 && Number(cat.id) <= 6
+      : Number(cat.id) >= 7;
+  });
 });
 
 // 수입/지출 선택에 따른 결제수단 필터링
 const filteredMethods = computed(() => {
-  return props.paymentMethods.filter((pay) => pay.type === form.type);
+  return props.paymentMethods.filter((pay) => {
+    if (form.value.type === 'income') {
+      return ['현금', '계좌이체', '환불', '포인트적립/캐시백'].includes(
+        pay.name,
+      );
+    } else {
+      return ['신용카드', '체크카드', '현금', '계좌이체'].includes(pay.name);
+    }
+  });
 });
 
 // 구분이 바뀔 때마다 선택된 카테고리 초기화
 watch(
-  () => form.type,
+  () => form.value.type,
   () => {
     form.value.categoryId = '';
+    form.value.paymentMethod = '';
+    form.value.isFixed = false;
   },
 );
 
@@ -46,7 +63,16 @@ const closeModal = () => {
 };
 
 const saveTransaction = () => {
-  if (!form.value.categoryId || !form.value.amount) return;
+  if (!form.value.categoryId || !form.value.amount) {
+    alert('카테고리와 금액을 모두 입력해주세요');
+    return;
+  }
+
+  if (form.value.amount < 0) {
+    alert('금액은 0 이상의 숫자만 입력 가능합니다');
+    form.value.amount = null;
+    return;
+  }
   emit('save', { ...form.value });
   closeModal();
 };
@@ -98,7 +124,7 @@ const saveTransaction = () => {
         </div>
 
         <!-- 3. 지출 형태 (결제 수단) -->
-        <div class="form-group" v-if="form.type === 'expense'">
+        <div class="form-group">
           <label>결제 수단</label>
           <select v-model="form.paymentMethod" required>
             <option value="" disabled>결제 수단을 선택하세요</option>
@@ -115,20 +141,44 @@ const saveTransaction = () => {
         <!-- 4. 금액 입력 -->
         <div class="form-group">
           <label>금액</label>
-          <input
-            type="number"
-            v-model.number="form.amount"
-            placeholder="0"
-            required
-          />
+          <div class="amount-input-wrapper">
+            <input
+              type="number"
+              v-model.number="form.amount"
+              placeholder="0 이상의 금액만 가능합니다"
+              min="0"
+              required
+              class="no-spinners"
+            />
+          </div>
         </div>
 
-        <!-- 5. 한줄 메모 -->
+        <!-- 5. 날짜 선택 (✨ 새로 추가) -->
+        <div class="form-group">
+          <label>날짜</label>
+          <input type="date" v-model="form.date" required class="date-input" />
+        </div>
+
+        <!-- 6. 지출 형태 선택 -->
+        <div class="form-group" v-if="form.type === 'expense'">
+          <label>지출 형태</label>
+          <div class="type-selector">
+            <button
+              type="button"
+              :class="{ active: form.isFixed === true }"
+              @click="form.isFixed = !form.isFixed"
+            >
+              고정 지출
+            </button>
+          </div>
+        </div>
+
+        <!-- 7. 한줄 메모 -->
         <div class="form-group">
           <label>메모</label>
           <input
             type="text"
-            v-model="form.description"
+            v-model="form.memo"
             placeholder="내용을 입력하세요"
           />
         </div>
@@ -234,5 +284,42 @@ const saveTransaction = () => {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
+}
+/* 기본 숫자 입력창의 화살표 숨기기 */
+.no-spinners::-webkit-outer-spin-button,
+.no-spinners::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.amount-input-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.amount-input-wrapper input {
+  flex: 1;
+  padding-right: 40px; /* 버튼 공간 확보 */
+}
+
+.step-buttons {
+  position: absolute;
+  right: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.step-buttons button {
+  background: none;
+  border: none;
+  font-size: 10px;
+  cursor: pointer;
+  padding: 2px 5px;
+  color: #666;
+}
+
+.step-buttons button:hover {
+  color: #4a90e2;
 }
 </style>

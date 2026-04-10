@@ -105,6 +105,9 @@ export const useBaseStore = defineStore('base', () => {
     { name: '체크카드', color: '#2ecc71' },
     { name: '현금', color: '	#95a5a6' },
     { name: '계좌이체', color: '#e67e22' },
+
+    { name: '환불', color: '#3498db' },
+    { name: '포인트적립/캐시백', color: '#2ecc71' },
   ]);
 
   // ID로 이름을 찾아주는 Getter 함수들
