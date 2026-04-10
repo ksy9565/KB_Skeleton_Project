@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { fetchUserInfoApi } from '@/services/userService';
+import { fetchUserInfoApi, registerUserApi, loginUserApi } from '@/services/userService';
 
 export const useAuthStore = defineStore('auth', () => {
-  // State: 사용자 정보 저장 변수
   const currentUser = ref(null); // 현재 로그인한 사용자 객체
   const isLoading = ref(false);
   const error = ref(null);
@@ -21,28 +20,64 @@ export const useAuthStore = defineStore('auth', () => {
     return layouts.value.find((l) => l.id === currentUser.value.layoutId);
   });
 
-  // Actions
-  function login(userData) {
-    currentUser.value = userData;
-  }
+  const isAuthenticated = computed(() => !!currentUser.value);
 
-  function logout(userData) {
-    currentUser.value = userData;
-  }
+  // Actions
+  const login = async (username, password) => {
+    isLoading.value = true;
+    error.value = null;
+    try {
+      const user = await loginUserApi(username, password); 
+      
+      if (user) {
+        currentUser.value = user;
+        return true;
+      } else {
+        error.value = "아이디 또는 비밀번호가 일치하지 않습니다.";
+        return false;
+      }
+    } catch (err) {
+      error.value = "서버와 통신 중 오류가 발생했습니다.";
+      return false;
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  const register = async (userData) => {
+    isLoading.value = true;
+    error.value = null;
+    try {
+      const newUser = {
+        ...userData,
+        balance: 0,
+        layoutId: 1
+      };
+      const result = await registerUserApi(newUser);
+      return result;
+    } catch (err) {
+      error.value = "회원가입에 실패했습니다.";
+      throw err;
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  const logout = () => {
+    currentUser.value = null;
+    error.value = null;
+  };
 
   function updateBalance(newAmount) {
     if (currentUser.value) currentUser.value.balance += newAmount;
   }
 
-  // 비동기 통신 및 상태 업데이트
-  // 2. Actions: 비동기 통신 및 상태 업데이트
   const getUserInfo = async (userId) => {
     isLoading.value = true;
     error.value = null;
 
     try {
       const data = await fetchUserInfoApi(userId);
-      // API 응답 데이터를 state에 저장
       login(data);
     } catch (err) {
       console.error('사용자 정보 로딩 실패:', err);
@@ -60,6 +95,7 @@ export const useAuthStore = defineStore('auth', () => {
     userLayout,
     getUserInfo,
     login,
+    register,
     logout,
     updateBalance,
   };
