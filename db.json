@@ -1,7 +1,7 @@
 {
   "users": [
-    { "id": "user1", "name": "철수", "balance": 1000000 },
-    { "id": "user2", "name": "영희", "balance": 500000 }
+    { "id": "user1", "username": "test1", "password": "1234", "name": "철수", "balance": 1000000, "layoutId": 1},
+    { "id": "user2", "username": "test2", "password": "1234", "name": "영희", "balance": 500000, "layoutId": 2}
   ],
   "transactions": [
     {
