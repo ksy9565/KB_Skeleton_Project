@@ -118,8 +118,7 @@
 }
 
 .sidebar-group button,
-.ghost-button,
-.panel-head button {
+.ghost-button {
   width: 100%;
   padding: 8px 10px;
   border: 0;
@@ -258,8 +257,14 @@
   color: #7c3aed;
 }
 
-.upper-grid {
+/* .upper-grid {
   grid-template-columns: 1.05fr 1.25fr;
+} */
+ .upper-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr; 
+  gap: 20px;
+  align-items: stretch;
 }
 
 .lower-grid,
@@ -271,17 +276,74 @@
   padding: 18px;
 }
 
-.panel-head {
+/* .panel-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-}
+} */
 
 .panel-head button {
   width: auto;
   padding-inline: 14px;
   text-align: center;
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  border-radius: 8px;
+  background: white;
+  color: #7c3aed;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* 달력 상단 헤더 영역 */
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 중앙 정렬 */
+  position: relative;
+  padding: 10px 0 20px;
+}
+
+/* 년/월 선택 영역 */
+.month-selector {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* 화살표와 텍스트 사이 간격 */
+}
+
+.current-month {
+  margin: 0;
+  font-size: 1.4rem; /* 크기 키움 */
+  font-weight: 700;
+  color: #31204f;
+  min-width: 150px; /* 월이 바뀌어도 글자 위치 고정 */
+  text-align: center;
+}
+
+/* 화살표 버튼 스타일 (너무 컸던 버튼 축소) */
+.nav-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(124, 58, 237, 0.05);
+  color: #7c3aed;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  background: rgba(124, 58, 237, 0.15);
+  transform: scale(1.1);
+}
+
+.today-btn:hover {
+  background: #f4eefc;
 }
 
 .calendar-copy {
@@ -313,7 +375,6 @@
   border-radius: 12px;
   background: #f7f3ff;
   font-size: 0.9rem;
-  color: #37245d;
 }
 
 .calendar-day.empty {
@@ -321,8 +382,7 @@
 }
 
 .calendar-day.active {
-  color: #fff;
-  background: linear-gradient(135deg, #8b5cf6, #a855f7);
+  color: black;
 }
 
 .transaction-list {
@@ -531,7 +591,6 @@
   }
 
   .summary-grid,
-  .upper-grid,
   .lower-grid,
   .final-grid {
     grid-template-columns: 1fr;
@@ -555,4 +614,80 @@
   .bar {
     width: 14px;
   }
+}
+
+.panel.calendar-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%; 
+  min-height: 650px;
+}
+
+.calendar-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.calendar-grid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.calendar-week {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-bottom: 1px solid rgba(130, 120, 170, 0.08);
+}
+
+.calendar-week:last-child {
+  border-bottom: none;
+}
+
+.calendar-day {
+  min-height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 8px 4px;
+  background: transparent;
+  border-right: 1px solid rgba(130, 120, 170, 0.05);
+}
+
+.calendar-day:last-child {
+  border-right: none;
+}
+
+.day-number {
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+  padding-left: 4px;
+  color: rgba(28, 20, 48, 0.8);
+}
+
+.day-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.income-amount {
+  font-size: 0.72rem;
+  color: #17a34a;
+  text-align: right;
+  font-weight: 700;
+}
+
+.expense-amount {
+  font-size: 0.72rem;
+  color: #ef4444;
+  text-align: right;
+  font-weight: 700;
 }
