@@ -49,14 +49,6 @@ const summaryCards = computed(() => [
   },
 ]);
 
-const calendarDays = [
-  ['', '', '', '1', '2', '3', '4'],
-  ['5', '6', '7', '8', '9', '10', '11'],
-  ['12', '13', '14', '15', '16', '17', '18'],
-  ['19', '20', '21', '22', '23', '24', '25'],
-  ['26', '27', '28', '29', '30', '', ''],
-];
-
 const recentTransactions = [
   { type: '지출', title: '점심 식사', amount: '-12,000원', date: '2026-04-08' },
   { type: '수입', title: '급여', amount: '+3,000,000원', date: '2026-04-05' },
@@ -104,7 +96,7 @@ const fixedExpenses = [
       />
 
       <section class="panel-grid upper-grid">
-        <DashboardCalendarPanel :days="calendarDays" />
+        <DashboardCalendarPanel/>
         <DashboardRecentTransactions :items="recentTransactions" />
       </section>
 
