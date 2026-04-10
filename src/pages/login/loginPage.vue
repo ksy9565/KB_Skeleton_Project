@@ -2,6 +2,18 @@
 import { computed, reactive, ref } from 'vue';
 import { useRouter, RouterLink, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
+import DashboardSidebar from '@/components/mainPage/DashboardSidebar.vue';
+
+const navigationGroups = [
+  {
+    title: '계정',
+    items: ['대시보드', '가계부', '통계', '카드 관리'],
+  },
+  {
+    title: '설정',
+    items: ['예산 설정', '카테고리 설정', '알림 설정'],
+  },
+];
 
 const router = useRouter();
 const route = useRoute();
@@ -28,7 +40,7 @@ const handleLogin = async () => {
   }
 
   const isSuccess = await authStore.login(form.username.trim(), form.password);
-  
+
   if (isSuccess) {
     router.push({ name: 'main' });
   } else {
@@ -39,69 +51,81 @@ const handleLogin = async () => {
 
 <template>
   <main class="auth-page">
-    <section class="auth-panel">
-      <div class="auth-copy">
-        <p class="eyebrow">Login</p>
-        <h2>가계부를 다시 작성해보세요</h2>
-        <p class="description">
-          등록한 아이디와 비밀번호를 입력하면 대시보드로 이동할 수
-          있습니다.
-        </p>
-      </div>
+    <DashboardSidebar :groups="navigationGroups" />
 
-      <form class="auth-form" @submit.prevent="handleLogin">
-        <label class="field">
-          <span>아이디</span>
-          <input
-            v-model="form.username"
-            type="text"
-            name="username"
-            placeholder="아이디를 입력하세요"
-            autocomplete="username"
+    <div class="auth-content">
+      <section class="auth-panel">
+        <div class="auth-copy">
+          <p class="eyebrow">Login</p>
+          <h2>가계부를 다시 작성해보세요</h2>
+          <p class="description">
+            등록한 아이디와 비밀번호를 입력하면 대시보드로 이동할 수 있습니다.
+          </p>
+        </div>
+
+        <form class="auth-form" @submit.prevent="handleLogin">
+          <label class="field">
+            <span>아이디</span>
+            <input
+              v-model="form.username"
+              type="text"
+              name="username"
+              placeholder="아이디를 입력하세요"
+              autocomplete="username"
+              :disabled="authStore.isLoading"
+            />
+          </label>
+
+          <label class="field">
+            <span>비밀번호</span>
+            <input
+              v-model="form.password"
+              type="password"
+              name="password"
+              placeholder="비밀번호를 입력하세요"
+              autocomplete="current-password"
+              :disabled="authStore.isLoading"
+            />
+          </label>
+
+          <p v-if="successMessage" class="message success">
+            {{ successMessage }}
+          </p>
+          <p v-if="errorMessage" class="message error">{{ errorMessage }}</p>
+
+          <button
+            type="submit"
+            class="submit-button"
             :disabled="authStore.isLoading"
-          />
-        </label>
+          >
+            <span v-if="authStore.isLoading">로그인 중...</span>
+            <span v-else>로그인</span>
+          </button>
+        </form>
 
-        <label class="field">
-          <span>비밀번호</span>
-          <input
-            v-model="form.password"
-            type="password"
-            name="password"
-            placeholder="비밀번호를 입력하세요"
-            autocomplete="current-password"
-            :disabled="authStore.isLoading"
-          />
-        </label>
-
-        <p v-if="successMessage" class="message success">
-          {{ successMessage }}
+        <p class="auth-link">
+          아직 계정이 없나요?
+          <RouterLink :to="{ name: 'register' }">회원가입</RouterLink>
         </p>
-        <p v-if="errorMessage" class="message error">{{ errorMessage }}</p>
-
-        <button type="submit" class="submit-button" :disabled="authStore.isLoading">
-          <span v-if="authStore.isLoading">로그인 중...</span>
-          <span v-else>로그인</span>
-        </button>
-      </form>
-
-      <p class="auth-link">
-        아직 계정이 없나요?
-        <RouterLink :to="{ name: 'register' }">회원가입</RouterLink>
-      </p>
-    </section>
+      </section>
+    </div>
   </main>
 </template>
 
 <style scoped>
 .auth-page {
   min-height: 100vh;
-  display: grid;
-  place-items: center;
+  position: relative;
   padding: 24px;
   background:
     radial-gradient(circle at top, rgba(124, 58, 237, 0.18), transparent 34%),
     linear-gradient(180deg, #fcfaff 0%, #f5efff 100%);
+}
+
+.auth-content {
+  min-height: calc(100vh - 48px);
+  display: grid;
+  place-items: center;
 }
 
 .auth-panel {
