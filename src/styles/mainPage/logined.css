@@ -128,6 +128,11 @@
   text-align: left;
 }
 
+.sidebar-group button.is-active {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: #fff;
+}
+
 .sidebar-footer {
   margin-top: auto;
 }

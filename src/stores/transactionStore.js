@@ -3,7 +3,6 @@ import { ref, computed } from 'vue';
 import { transactionService } from '@/services/transactionService';
 import { useAuthStore } from './authStore';
 
-
 export const useTransactionStore = defineStore('transaction', () => {
   // State
   const authStore = useAuthStore();
@@ -16,15 +15,17 @@ export const useTransactionStore = defineStore('transaction', () => {
   // Getters
   // 1. 월별 거래내역 필터링
   const monthlyTransactions = computed(() => {
-    return transactions.value.filter(t => t.date.startsWith(currentMonth.value));
+    return transactions.value.filter((t) =>
+      t.date.startsWith(currentMonth.value),
+    );
   });
 
   // 2. 이번 달 총 수입
-  const monthlyIncome = computed(() => 
+  const monthlyIncome = computed(() =>
     monthlyTransactions.value
       .filter((t) => t.type === 'income')
-      .reduce((sum, t) => sum + t.amount, 0)
-  )
+      .reduce((sum, t) => sum + t.amount, 0),
+  );
 
   // 3. 이번 달 총 지출
   const monthlyExpense = computed(() =>
@@ -44,7 +45,7 @@ export const useTransactionStore = defineStore('transaction', () => {
 
   // Actions
   // 1. 현재 로그인한 유저의 거래 내역 가져오기
-  async function fetchTransactions(){
+  async function fetchTransactions() {
     const userId = authStore.currentUser?.id;
     if (!userId) {
       console.warn('로그인한 유저 정보가 없어 내역을 불러올 수 없습니다.');
@@ -54,9 +55,9 @@ export const useTransactionStore = defineStore('transaction', () => {
     try {
       const data = await transactionService.getTransactionsByUserId(userId);
       transactions.value = data;
-      console.log("데이터 로드 성공: ", data);
+      console.log('데이터 로드 성공: ', data);
     } catch (error) {
-      console.error("데이터 로드 실패: ", error);
+      console.error('데이터 로드 실패: ', error);
     }
   }
 
@@ -66,8 +67,21 @@ export const useTransactionStore = defineStore('transaction', () => {
 
     // 2. (선택사항) Auth 스토어의 잔액(balance) 업데이트 로직 연결 가능
   }
-  function updateTransaction(id, data) {}
 
+  async function updateTransaction(id, data) {
+    try {
+      await transactionService.updateTransaction(id, data);
+
+      const index = transactions.value.findIndex((t) => t.id === id);
+      if (index !== -1) {
+        transactions.value[index] = { ...transactions.value[index], ...data };
+        console.log('스토어 업데이트 완료:', transactions.value[index]);
+      }
+    } catch (error) {
+      console.error('스토어 업데이트 실패:', error);
+      throw error;
+    }
+  }
   function deleteTransaction(id) {
     transactions.value = transactions.value.filter((t) => t.id !== id);
   }
@@ -121,9 +135,13 @@ export const useTransactionStore = defineStore('transaction', () => {
   }
 
   function getMonthlyStats() {
-    const monthFormatter = new Intl.DateTimeFormat('ko-KR', { month: 'numeric' });
+    const monthFormatter = new Intl.DateTimeFormat('ko-KR', {
+      month: 'numeric',
+    });
     const monthStats = new Map();
-    const [currentYear, currentMonthNumber] = currentMonth.value.split('-').map(Number);
+    const [currentYear, currentMonthNumber] = currentMonth.value
+      .split('-')
+      .map(Number);
 
     for (let offset = 3; offset >= 0; offset -= 1) {
       const date = new Date(currentYear, currentMonthNumber - 1 - offset, 1);
