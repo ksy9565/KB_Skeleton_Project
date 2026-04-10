@@ -7,10 +7,8 @@ const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
 
-const STORAGE_KEY = 'kb-users';
-
 const form = reactive({
-  userId: '',
+  username: '',
   password: '',
 });
 
@@ -21,34 +19,21 @@ const successMessage = computed(() =>
     : '',
 );
 
-const handleLogin = () => {
+const handleLogin = async () => {
   errorMessage.value = '';
 
-  if (!form.userId.trim() || !form.password.trim()) {
+  if (!form.username.trim() || !form.password.trim()) {
     errorMessage.value = '아이디와 비밀번호를 모두 입력해 주세요.';
     return;
   }
 
-  const users = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]');
-  const matchedUser = users.find(
-    (user) =>
-      user.userId === form.userId.trim() && user.password === form.password,
-  );
-
-  if (!matchedUser) {
-    errorMessage.value = '아이디 또는 비밀번호가 올바르지 않습니다.';
-    return;
+  const isSuccess = await authStore.login(form.username.trim(), form.password);
+  
+  if (isSuccess) {
+    router.push({ name: 'main' });
+  } else {
+    errorMessage.value = authStore.error || '로그인에 실패했습니다.';
   }
-
-  const loggedInUser = {
-    userId: matchedUser.userId,
-    name: matchedUser.name,
-    layoutId: matchedUser.layoutId ?? 1,
-  };
-
-  authStore.login(loggedInUser);
-  localStorage.setItem('kb-current-user', JSON.stringify(loggedInUser));
-  router.push({ name: 'main' });
 };
 </script>
 
@@ -57,9 +42,9 @@ const handleLogin = () => {
     <section class="auth-panel">
       <div class="auth-copy">
         <p class="eyebrow">Login</p>
-        <h2>가계부 서비스를 다시 시작해보세요</h2>
+        <h2>가계부를 다시 작성해보세요</h2>
         <p class="description">
-          등록한 아이디와 비밀번호를 입력하면 대시보드로 바로 이동할 수
+          등록한 아이디와 비밀번호를 입력하면 대시보드로 이동할 수
           있습니다.
         </p>
       </div>
@@ -68,11 +53,12 @@ const handleLogin = () => {
         <label class="field">
           <span>아이디</span>
           <input
-            v-model="form.userId"
+            v-model="form.username"
             type="text"
-            name="userId"
+            name="username"
             placeholder="아이디를 입력하세요"
             autocomplete="username"
+            :disabled="authStore.isLoading"
           />
         </label>
 
@@ -84,6 +70,7 @@ const handleLogin = () => {
             name="password"
             placeholder="비밀번호를 입력하세요"
             autocomplete="current-password"
+            :disabled="authStore.isLoading"
           />
         </label>
 
@@ -92,7 +79,10 @@ const handleLogin = () => {
         </p>
         <p v-if="errorMessage" class="message error">{{ errorMessage }}</p>
 
-        <button type="submit" class="submit-button">로그인</button>
+        <button type="submit" class="submit-button" :disabled="authStore.isLoading">
+          <span v-if="authStore.isLoading">로그인 중...</span>
+          <span v-else>로그인</span>
+        </button>
       </form>
 
       <p class="auth-link">

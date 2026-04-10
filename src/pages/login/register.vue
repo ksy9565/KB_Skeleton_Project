@@ -1,46 +1,43 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/authStore';
 
 const router = useRouter();
-
-const STORAGE_KEY = 'kb-users';
+const authStore = useAuthStore();
 
 const form = reactive({
-  userId: '',
+  username: '',
   name: '',
   password: '',
 });
 
 const errorMessage = ref('');
 
-const handleRegister = () => {
+const handleRegister = async () => {
   errorMessage.value = '';
 
-  if (!form.userId.trim() || !form.name.trim() || !form.password.trim()) {
+  if (!form.username.trim() || !form.name.trim() || !form.password.trim()) {
     errorMessage.value = '아이디, 이름, 비밀번호를 모두 입력해 주세요.';
     return;
   }
 
-  const users = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]');
-  const hasSameId = users.some((user) => user.userId === form.userId.trim());
-
-  if (hasSameId) {
-    errorMessage.value = '이미 사용 중인 아이디입니다.';
-    return;
-  }
-
-  const newUser = {
-    userId: form.userId.trim(),
+  const isSuccess = await authStore.register({
+    username: form.username.trim(),
     name: form.name.trim(),
     password: form.password,
-    layoutId: 1,
-  };
+  });
 
-  users.push(newUser);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+  if (isSuccess) {
+    router.push({ name: 'login', query: { registered: '1' } });
+  } else {
+    errorMessage.value = authStore.error;
+  }
 
-  router.push({ name: 'login', query: { registered: '1' } });
+  console.log('-----디버깅------');
+  console.log('입력값:', form.username);
+  console.log('가입 결과:', isSuccess);
+  console.log('스토어 에러:', authStore.error);
 };
 </script>
 
@@ -60,9 +57,9 @@ const handleRegister = () => {
         <label class="field">
           <span>아이디</span>
           <input
-            v-model="form.userId"
+            v-model="form.username"
             type="text"
-            name="userId"
+            name="username"
             placeholder="사용할 아이디를 입력하세요"
             autocomplete="username"
           />
