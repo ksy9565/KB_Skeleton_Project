@@ -58,14 +58,6 @@ const calendarDays = [
   ['26', '27', '28', '29', '30', '', ''],
 ];
 
-const recentTransactions = [
-  { type: '지출', title: '점심 식사', amount: '-12,000원', date: '2026-04-08' },
-  { type: '수입', title: '급여', amount: '+3,000,000원', date: '2026-04-05' },
-  { type: '지출', title: '교통비', amount: '-9,500원', date: '2026-04-04' },
-  { type: '지출', title: '생활 용품', amount: '-39,000원', date: '2026-04-03' },
-  { type: '지출', title: '정기 구독', amount: '-15,000원', date: '2026-04-01' },
-];
-
 const weeklyBars = computed(() => transactionStore.getWeeklyStats());
 
 const monthlyBars = [
@@ -98,7 +90,7 @@ const fixedExpenses = [
 
       <section class="panel-grid upper-grid">
         <DashboardCalendarPanel :days="calendarDays" />
-        <DashboardRecentTransactions :items="recentTransactions" />
+        <DashboardRecentTransactions />
       </section>
 
       <section class="panel-grid lower-grid">
