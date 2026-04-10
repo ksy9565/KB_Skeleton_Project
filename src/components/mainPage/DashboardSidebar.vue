@@ -2,11 +2,16 @@
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
+import DashboardBudgetBattery from '@/components/mainPage/DashboardBudgetBattery.vue';
 
 const props = defineProps({
   groups: {
     type: Array,
     required: true,
+  },
+  showBattery: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -182,6 +187,10 @@ onBeforeUnmount(() => {
           <span>로그아웃</span>
         </button>
       </nav>
+
+      <div v-if="props.showBattery" class="sidebar-battery">
+        <DashboardBudgetBattery />
+      </div>
     </aside>
 
     <transition name="sidebar-fade">
@@ -244,6 +253,10 @@ onBeforeUnmount(() => {
               <span>로그아웃</span>
             </button>
           </nav>
+
+          <div v-if="props.showBattery" class="sidebar-battery">
+            <DashboardBudgetBattery />
+          </div>
         </aside>
       </div>
     </transition>

@@ -8,6 +8,7 @@ export const useTransactionStore = defineStore('transaction', () => {
   const authStore = useAuthStore();
   const transactions = ref([]);
   const budgets = ref([]);
+  const currentBudget = ref(null);
   const currentMonth = ref(new Date().toISOString().slice(0, 7));
 
   console.log(authStore.currentUser);
@@ -43,6 +44,31 @@ export const useTransactionStore = defineStore('transaction', () => {
     return initialBalance + historySum;
   });
 
+  // 5. 예산 대비 지출 진행률
+  const budgetProgress = computed(() => {
+    const budgetAmount = Number(currentBudget.value?.amount || 0);
+    const spentAmount = monthlyExpense.value;
+
+    if (!budgetAmount || budgetAmount <= 0) {
+      return {
+        budgetAmount: 0,
+        spentAmount,
+        spentPercent: 0,
+        remainingPercent: 100,
+      };
+    }
+
+    const spentPercent = Math.round((spentAmount / budgetAmount) * 100);
+    const remainingPercent = 100 - spentPercent;
+
+    return {
+      budgetAmount,
+      spentAmount,
+      spentPercent,
+      remainingPercent,
+    };
+  });
+
   // Actions
   // 1. 현재 로그인한 유저의 거래 내역 가져오기
   async function fetchTransactions() {
@@ -59,6 +85,66 @@ export const useTransactionStore = defineStore('transaction', () => {
     } catch (error) {
       console.error('데이터 로드 실패: ', error);
     }
+  }
+
+  async function fetchBudgetForCurrentMonth() {
+    const userId = authStore.currentUser?.id;
+    if (!userId) {
+      currentBudget.value = null;
+      return;
+    }
+
+    try {
+      const data = await transactionService.getBudgetByUserIdAndMonth(
+        userId,
+        currentMonth.value,
+      );
+
+      currentBudget.value = data;
+      if (data) {
+        budgets.value = [
+          ...budgets.value.filter(
+            (budget) => budget.month !== currentMonth.value,
+          ),
+          data,
+        ];
+      }
+    } catch (error) {
+      console.error('예산 데이터 로드 실패:', error);
+      currentBudget.value = null;
+    }
+  }
+
+  async function saveBudgetForCurrentMonth(amount) {
+    const userId = authStore.currentUser?.id;
+    if (!userId) {
+      throw new Error('로그인한 유저 정보가 없습니다.');
+    }
+
+    const normalizedAmount = Number(amount);
+    if (!Number.isFinite(normalizedAmount) || normalizedAmount <= 0) {
+      throw new Error('예산은 0보다 큰 숫자여야 합니다.');
+    }
+
+    const payload = {
+      userId,
+      month: currentMonth.value,
+      amount: normalizedAmount,
+    };
+
+    if (currentBudget.value?.id) {
+      const updated = await transactionService.updateBudget(
+        currentBudget.value.id,
+        payload,
+      );
+      currentBudget.value = updated;
+      return updated;
+    }
+
+    const created = await transactionService.createBudget(payload);
+    currentBudget.value = created;
+    budgets.value.push(created);
+    return created;
   }
 
   function addTransaction(transaction) {
@@ -180,12 +266,16 @@ export const useTransactionStore = defineStore('transaction', () => {
   return {
     transactions,
     budgets,
+    currentBudget,
     currentMonth,
     monthlyTransactions,
     monthlyIncome,
     monthlyExpense,
     totalBalance,
+    budgetProgress,
     fetchTransactions,
+    fetchBudgetForCurrentMonth,
+    saveBudgetForCurrentMonth,
     addTransaction,
     deleteTransaction,
     getWeeklyStats,
