@@ -57,7 +57,7 @@ const handleLogin = async () => {
       <section class="auth-panel">
         <div class="auth-copy">
           <p class="eyebrow">Login</p>
-          <h2>가계부를 다시 작성해보세요</h2>
+          <h2>가계부를 작성해보세요</h2>
           <p class="description">
             등록한 아이디와 비밀번호를 입력하면 대시보드로 이동할 수 있습니다.
           </p>

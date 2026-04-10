@@ -15,7 +15,7 @@ const navigationGroups = [
 
 <template>
   <main class="simple-page">
-    <DashboardSidebar :groups="navigationGroups" />
+    <DashboardSidebar :groups="navigationGroups" :show-battery="true" />
 
     <div class="simple-content">
       <section class="simple-card">

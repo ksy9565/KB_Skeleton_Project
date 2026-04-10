@@ -152,6 +152,7 @@ onMounted(async () => {
 
         { title: '설정', items: ['예산 설정', '카테고리 설정', '알림 설정'] },
       ]"
+      :show-battery="true"
     />
 
     <section class="content-area">
