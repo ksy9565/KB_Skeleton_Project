@@ -39,7 +39,7 @@ const renderChart = () => {
   const ctx = chartCanvas.value.getContext('2d');
 
   const createGradient = (color1, color2) => {
-    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, color1);
     gradient.addColorStop(1, color2);
     return gradient;

@@ -287,5 +287,6 @@ export const useTransactionStore = defineStore('transaction', () => {
     deleteTransaction,
     getWeeklyStats,
     getMonthlyStats,
+    updateTransaction,
   };
 });
