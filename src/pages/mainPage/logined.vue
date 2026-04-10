@@ -60,14 +60,6 @@ const summaryCards = computed(() => [
   },
 ]);
 
-const calendarDays = [
-  ['', '', '', '1', '2', '3', '4'],
-  ['5', '6', '7', '8', '9', '10', '11'],
-  ['12', '13', '14', '15', '16', '17', '18'],
-  ['19', '20', '21', '22', '23', '24', '25'],
-  ['26', '27', '28', '29', '30', '', ''],
-];
-
 const recentTransactions = [
   { type: '지출', title: '점심 식사', amount: '-12,000원', date: '2026-04-08' },
   { type: '수입', title: '급여', amount: '+3,000,000원', date: '2026-04-05' },
@@ -93,12 +85,6 @@ const categorySeries = [
   { label: '기타', value: 13, color: '#ece7ff' },
 ];
 
-const fixedExpenses = [
-  { label: '주거', value: '월세', amount: '~', helper: '자동이체' },
-  { label: '쇼핑', value: '정기 구독', amount: '~', helper: '정기 결제' },
-  { label: '교통', value: '교통카드', amount: '~', helper: '충전 예정' },
-  { label: '총계', value: '고정 지출', amount: '~', helper: '월간 합산' },
-];
 </script>
 
 <template>
@@ -115,8 +101,8 @@ const fixedExpenses = [
       />
 
       <section class="panel-grid upper-grid">
-        <DashboardCalendarPanel :days="calendarDays" />
-        <DashboardRecentTransactions :items="recentTransactions" />
+        <DashboardCalendarPanel/>
+        <DashboardRecentTransactions/>
       </section>
 
       <section class="panel-grid lower-grid">
