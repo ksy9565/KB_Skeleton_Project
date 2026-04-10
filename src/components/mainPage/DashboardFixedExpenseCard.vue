@@ -28,7 +28,6 @@ const getDayOnly = (dateString) => {
   <article class="panel fixed-expense-panel">
     <div class="panel-head">
       <p class="panel-label">고정 지출</p>
-      <button type="button">관리</button>
     </div>
 
     <div class="fixed-expense-list">
@@ -67,7 +66,7 @@ const getDayOnly = (dateString) => {
 .fixed-expense-panel {
   display: flex;
   flex-direction: column;
-  padding: 24px;
+  padding: 20px;
 }
 
 .fixed-expense-list {
@@ -106,8 +105,8 @@ const getDayOnly = (dateString) => {
 
 .row-left {
   display: flex;
-  align-items: center; /* 가로 정렬 */
-  gap: 20px; /* 날짜와 텍스트 사이 간격 */
+  align-items: center;
+  gap: 16px;
 }
 
 /* 날짜 스타일 */
