@@ -11,11 +11,19 @@ import DashboardWeeklyChart from '@/components/mainPage/DashboardWeeklyChart.vue
 import '@/styles/mainPage/logined.css';
 
 import { computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { useTransactionStore } from '@/stores/transactionStore';
 import { useAuthStore } from '@/stores/authStore';
 
-const transactionStore = useTransactionStore()
+const transactionStore = useTransactionStore();
 const authStore = useAuthStore();
+const router = useRouter();
+
+const isGuest = computed(() => !authStore.isAuthenticated);
+
+const moveToLogin = () => {
+  router.push({ name: 'login' });
+};
 
 onMounted(async () => {
   if (authStore.currentUser) {
@@ -91,7 +99,7 @@ const fixedExpenses = [
 </script>
 
 <template>
-  <div class="dashboard-shell">
+  <div class="dashboard-shell" :class="{ 'is-guest': isGuest }">
     <DashboardSidebar :groups="navigationGroups" />
 
     <section class="content-area">
@@ -118,5 +126,10 @@ const fixedExpenses = [
         <DashboardFixedExpenseCard :items="fixedExpenses" />
       </section>
     </section>
+
+    <div v-if="isGuest" class="guest-blocker">
+      <p>로그인해주세요</p>
+      <button type="button" @click="moveToLogin">로그인 하러가기</button>
+    </div>
   </div>
 </template>

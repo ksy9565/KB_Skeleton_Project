@@ -2,6 +2,18 @@
 import { reactive, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
+import DashboardSidebar from '@/components/mainPage/DashboardSidebar.vue';
+
+const navigationGroups = [
+  {
+    title: '계정',
+    items: ['대시보드', '가계부', '통계', '카드 관리'],
+  },
+  {
+    title: '설정',
+    items: ['예산 설정', '카테고리 설정', '알림 설정'],
+  },
+];
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -43,72 +55,81 @@ const handleRegister = async () => {
 
 <template>
   <main class="auth-page">
-    <section class="auth-panel">
-      <div class="auth-copy">
-        <p class="eyebrow">Register</p>
-        <h2>새 계정을 만들고 가계부를 시작해보세요</h2>
-        <p class="description">
-          아이디, 이름, 비밀번호를 입력하면 바로 로그인할 수 있는 계정이
-          생성됩니다.
+    <DashboardSidebar :groups="navigationGroups" />
+
+    <div class="auth-content">
+      <section class="auth-panel">
+        <div class="auth-copy">
+          <p class="eyebrow">Register</p>
+          <h2>새 계정을 만들고 가계부를 시작해보세요</h2>
+          <p class="description">
+            아이디, 이름, 비밀번호를 입력하면 바로 로그인할 수 있는 계정이
+            생성됩니다.
+          </p>
+        </div>
+
+        <form class="auth-form" @submit.prevent="handleRegister">
+          <label class="field">
+            <span>아이디</span>
+            <input
+              v-model="form.username"
+              type="text"
+              name="username"
+              placeholder="사용할 아이디를 입력하세요"
+              autocomplete="username"
+            />
+          </label>
+
+          <label class="field">
+            <span>이름</span>
+            <input
+              v-model="form.name"
+              type="text"
+              name="name"
+              placeholder="이름을 입력하세요"
+              autocomplete="name"
+            />
+          </label>
+
+          <label class="field">
+            <span>비밀번호</span>
+            <input
+              v-model="form.password"
+              type="password"
+              name="password"
+              placeholder="비밀번호를 입력하세요"
+              autocomplete="new-password"
+            />
+          </label>
+
+          <p v-if="errorMessage" class="message error">{{ errorMessage }}</p>
+
+          <button type="submit" class="submit-button">회원가입</button>
+        </form>
+
+        <p class="auth-link">
+          이미 계정이 있나요?
+          <RouterLink :to="{ name: 'login' }">로그인</RouterLink>
         </p>
-      </div>
-
-      <form class="auth-form" @submit.prevent="handleRegister">
-        <label class="field">
-          <span>아이디</span>
-          <input
-            v-model="form.username"
-            type="text"
-            name="username"
-            placeholder="사용할 아이디를 입력하세요"
-            autocomplete="username"
-          />
-        </label>
-
-        <label class="field">
-          <span>이름</span>
-          <input
-            v-model="form.name"
-            type="text"
-            name="name"
-            placeholder="이름을 입력하세요"
-            autocomplete="name"
-          />
-        </label>
-
-        <label class="field">
-          <span>비밀번호</span>
-          <input
-            v-model="form.password"
-            type="password"
-            name="password"
-            placeholder="비밀번호를 입력하세요"
-            autocomplete="new-password"
-          />
-        </label>
-
-        <p v-if="errorMessage" class="message error">{{ errorMessage }}</p>
-
-        <button type="submit" class="submit-button">회원가입</button>
-      </form>
-
-      <p class="auth-link">
-        이미 계정이 있나요?
-        <RouterLink :to="{ name: 'login' }">로그인</RouterLink>
-      </p>
-    </section>
+      </section>
+    </div>
   </main>
 </template>
 
 <style scoped>
 .auth-page {
   min-height: 100vh;
-  display: grid;
-  place-items: center;
+  position: relative;
   padding: 24px;
   background:
     radial-gradient(circle at top, rgba(124, 58, 237, 0.18), transparent 34%),
     linear-gradient(180deg, #fcfaff 0%, #f5efff 100%);
+}
+
+.auth-content {
+  min-height: calc(100vh - 48px);
+  display: grid;
+  place-items: center;
 }
 
 .auth-panel {

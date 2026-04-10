@@ -1,6 +1,7 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/authStore';
 
 const props = defineProps({
   groups: {
@@ -11,38 +12,66 @@ const props = defineProps({
 
 const router = useRouter();
 const route = useRoute();
+const authStore = useAuthStore();
 const mobileMenuOpen = ref(false);
 const isMobile = ref(false);
-const DASHBOARD_LABEL = '대시보드';
-const LEDGER_LABEL = '가계부';
+const sidebarItems = [
+  {
+    key: 'home',
+    label: '홈으로',
+    icon: 'fa-solid fa-house',
+    routeName: 'main',
+  },
+  {
+    key: 'ledger',
+    label: '가계부',
+    icon: 'fa-solid fa-calendar',
+    routeName: 'ledger',
+  },
+  {
+    key: 'analysis',
+    label: '분석',
+    icon: 'fa-solid fa-chart-column',
+    routeName: 'analysis',
+  },
+  {
+    key: 'settings',
+    label: '설정',
+    icon: 'fa-solid fa-gear',
+    routeName: 'settings',
+  },
+];
 
-const navigateToItem = (item) => {
-  const normalizedItem = item.trim();
+const isDisabledItem = (item) =>
+  !authStore.isAuthenticated && item.key !== 'home';
 
-  if (normalizedItem === LEDGER_LABEL) {
-    router.push({ name: 'ledger' });
-    closeMenu();
+const navigateToItem = async (item) => {
+  if (isDisabledItem(item)) {
     return;
   }
 
-  if (normalizedItem === DASHBOARD_LABEL) {
-    router.push({ name: 'main' });
+  if (
+    item.key === 'home' ||
+    item.key === 'ledger' ||
+    item.key === 'analysis' ||
+    item.key === 'settings'
+  ) {
+    await router.push({ name: item.routeName });
     closeMenu();
   }
 };
 
-const isActiveItem = (item) => {
-  const normalizedItem = item.trim();
+const isActiveItem = (item) => route.name === item.routeName;
 
-  if (normalizedItem === LEDGER_LABEL) {
-    return route.name === 'ledger';
+const handleLogout = () => {
+  if (!authStore.isAuthenticated) {
+    window.alert('로그인을 먼저 해주세요!');
+    return;
   }
 
-  if (normalizedItem === DASHBOARD_LABEL) {
-    return route.name === 'main';
-  }
-
-  return false;
+  authStore.logout();
+  router.push({ name: 'login' });
+  closeMenu();
 };
 
 const syncViewport = () => {
@@ -60,6 +89,18 @@ const openMenu = () => {
 const closeMenu = () => {
   mobileMenuOpen.value = false;
 };
+
+const handleLogin = () => {
+  if (authStore.isAuthenticated) {
+    return;
+  }
+
+  router.push({ name: 'login' });
+  closeMenu();
+};
+
+const getDisplayName = () =>
+  authStore.currentUser?.name || authStore.currentUser?.username || '';
 
 watch(mobileMenuOpen, (isOpen) => {
   if (typeof document === 'undefined') {
@@ -92,43 +133,55 @@ onBeforeUnmount(() => {
       aria-label="메뉴 열기"
       @click="openMenu"
     >
-      <span></span>
-      <span></span>
-      <span></span>
+      <i class="fa-solid fa-bars"></i>
     </button>
 
     <aside
       v-if="!isMobile"
       class="dashboard-sidebar dashboard-sidebar--desktop"
     >
-      <div class="brand-card">
-        <p class="brand-eyebrow">이름</p>
-        <h2>사용자님</h2>
-        <p>개인 가계부를 한 화면에서 관리합니다.</p>
-      </div>
-
-      <section
-        v-for="group in props.groups"
-        :key="group.title"
-        class="sidebar-group"
+      <button
+        type="button"
+        class="login-button"
+        :class="{ 'is-disabled': authStore.isAuthenticated }"
+        :disabled="authStore.isAuthenticated"
+        @click="handleLogin"
       >
-        <h3>{{ group.title }}</h3>
-        <ul>
-          <li v-for="item in group.items" :key="item">
-            <button
-              type="button"
-              :class="{ 'is-active': isActiveItem(item) }"
-              @click="navigateToItem(item)"
-            >
-              {{ item }}
-            </button>
-          </li>
-        </ul>
-      </section>
+        <i class="fa-solid fa-user"></i>
+        <span v-if="authStore.isAuthenticated"
+          >{{ getDisplayName() }}님 환영합니다</span
+        >
+        <span v-else>로그인</span>
+      </button>
 
-      <div class="sidebar-footer">
-        <button type="button" class="ghost-button">로그아웃</button>
-      </div>
+      <nav class="sidebar-nav" aria-label="사이드바 메뉴">
+        <button
+          v-for="item in sidebarItems"
+          :key="item.key"
+          type="button"
+          class="sidebar-link"
+          :class="{
+            'is-active': isActiveItem(item),
+            'is-disabled': isDisabledItem(item),
+          }"
+          :disabled="isDisabledItem(item)"
+          @click="navigateToItem(item)"
+        >
+          <i :class="item.icon"></i>
+          <span>{{ item.label }}</span>
+        </button>
+
+        <button
+          type="button"
+          class="sidebar-link sidebar-link--danger"
+          :class="{ 'is-disabled': !authStore.isAuthenticated }"
+          :disabled="!authStore.isAuthenticated"
+          @click="handleLogout"
+        >
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>로그아웃</span>
+        </button>
+      </nav>
     </aside>
 
     <transition name="sidebar-fade">
@@ -139,11 +192,19 @@ onBeforeUnmount(() => {
       >
         <aside class="dashboard-sidebar dashboard-sidebar--mobile">
           <div class="sidebar-mobile-header">
-            <div class="brand-card brand-card--compact">
-              <p class="brand-eyebrow">이름</p>
-              <h2>사용자님</h2>
-              <p>개인 가계부를 한 화면에서 관리합니다.</p>
-            </div>
+            <button
+              type="button"
+              class="login-button"
+              :class="{ 'is-disabled': authStore.isAuthenticated }"
+              :disabled="authStore.isAuthenticated"
+              @click="handleLogin"
+            >
+              <i class="fa-solid fa-user"></i>
+              <span v-if="authStore.isAuthenticated"
+                >{{ getDisplayName() }}님 환영합니다</span
+              >
+              <span v-else>로그인</span>
+            </button>
 
             <button
               type="button"
@@ -155,28 +216,34 @@ onBeforeUnmount(() => {
             </button>
           </div>
 
-          <section
-            v-for="group in props.groups"
-            :key="group.title"
-            class="sidebar-group"
-          >
-            <h3>{{ group.title }}</h3>
-            <ul>
-              <li v-for="item in group.items" :key="item">
-                <button
-                  type="button"
-                  :class="{ 'is-active': isActiveItem(item) }"
-                  @click="navigateToItem(item)"
-                >
-                  {{ item }}
-                </button>
-              </li>
-            </ul>
-          </section>
+          <nav class="sidebar-nav" aria-label="사이드바 메뉴">
+            <button
+              v-for="item in sidebarItems"
+              :key="item.key"
+              type="button"
+              class="sidebar-link"
+              :class="{
+                'is-active': isActiveItem(item),
+                'is-disabled': isDisabledItem(item),
+              }"
+              :disabled="isDisabledItem(item)"
+              @click="navigateToItem(item)"
+            >
+              <i :class="item.icon"></i>
+              <span>{{ item.label }}</span>
+            </button>
 
-          <div class="sidebar-footer">
-            <button type="button" class="ghost-button">로그아웃</button>
-          </div>
+            <button
+              type="button"
+              class="sidebar-link sidebar-link--danger"
+              :class="{ 'is-disabled': !authStore.isAuthenticated }"
+              :disabled="!authStore.isAuthenticated"
+              @click="handleLogout"
+            >
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
+              <span>로그아웃</span>
+            </button>
+          </nav>
         </aside>
       </div>
     </transition>
