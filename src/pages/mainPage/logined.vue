@@ -27,7 +27,10 @@ const moveToLogin = () => {
 
 onMounted(async () => {
   if (authStore.currentUser) {
-    await transactionStore.fetchTransactions();
+    await Promise.all([
+      transactionStore.fetchTransactions(),
+      transactionStore.fetchBudgetForCurrentMonth(),
+    ]);
   }
 });
 
@@ -100,7 +103,7 @@ const fixedExpenses = [
 
 <template>
   <div class="dashboard-shell" :class="{ 'is-guest': isGuest }">
-    <DashboardSidebar :groups="navigationGroups" />
+    <DashboardSidebar :groups="navigationGroups" :show-battery="true" />
 
     <section class="content-area">
       <DashboardTopSummary
