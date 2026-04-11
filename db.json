@@ -75,6 +75,42 @@
       "memo": "",
       "isFixed": false,
       "id": 4
+    },
+    {
+      "id": 4,
+      "userId": "user1",
+      "type": "expense",
+      "amount": 1250,
+      "date": "2026-04-03",
+      "title": "지하철 요금",
+      "categoryId": 5,
+      "paymentMethod": "교통카드",
+      "memo": "학원 등교",
+      "isFixed": true
+    },
+    {
+      "id": 5,
+      "userId": "user1",
+      "type": "income",
+      "amount": 12000,
+      "date": "2026-04-05",
+      "title": "교보문고",
+      "categoryId": 3,
+      "paymentMethod": null,
+      "memo": "",
+      "isFixed": false
+    },
+    {
+      "id": 6,
+      "userId": "user1",
+      "type": "expense",
+      "amount": 4900,
+      "date": "2026-04-06",
+      "title": "편의점 간식",
+      "categoryId": 1,
+      "paymentMethod": "현금",
+      "memo": "초콜릿",
+      "isFixed": false
     }
   ],
   "catgories": [
