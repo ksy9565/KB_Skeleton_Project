@@ -43,7 +43,9 @@ const filteredMethods = computed(() => {
         pay.name,
       );
     } else {
-      return ['신용카드', '체크카드', '현금', '계좌이체'].includes(pay.name);
+      return ['신용카드', '체크카드', '교통카드', '현금', '계좌이체'].includes(
+        pay.name,
+      );
     }
   });
 });
