@@ -7,6 +7,7 @@ import { useBaseStore } from '@/stores/commonStore';
 import { useTransactionStore } from '@/stores/transactionStore';
 import { storeToRefs } from 'pinia';
 const modalOpen = ref(false);
+const selectedDate = ref(null);
 
 const currentDate = ref(new Date());
 const transactionStore = useTransactionStore();
@@ -117,6 +118,11 @@ const getDateKey = (day) => {
   const formattedDay = String(day).padStart(2, '0');
   return `${year.value}-${formattedMonth}-${formattedDay}`;
 };
+// 날짜 저장 후 모달 열기
+const openModalWithDate = (day) => {
+  selectedDate.value = getDateKey(day);
+  if (selectedDate.value) modalOpen.value = true;
+};
 
 onMounted(() => {
   fetchTransactions();
@@ -164,19 +170,38 @@ onMounted(() => {
             'sun-text': dayIndex === 0 && day,
             'sat-text': dayIndex === 6 && day,
           }"
+          @click="openModalWithDate(day)"
         >
-          <button type="button" @click="modalOpen = true" class="btn-add">
-            상세
-          </button>
-          <addTransactionModal
-            :is-open="modalOpen"
-            :userId="userId"
-            :categories="categories"
-            :paymentMethods="paymentMethods"
-            @close="modalOpen = false"
-            @save="handleSave"
-            ;
-          />
+          <span class="day-number">{{ day || '' }}</span>
+
+          <div v-if="day && dailySummary[getDateKey(day)]" class="day-stats">
+            <span
+              v-if="dailySummary[getDateKey(day)].income > 0"
+              class="income-amount"
+            >
+              +{{ dailySummary[getDateKey(day)].income.toLocaleString() }}
+            </span>
+            <span
+              v-if="dailySummary[getDateKey(day)].expense > 0"
+              class="expense-amount"
+            >
+              -{{ dailySummary[getDateKey(day)].expense.toLocaleString() }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <!--         <button
+          type="button"
+          v-for="(day, dayIndex) in week"
+          :key="`${weekIndex}-${dayIndex}`"
+          @click="openModalWithDate(day)"
+          class="calendar-day"
+          :class="{
+            empty: !day,
+            'sun-text': dayIndex === 0 && day,
+            'sat-text': dayIndex === 6 && day,
+          }"
+        >
           <span class="day-number">{{ day || '' }}</span>
 
           <div v-if="day && dailySummary[getDateKey(day)]" class="day-stats">
@@ -192,8 +217,17 @@ onMounted(() => {
               -{{ dailySummary[getDateKey(day)].expense.toLocaleString() }}
             </span>
           </div>
-        </div>
-      </div>
+        </button> -->
+      <addTransactionModal
+        :is-open="modalOpen"
+        :userId="userId"
+        :categories="categories"
+        :paymentMethods="paymentMethods"
+        :selectedDay="selectedDate"
+        @close="modalOpen = false"
+        @save="handleSave"
+        ;
+      />
     </div>
   </article>
 </template>

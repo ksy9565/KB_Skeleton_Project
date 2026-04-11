@@ -101,7 +101,7 @@ const chartOptions = computed(() => ({
   plugins: {
     legend: { display: false }, // 기본 범례는 숨기고 기존 커스텀 범례 사용
     tooltip: {
-      enabled: true, // 호버 시 툴팁 활성화 기능: mobile 아닐 때에만 적용
+      enabled: true, // 호버 시 툴팁 활성화 기능
       callbacks: {
         label: (context) => {
           const label = context.label || '';
@@ -121,13 +121,13 @@ const chartOptions = computed(() => ({
         // value를 숫자로 변환 (이미 숫자라면 생략 가능)
         const numericValue = Number(value);
 
-        // 10.0 이상인 경우에만 레이블 표시
+        // 9.0 이상인 경우에만 레이블 표시
         if (numericValue >= 9.0) {
           const label = context.chart.data.labels[context.dataIndex];
           return `${label}\n${numericValue}%`;
         }
 
-        // 10.0 미만인 경우 아무것도 표시하지 않음
+        // 9.0 미만인 경우 아무것도 표시하지 않음
         return '';
       },
       textAlign: 'center',

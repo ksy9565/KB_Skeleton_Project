@@ -7,6 +7,7 @@ const props = defineProps({
   categories: Array, // { id, name, color}
   paymentMethods: Array, // { name, color }
   incomePaymentMethods: Array, // { name, color }
+  selectedDay: String,
 });
 
 const emit = defineEmits(['close', 'save']);
@@ -18,13 +19,13 @@ const initialForm = {
   amount: null,
   categoryId: '',
   paymentMethod: '',
-  date: new Date().toISOString().split('T')[0],
+  date: props.selectedDay,
   memo: '',
   isFixed: false,
 };
 
 const form = ref({ ...initialForm });
-
+console.log(form.value.date);
 // 수입/지출 선택에 따른 카테고리 필터링
 const filteredCategories = computed(() => {
   return props.categories.filter((cat) => {
@@ -54,6 +55,15 @@ watch(
     form.value.categoryId = '';
     form.value.paymentMethod = '';
     form.value.isFixed = false;
+  },
+);
+
+watch(
+  () => props.selectedDay,
+  (newDate) => {
+    if (newDate) {
+      form.value.date = newDate;
+    }
   },
 );
 
@@ -102,7 +112,11 @@ const saveTransaction = () => {
         <h2>거래 내역 추가</h2>
         <button class="close-btn" @click="closeModal">&times;</button>
       </header>
-
+      <!-- 5. 날짜 선택 (✨ 새로 추가) -->
+      <div class="form-group">
+        <label>날짜</label>
+        <p>{{ form.date }}</p>
+      </div>
       <form @submit.prevent="saveTransaction">
         <!-- 1. 수입/지출 선택 -->
         <div class="form-group">
@@ -168,12 +182,6 @@ const saveTransaction = () => {
               class="no-spinners"
             />
           </div>
-        </div>
-
-        <!-- 5. 날짜 선택 (✨ 새로 추가) -->
-        <div class="form-group">
-          <label>날짜</label>
-          <input type="date" v-model="form.date" required class="date-input" />
         </div>
 
         <!-- 6. 지출 형태 선택 -->
