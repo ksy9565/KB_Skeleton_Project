@@ -14,7 +14,7 @@ const today = new Date();
 const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
 const collapsedGroups = ref({});
-const categories = ref([]); // 카테고리 목록 저장
+const categories = ref([]);
 
 const viewDate = ref(new Date());
 
@@ -40,50 +40,8 @@ const editingItem = reactive({
   isFixed: false,
 });
 
-// 목데이터
-const mockTransactions = ref([
-  {
-    id: 1,
-    type: 'expense',
-    date: '2026-04-10',
-    categoryId: 7,
-    paymentMethod: '체크카드',
-    amount: 11600,
-    memo: '같이 커피 사먹음',
-  },
-  {
-    id: 2,
-    type: 'expense',
-    date: '2026-04-10',
-    categoryId: 7,
-    paymentMethod: '신용카드',
-    amount: 10000,
-    memo: '편의점',
-  },
-  {
-    id: 3,
-    type: 'expense',
-    date: '2026-04-05',
-    categoryId: 11,
-    paymentMethod: '체크카드',
-    amount: 45640,
-    memo: '이마트 장보기',
-  },
-  {
-    id: 4,
-    type: 'income',
-    date: '2026-04-01',
-    categoryId: 1,
-    paymentMethod: null,
-    amount: 650000,
-    memo: '용돈',
-  },
-]);
-
 const groupedTransactions = computed(() => {
-  const source = transactionStore.transactions.length
-    ? transactionStore.transactions
-    : mockTransactions.value;
+  const source = transactionStore.transactions;
 
   const filtered = source.filter((item) => {
     const itemDate = new Date(item.date);
@@ -103,11 +61,9 @@ const groupedTransactions = computed(() => {
 });
 
 const filteredCategories = computed(() => {
-  if (editingItem.type === 'expense') {
-    // 지출(expense)일 때는 ID 1~6만 표시
+  if (editingItem.type === 'income') {
     return categories.value.filter((cat) => cat.id >= 1 && cat.id <= 6);
   } else {
-    // 수입(income)일 때는 ID 7 이상만 표시
     return categories.value.filter((cat) => cat.id >= 7);
   }
 });
@@ -220,10 +176,10 @@ onMounted(async () => {
               <tr>
                 <th>분류</th>
                 <th>카테고리</th>
+                <th>내용</th>
                 <th>결제수단</th>
                 <th>금액</th>
                 <th>메모</th>
-                <th class="text-right">관리</th>
               </tr>
             </thead>
             <tbody>
@@ -234,6 +190,7 @@ onMounted(async () => {
                   </span>
                 </td>
                 <td>{{ getCategoryName(item.categoryId) }}</td>
+                <td class="title-cell">{{ item.title || '내용 없음' }}</td>
                 <td>{{ item.paymentMethod || '-' }}</td>
                 <td
                   :class="['amount', item.type === 'income' ? 'plus' : 'minus']"
@@ -529,7 +486,7 @@ onMounted(async () => {
 .modal-content {
   background: white;
   padding: 32px;
-  border-radius: 24px; /* 더 둥글게 */
+  border-radius: 24px;
   width: 480px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
   border: 1px solid rgba(124, 58, 237, 0.1);
@@ -590,30 +547,6 @@ onMounted(async () => {
   display: flex;
   gap: 10px;
 }
-
-.modal-footer {
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.save-btn {
-  background-color: #4a72ff;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.cancel-btn {
-  background: #eee;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-}
 .modal-footer {
   margin-top: 30px;
   display: flex;
@@ -636,7 +569,7 @@ onMounted(async () => {
 }
 
 .save-btn {
-  flex: 2; /* 수정 버튼을 더 강조 */
+  flex: 2;
   background: linear-gradient(135deg, #7c3aed, #a855f7);
   color: white;
   border: none;

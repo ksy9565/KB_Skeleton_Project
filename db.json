@@ -49,8 +49,8 @@
       "amount": 10000,
       "date": "2026-04-02",
       "title": "커피",
-      "categoryId": 2,
-      "paymentMethod": "신용카드",
+      "categoryId": 7,
+      "paymentMethod": "체크카드",
       "memo": "",
       "isFixed": false
     },
@@ -61,6 +61,53 @@
       "amount": 200000,
       "date": "2026-04-01",
       "title": "월급"
+    },
+    {
+      "userId": "user1",
+      "type": "expense",
+      "amount": 676763,
+      "categoryId": 8,
+      "paymentMethod": "현금",
+      "date": "2026-04-10",
+      "memo": "",
+      "isFixed": false,
+      "id": 4
+    },
+    {
+      "id": 4,
+      "userId": "user1",
+      "type": "expense",
+      "amount": 1250,
+      "date": "2026-04-03",
+      "title": "지하철 요금",
+      "categoryId": 5,
+      "paymentMethod": "교통카드",
+      "memo": "학원 등교",
+      "isFixed": true
+    },
+    {
+      "id": 5,
+      "userId": "user1",
+      "type": "expense",
+      "amount": 12000,
+      "date": "2026-04-05",
+      "title": "교보문고",
+      "categoryId": 6,
+      "paymentMethod": "체크카드",
+      "memo": "",
+      "isFixed": false
+    },
+    {
+      "id": 6,
+      "userId": "user1",
+      "type": "expense",
+      "amount": 4900,
+      "date": "2026-04-06",
+      "title": "편의점 간식",
+      "categoryId": 1,
+      "paymentMethod": "현금",
+      "memo": "초콜릿",
+      "isFixed": false
     }
   ],
   "catgories": [
