@@ -115,6 +115,9 @@ export const useBaseStore = defineStore('base', () => {
   const getCategoryName = (id) =>
     categories.value.find((c) => c.id === id)?.name;
 
+  const getCategoryColor = (name) =>
+    categories.value.find((c) => c.name === name)?.color;
+
   const getPaymentMethodsColor = (name) =>
     paymentMethods.value.find((c) => c.name === name)?.color;
 
@@ -122,6 +125,7 @@ export const useBaseStore = defineStore('base', () => {
     categories,
     paymentMethods,
     getCategoryName,
+    getCategoryColor,
     getPaymentMethodsColor,
   };
 });

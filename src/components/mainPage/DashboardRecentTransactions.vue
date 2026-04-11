@@ -7,7 +7,6 @@ import { useTransactionStore } from '@/stores/transactionStore';
 import { useAuthStore } from '@/stores/authStore';
 import { storeToRefs } from 'pinia';
 import { useBaseStore } from '@/stores/commonStore';
-const modalOpen = ref(false);
 // 2. ChartJS 플러그인 등록
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
@@ -23,7 +22,6 @@ const { addTransaction2 } = transactionStore;
 
 // 초기 데이터 로드
 onMounted(async () => {
-  const userId = authStore.currentUser?.id || 1;
   // 임시로 최근 1개월 데이터를 가져온 후 위에서 slice(0, 10) 처리
   await transactionStore.getCategoryStats(userId, currentMonth.value);
 });
@@ -54,9 +52,6 @@ const items = computed(() => {
   <article class="panel recent-panel">
     <div class="panel-head">
       <p class="panel-label">최근 거래 내역</p>
-      <button type="button" @click="modalOpen = true" class="btn-add">
-        상세
-      </button>
     </div>
 
     <ul class="transaction-list">
@@ -93,3 +88,12 @@ const items = computed(() => {
     </ul>
   </article>
 </template>
+
+<style scoped>
+.recent-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* 부모(그리드) 높이를 꽉 채움 */
+  overflow: hidden; /* 내부 스크롤이 절대 안 생기게 차단 */
+}
+</style>

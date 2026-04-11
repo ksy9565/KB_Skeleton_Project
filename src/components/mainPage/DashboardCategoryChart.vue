@@ -70,7 +70,7 @@ const items = computed(() => {
       return {
         label: categoryInfo?.name || String(catId),
         value: percentage,
-        color: categoryInfo?.color || '#b8b3c9',
+        color: baseStore.getCategoryColor(categoryInfo?.name),
       };
     })
     .sort((a, b) => b.value - a.value);

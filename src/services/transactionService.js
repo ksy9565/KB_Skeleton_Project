@@ -27,6 +27,17 @@ export const transactionService = {
       throw error;
     }
   },
+  async deleteTransaction(id) {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/transactions/${id}`,
+      );
+      return response.data;
+    } catch (error) {
+      console.error('API 삭제 요청 실패:', error);
+      throw error;
+    }
+  },
 
   async getBudgetByUserIdAndMonth(userId, month) {
     if (!userId || !month) {
