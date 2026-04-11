@@ -14,6 +14,7 @@ const today = new Date();
 const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
 const collapsedGroups = ref({});
+const categories = ref([]); // 카테고리 목록 저장
 
 const viewDate = ref(new Date());
 
@@ -32,10 +33,11 @@ const editingItem = reactive({
   id: null,
   date: '',
   type: 'expense',
-  category: '',
-  method: '',
+  categoryId: null,
+  paymentMethod: '',
   amount: 0,
   memo: '',
+  isFixed: false,
 });
 
 // 목데이터
@@ -44,8 +46,8 @@ const mockTransactions = ref([
     id: 1,
     type: 'expense',
     date: '2026-04-10',
-    category: '카페·간식',
-    method: '카드',
+    categoryId: 7,
+    paymentMethod: '체크카드',
     amount: 11600,
     memo: '같이 커피 사먹음',
   },
@@ -53,8 +55,8 @@ const mockTransactions = ref([
     id: 2,
     type: 'expense',
     date: '2026-04-10',
-    category: '식비',
-    method: '카드',
+    categoryId: 7,
+    paymentMethod: '신용카드',
     amount: 10000,
     memo: '편의점',
   },
@@ -62,8 +64,8 @@ const mockTransactions = ref([
     id: 3,
     type: 'expense',
     date: '2026-04-05',
-    category: '생활',
-    method: '카드',
+    categoryId: 11,
+    paymentMethod: '체크카드',
     amount: 45640,
     memo: '이마트 장보기',
   },
@@ -71,8 +73,8 @@ const mockTransactions = ref([
     id: 4,
     type: 'income',
     date: '2026-04-01',
-    category: '기타',
-    method: '현금',
+    categoryId: 1,
+    paymentMethod: null,
     amount: 650000,
     memo: '용돈',
   },
@@ -100,6 +102,16 @@ const groupedTransactions = computed(() => {
   }, {});
 });
 
+const filteredCategories = computed(() => {
+  if (editingItem.type === 'expense') {
+    // 지출(expense)일 때는 ID 1~6만 표시
+    return categories.value.filter((cat) => cat.id >= 1 && cat.id <= 6);
+  } else {
+    // 수입(income)일 때는 ID 7 이상만 표시
+    return categories.value.filter((cat) => cat.id >= 7);
+  }
+});
+
 const toggleGroup = (date) => {
   collapsedGroups.value[date] = !collapsedGroups.value[date];
 };
@@ -121,6 +133,7 @@ const handleUpdateSubmit = async () => {
       alert('수정되었습니다.');
       closeEditModal();
     } catch (error) {
+      console.error('수정 실패 상세:', error.response?.data || error);
       alert('수정 중 오류가 발생했습니다.');
     }
   }
@@ -139,8 +152,19 @@ const handleDelete = async (id) => {
 
 const formatNumber = (num) => num.toLocaleString();
 
+const getCategoryName = (id) => {
+  const category = categories.value.find((c) => c.id === id);
+  return category ? category.name : '미지정';
+};
+
 onMounted(async () => {
   await transactionStore.fetchTransactions();
+  try {
+    const response = await fetch('http://localhost:3000/catgories');
+    categories.value = await response.json();
+  } catch (error) {
+    console.error('카테고리 로드 실패:', error);
+  }
 });
 </script>
 
@@ -209,8 +233,8 @@ onMounted(async () => {
                     {{ item.type === 'income' ? '수입' : '지출' }}
                   </span>
                 </td>
-                <td>{{ item.category }}</td>
-                <td>{{ item.method }}</td>
+                <td>{{ getCategoryName(item.categoryId) }}</td>
+                <td>{{ item.paymentMethod || '-' }}</td>
                 <td
                   :class="['amount', item.type === 'income' ? 'plus' : 'minus']"
                 >
@@ -246,7 +270,6 @@ onMounted(async () => {
       <div class="modal-content">
         <header class="modal-header">
           <h2>거래 내역 수정</h2>
-          <button class="close-btn" @click="closeEditModal">&times;</button>
         </header>
 
         <form @submit.prevent="handleUpdateSubmit" class="edit-form">
@@ -263,6 +286,7 @@ onMounted(async () => {
                 id="edit-expense"
                 value="expense"
                 v-model="editingItem.type"
+                @change="editingItem.paymentMethod = '체크카드'"
               />
               <label for="edit-expense" class="type-label expense">지출</label>
               <input
@@ -270,6 +294,7 @@ onMounted(async () => {
                 id="edit-income"
                 value="income"
                 v-model="editingItem.type"
+                @change="editingItem.paymentMethod = null"
               />
               <label for="edit-income" class="type-label income">수입</label>
             </div>
@@ -277,7 +302,25 @@ onMounted(async () => {
 
           <div class="form-group">
             <label>카테고리</label>
-            <input type="text" v-model="editingItem.category" required />
+            <select v-model="editingItem.categoryId" required>
+              <option :value="null" disabled>카테고리를 선택하세요</option>
+              <option
+                v-for="cat in filteredCategories"
+                :key="cat.id"
+                :value="cat.id"
+              >
+                {{ cat.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group" v-if="editingItem.type === 'expense'">
+            <label>결제수단</label>
+            <select v-model="editingItem.paymentMethod">
+              <option value="체크카드">체크카드</option>
+              <option value="신용카드">신용카드</option>
+              <option value="현금">현금</option>
+            </select>
           </div>
 
           <div class="form-group">
@@ -288,6 +331,13 @@ onMounted(async () => {
           <div class="form-group">
             <label>메모</label>
             <textarea v-model="editingItem.memo" rows="3"></textarea>
+          </div>
+
+          <div class="form-group check-group">
+            <label>
+              <input type="checkbox" v-model="editingItem.isFixed" />
+              고정 거래 여부
+            </label>
           </div>
 
           <footer class="modal-footer">
@@ -478,10 +528,11 @@ onMounted(async () => {
 
 .modal-content {
   background: white;
-  padding: 30px;
-  border-radius: 12px;
-  width: 450px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 32px;
+  border-radius: 24px; /* 더 둥글게 */
+  width: 480px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.1);
 }
 
 .modal-header {
@@ -489,6 +540,12 @@ onMounted(async () => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+}
+.modal-header h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #1f2937;
+  letter-spacing: -0.02em;
 }
 
 .edit-form {
@@ -503,12 +560,32 @@ onMounted(async () => {
   gap: 5px;
 }
 
-.form-group input {
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #1f2937;
+  background-color: #f9fafb;
+  transition: all 0.2s ease;
 }
 
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #7c3aed;
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+}
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #4b5563;
+  margin-bottom: 4px;
+}
 .radio-wrapper {
   display: flex;
   gap: 10px;
@@ -536,5 +613,44 @@ onMounted(async () => {
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
+}
+.modal-footer {
+  margin-top: 30px;
+  display: flex;
+  gap: 12px;
+}
+
+.cancel-btn {
+  flex: 1;
+  background: #f3f4f6;
+  border: none;
+  padding: 14px;
+  border-radius: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  transition: background 0.2s;
+}
+
+.cancel-btn:hover {
+  background: #e5e7eb;
+}
+
+.save-btn {
+  flex: 2; /* 수정 버튼을 더 강조 */
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 14px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.save-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3);
 }
 </style>
