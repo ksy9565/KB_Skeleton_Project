@@ -59,50 +59,8 @@ const editingItem = reactive({
   isFixed: false,
 });
 
-// 목데이터
-const mockTransactions = ref([
-  {
-    id: 1,
-    type: 'expense',
-    date: '2026-04-10',
-    categoryId: 7,
-    paymentMethod: '체크카드',
-    amount: 11600,
-    memo: '같이 커피 사먹음',
-  },
-  {
-    id: 2,
-    type: 'expense',
-    date: '2026-04-10',
-    categoryId: 7,
-    paymentMethod: '신용카드',
-    amount: 10000,
-    memo: '편의점',
-  },
-  {
-    id: 3,
-    type: 'expense',
-    date: '2026-04-05',
-    categoryId: 11,
-    paymentMethod: '체크카드',
-    amount: 45640,
-    memo: '이마트 장보기',
-  },
-  {
-    id: 4,
-    type: 'income',
-    date: '2026-04-01',
-    categoryId: 1,
-    paymentMethod: null,
-    amount: 650000,
-    memo: '용돈',
-  },
-]);
-
 const groupedTransactions = computed(() => {
-  const source = transactionStore.transactions.length
-    ? transactionStore.transactions
-    : mockTransactions.value;
+  const source = transactionStore.transactions;
 
   const filtered = source.filter((item) => {
     const itemDate = new Date(item.date);
@@ -219,7 +177,8 @@ onMounted(async () => {
   await transactionStore.fetchTransactions();
   try {
     const response = await fetch('http://localhost:3000/catgories');
-    categories.value = await response.json();
+    const apiCategories = await response.json();
+    baseStore.mergeCategoriesWithColors(apiCategories);
   } catch (error) {
     console.error('카테고리 로드 실패:', error);
   }

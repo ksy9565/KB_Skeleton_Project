@@ -6,7 +6,8 @@
       "password": "1234",
       "name": "철수",
       "balance": 1000000,
-      "layoutId": 1
+      "layoutId": 1,
+      "profileImage": null
     },
     {
       "id": "user2",
@@ -14,14 +15,16 @@
       "password": "1234",
       "name": "영희",
       "balance": 500000,
-      "layoutId": 2
+      "layoutId": 2,
+      "profileImage": null
     },
     {
       "username": "test",
-      "name": "정준",
+      "name": "ABC",
       "password": "1234",
       "balance": 0,
       "layoutId": 1,
+      "profileImage": null,
       "id": "n6K3AIp"
     },
     {
@@ -30,6 +33,7 @@
       "password": "1234",
       "balance": 0,
       "layoutId": 1,
+      "profileImage": null,
       "id": "-yx5KNy"
     }
   ],
