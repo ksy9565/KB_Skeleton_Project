@@ -7,6 +7,7 @@ import DashboardRecentTransactions from '@/components/mainPage/DashboardRecentTr
 import DashboardSidebar from '@/components/mainPage/DashboardSidebar.vue';
 import DashboardTopSummary from '@/components/mainPage/DashboardTopSummary.vue';
 import DashboardWeeklyChart from '@/components/mainPage/DashboardWeeklyChart.vue';
+import DashboardPaymentMethodsChart from '@/components/mainPage/DashboardPaymentMethodsChart.vue';
 
 import '@/styles/mainPage/logined.css';
 
@@ -60,6 +61,14 @@ const summaryCards = computed(() => [
   },
 ]);
 
+const calendarDays = [
+  ['', '', '', '1', '2', '3', '4'],
+  ['5', '6', '7', '8', '9', '10', '11'],
+  ['12', '13', '14', '15', '16', '17', '18'],
+  ['19', '20', '21', '22', '23', '24', '25'],
+  ['26', '27', '28', '29', '30', '', ''],
+];
+
 const recentTransactions = [
   { type: '지출', title: '점심 식사', amount: '-12,000원', date: '2026-04-08' },
   { type: '수입', title: '급여', amount: '+3,000,000원', date: '2026-04-05' },
@@ -76,15 +85,6 @@ const monthlyBars = [
   { label: '3월', income: 38, expense: 21 },
   { label: '4월', income: 55, expense: 26 },
 ];
-
-const categorySeries = [
-  { label: '식비', value: 41, color: '#7c3aed' },
-  { label: '교통', value: 21, color: '#9f67ff' },
-  { label: '주거', value: 14, color: '#bba9ff' },
-  { label: '쇼핑', value: 11, color: '#d5ccff' },
-  { label: '기타', value: 13, color: '#ece7ff' },
-];
-
 </script>
 
 <template>
@@ -101,8 +101,8 @@ const categorySeries = [
       />
 
       <section class="panel-grid upper-grid">
-        <DashboardCalendarPanel/>
-        <DashboardRecentTransactions/>
+        <DashboardCalendarPanel />
+        <DashboardRecentTransactions />
       </section>
 
       <section class="panel-grid lower-grid">
@@ -111,7 +111,8 @@ const categorySeries = [
       </section>
 
       <section class="panel-grid lower-grid final-grid">
-        <DashboardCategoryChart :items="categorySeries" />
+        <DashboardCategoryChart />
+        <DashboardPaymentMethodsChart />
         <DashboardFixedExpenseCard :items="fixedExpenses" />
       </section>
     </section>

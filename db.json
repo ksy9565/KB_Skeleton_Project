@@ -40,7 +40,10 @@
       "type": "income",
       "amount": 50000,
       "date": "2026-04-01",
-      "title": "용돈"
+      "title": "용돈",
+      "categoryId": 3,
+      "paymentMethod": "현금",
+      "memo": "주간 용돈"
     },
     {
       "id": 2,
@@ -61,6 +64,17 @@
       "amount": 200000,
       "date": "2026-04-01",
       "title": "월급"
+    },
+    {
+      "userId": "user1",
+      "type": "expense",
+      "amount": 676763,
+      "categoryId": 8,
+      "paymentMethod": "현금",
+      "date": "2026-04-10",
+      "memo": "",
+      "isFixed": false,
+      "id": 4
     }
   ],
   "catgories": [

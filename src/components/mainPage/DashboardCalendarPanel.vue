@@ -2,11 +2,30 @@
 import { ref, computed, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/authStore';
 import { transactionService } from '@/services/transactionService';
-
-const authStore = useAuthStore();
-const transactions = ref([]);
+import addTransactionModal from '@/pages/subPage/addTransactionModal.vue';
+import { useBaseStore } from '@/stores/commonStore';
+import { useTransactionStore } from '@/stores/transactionStore';
+import { storeToRefs } from 'pinia';
+const modalOpen = ref(false);
+const selectedDate = ref(null);
 
 const currentDate = ref(new Date());
+const transactionStore = useTransactionStore();
+const authStore = useAuthStore();
+const userId = computed(() => authStore.currentUser?.id || 'guest');
+const baseStore = useBaseStore();
+
+const { categories, paymentMethods } = storeToRefs(baseStore);
+const { transactions, currentMonth } = storeToRefs(transactionStore);
+const { addTransaction2 } = transactionStore;
+const handleSave = async (data) => {
+  await addTransaction2(data);
+  const currentUserId = authStore.currentUser?.id;
+  if (currentUserId) {
+    await transactionStore.getCategoryStats(currentUserId, currentMonth.value);
+  }
+  modalOpen.value = false;
+};
 
 const year = computed(() => currentDate.value.getFullYear());
 const month = computed(() => currentDate.value.getMonth());
@@ -23,7 +42,7 @@ const nextMonth = () => {
 const calendarDays = computed(() => {
   const firstDayOfMonth = new Date(year.value, month.value, 1).getDay(); // 1일의 요일 (0:일 ~ 6:토)
   const lastDateOfMonth = new Date(year.value, month.value + 1, 0).getDate(); // 이번 달 마지막 날짜 (28~31)
-  
+
   const days = [];
   let currentWeek = [];
 
@@ -35,7 +54,7 @@ const calendarDays = computed(() => {
   // 1일부터 마지막 날까지 채우기
   for (let date = 1; date <= lastDateOfMonth; date++) {
     currentWeek.push(date);
-    
+
     // 토요일(6)이 되면 한 주를 마감하고 새 주 시작
     if (currentWeek.length === 7) {
       days.push(currentWeek);
@@ -56,8 +75,8 @@ const calendarDays = computed(() => {
 
 // 2. 서버에서 현재 유저의 트랜잭션 조회
 async function fetchTransactions() {
-  const userId = authStore.currentUser?.id; 
-  
+  const userId = authStore.currentUser?.id;
+
   if (!userId) {
     console.warn('유저 정보가 없습니다.');
     return;
@@ -66,9 +85,9 @@ async function fetchTransactions() {
   try {
     const data = await transactionService.getTransactionsByUserId(userId);
     transactions.value = data;
-    console.log("로드된 내역:", data);
+    console.log('로드된 내역:', data);
   } catch (error) {
-    console.error("데이터 로드 실패:", error);
+    console.error('데이터 로드 실패:', error);
   }
 }
 
@@ -99,6 +118,11 @@ const getDateKey = (day) => {
   const formattedDay = String(day).padStart(2, '0');
   return `${year.value}-${formattedMonth}-${formattedDay}`;
 };
+// 날짜 저장 후 모달 열기
+const openModalWithDate = (day) => {
+  selectedDate.value = getDateKey(day);
+  if (selectedDate.value) modalOpen.value = true;
+};
 
 onMounted(() => {
   fetchTransactions();
@@ -110,10 +134,11 @@ onMounted(() => {
     <div class="calendar-header">
       <div class="month-selector">
         <button type="button" class="nav-btn" @click="prevMonth">
-          <i class="prev-icon">&lt;</i> </button>
-        
+          <i class="prev-icon">&lt;</i>
+        </button>
+
         <h3 class="current-month">{{ year }}년 {{ month + 1 }}월</h3>
-        
+
         <button type="button" class="nav-btn" @click="nextMonth">
           <i class="next-icon">&gt;</i>
         </button>
@@ -140,23 +165,24 @@ onMounted(() => {
           v-for="(day, dayIndex) in week"
           :key="`${weekIndex}-${dayIndex}`"
           class="calendar-day"
-          :class="{ 
-            empty: !day, 
+          :class="{
+            empty: !day,
             'sun-text': dayIndex === 0 && day,
-            'sat-text': dayIndex === 6 && day 
+            'sat-text': dayIndex === 6 && day,
           }"
+          @click="openModalWithDate(day)"
         >
           <span class="day-number">{{ day || '' }}</span>
 
           <div v-if="day && dailySummary[getDateKey(day)]" class="day-stats">
-            <span 
-              v-if="dailySummary[getDateKey(day)].income > 0" 
+            <span
+              v-if="dailySummary[getDateKey(day)].income > 0"
               class="income-amount"
             >
               +{{ dailySummary[getDateKey(day)].income.toLocaleString() }}
             </span>
-            <span 
-              v-if="dailySummary[getDateKey(day)].expense > 0" 
+            <span
+              v-if="dailySummary[getDateKey(day)].expense > 0"
               class="expense-amount"
             >
               -{{ dailySummary[getDateKey(day)].expense.toLocaleString() }}
@@ -164,13 +190,57 @@ onMounted(() => {
           </div>
         </div>
       </div>
+      <!--         <button
+          type="button"
+          v-for="(day, dayIndex) in week"
+          :key="`${weekIndex}-${dayIndex}`"
+          @click="openModalWithDate(day)"
+          class="calendar-day"
+          :class="{
+            empty: !day,
+            'sun-text': dayIndex === 0 && day,
+            'sat-text': dayIndex === 6 && day,
+          }"
+        >
+          <span class="day-number">{{ day || '' }}</span>
+
+          <div v-if="day && dailySummary[getDateKey(day)]" class="day-stats">
+            <span
+              v-if="dailySummary[getDateKey(day)].income > 0"
+              class="income-amount"
+              >`` +{{ dailySummary[getDateKey(day)].income.toLocaleString() }}
+            </span>
+            <span
+              v-if="dailySummary[getDateKey(day)].expense > 0"
+              class="expense-amount"
+            >
+              -{{ dailySummary[getDateKey(day)].expense.toLocaleString() }}
+            </span>
+          </div>
+        </button> -->
+      <addTransactionModal
+        :is-open="modalOpen"
+        :userId="userId"
+        :categories="categories"
+        :paymentMethods="paymentMethods"
+        :selectedDay="selectedDate"
+        @close="modalOpen = false"
+        @save="handleSave"
+        ;
+      />
     </div>
   </article>
 </template>
 
 <style scoped>
-.calendar-weekdays span.sun { color: #ef4444; font-weight: 700; }
-.calendar-weekdays span.sat { color: #3b82f6; font-weight: 700; }
+.calendar-weekdays span.sun {
+  color: #ef4444;
+  font-weight: 700;
+}
+.calendar-weekdays span.sat {
+  color: #3b82f6;
+  font-weight: 700;
+}
 
 .calendar-day {
   min-height: 90px;
@@ -188,8 +258,12 @@ onMounted(() => {
   border: none;
 }
 
-.sun-text .day-number { color: #ef4444 !important; }
-.sat-text .day-number { color: #3b82f6 !important; }
+.sun-text .day-number {
+  color: #ef4444 !important;
+}
+.sat-text .day-number {
+  color: #3b82f6 !important;
+}
 
 .day-number {
   font-size: 0.85rem;
