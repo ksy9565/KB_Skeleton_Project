@@ -10,7 +10,6 @@ import Swal from 'sweetalert2';
 import { useAuthStore } from '@/stores/authStore';
 import { useTransactionStore } from '@/stores/transactionStore';
 import { useBaseStore } from '@/stores/commonStore';
-import { useBaseStore } from '@/stores/commonStore';
 import { transactionService } from '@/services/transactionService';
 import { storeToRefs } from 'pinia';
 
@@ -202,7 +201,6 @@ onMounted(async () => {
           <button class="month-btn" @click="moveMonth(1)">&gt;</button>
         </div>
 
-        <button class="write-btn" @click="modalOpen = true">
         <button class="write-btn" @click="modalOpen = true">
           가계부 작성 <span class="icon">✎</span>
         </button>

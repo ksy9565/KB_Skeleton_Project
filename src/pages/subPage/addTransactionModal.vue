@@ -63,8 +63,6 @@ watch(
 watch(
   () => [props.isOpen, props.userId, props.selectedDay],
   ([isOpen, userId, selectedDay]) => {
-  () => [props.isOpen, props.userId, props.selectedDay],
-  ([isOpen, userId, selectedDay]) => {
     if (isOpen) {
       form.value.userId = userId ?? null;
       if (selectedDay) {
