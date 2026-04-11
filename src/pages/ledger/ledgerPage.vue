@@ -59,50 +59,8 @@ const editingItem = reactive({
   isFixed: false,
 });
 
-// 목데이터
-const mockTransactions = ref([
-  {
-    id: 1,
-    type: 'expense',
-    date: '2026-04-10',
-    categoryId: 7,
-    paymentMethod: '체크카드',
-    amount: 11600,
-    memo: '같이 커피 사먹음',
-  },
-  {
-    id: 2,
-    type: 'expense',
-    date: '2026-04-10',
-    categoryId: 7,
-    paymentMethod: '신용카드',
-    amount: 10000,
-    memo: '편의점',
-  },
-  {
-    id: 3,
-    type: 'expense',
-    date: '2026-04-05',
-    categoryId: 11,
-    paymentMethod: '체크카드',
-    amount: 45640,
-    memo: '이마트 장보기',
-  },
-  {
-    id: 4,
-    type: 'income',
-    date: '2026-04-01',
-    categoryId: 1,
-    paymentMethod: null,
-    amount: 650000,
-    memo: '용돈',
-  },
-]);
-
 const groupedTransactions = computed(() => {
-  const source = transactionStore.transactions.length
-    ? transactionStore.transactions
-    : mockTransactions.value;
+  const source = transactionStore.transactions;
 
   const filtered = source.filter((item) => {
     const itemDate = new Date(item.date);
@@ -265,7 +223,6 @@ onMounted(async () => {
           <div class="col-date">날짜</div>
           <div class="col-type">구분</div>
           <div class="col-cat">카테고리</div>
-          <div class="col-title">내용</div>
           <div class="col-method">결제수단</div>
           <div class="col-amount">금액(원)</div>
           <div class="col-memo">메모</div>
@@ -298,7 +255,6 @@ onMounted(async () => {
                 }}</span>
               </div>
               <div class="col-cat">{{ getCategoryName(item.categoryId) }}</div>
-              <div class="col-title">{{ item.title || '내용 없음' }}</div>
               <div class="col-method">{{ item.paymentMethod || '-' }}</div>
               <div class="col-amount" :class="item.type">
                 {{ formatNumber(item.amount) }}
@@ -432,23 +388,16 @@ onMounted(async () => {
   display: grid;
   grid-template-columns:
     140px
-    70px
-    110px
-    1fr
-    100px
+    80px
     120px
-    minmax(200px, 1fr)
-    110px;
+    120px
+    120px
+    1fr
+    120px;
 
   align-items: center;
   gap: 20px;
   padding: 18px 24px;
-}
-
-.col-amount {
-  font-weight: 700;
-  text-align: right;
-  padding-right: 10px;
 }
 
 .list-header {
@@ -537,7 +486,6 @@ onMounted(async () => {
 
 .col-amount {
   font-weight: 700;
-  text-align: right;
   font-family: 'Pretendard', sans-serif;
 }
 .col-amount.income {
@@ -546,13 +494,14 @@ onMounted(async () => {
 .col-amount.expense {
   color: #e53e3e;
 }
-
-.col-title,
 .col-memo {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #4a5568;
+}
+.col-actions {
+  display: flex;
+  gap: 8px;
 }
 
 .small-btn {
@@ -582,9 +531,6 @@ onMounted(async () => {
   .transaction-row {
     grid-template-columns: 140px 70px 100px 1fr 100px 110px 100px;
   }
-  .col-memo {
-    display: none;
-  }
 }
 
 @media (max-width: 768px) {
@@ -594,48 +540,52 @@ onMounted(async () => {
   .list-header {
     display: none;
   }
+
   .date-toggle-header,
   .transaction-row {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding: 16px;
-    gap: 8px;
+    gap: 4px;
     position: relative;
   }
-  .date-toggle-header {
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-  }
 
-  .date-toggle-header .col-date {
+  .col-memo {
     display: block;
-    width: auto;
+    width: 100%;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1a202c;
+    order: 1;
+    margin-bottom: 4px;
   }
 
-  .transaction-row .col-date {
-    display: none;
-  }
-  .col-date {
-    display: none;
+  .col-type {
+    order: 0;
+    margin-bottom: 2px;
   }
 
-  .col-type,
   .col-cat {
     display: inline-flex;
-    width: auto;
+    order: 2;
+    color: #718096;
+    font-size: 0.95rem;
   }
 
-  .col-title {
-    white-space: normal;
+  .col-method {
+    order: 3;
+    font-size: 0.95rem;
+    color: #718096;
   }
 
   .col-amount {
     width: 100%;
     text-align: right;
-    font-size: 1.2rem;
-    margin: 8px 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 12px 0;
+    order: 4;
   }
 
   .col-actions {
@@ -644,6 +594,26 @@ onMounted(async () => {
     justify-content: flex-end;
     border-top: 1px solid #f1f3f9;
     padding-top: 12px;
+    margin-top: 8px;
+    order: 5;
+    gap: 8px;
+  }
+
+  .date-toggle-header {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    background-color: #f8fafc;
+  }
+
+  .date-toggle-header .col-date {
+    display: block;
+    width: auto;
+  }
+
+  .transaction-row .col-date,
+  .col-date {
+    display: none;
   }
 }
 .filter-bar {
@@ -819,9 +789,9 @@ onMounted(async () => {
   border-radius: 6px;
 }
 .type-selector button.active {
-  background: #4a90e2;
+  background: #7c4dff;
   color: white;
-  border-color: #4a90e2;
+  border-color: #7c4dff;
 }
 
 .modal-footer {

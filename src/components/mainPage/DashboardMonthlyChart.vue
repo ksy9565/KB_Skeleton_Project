@@ -97,6 +97,7 @@ const renderChart = () => {
       },
       plugins: {
         legend: { display: false },
+        datalabels: { display: false },
         tooltip: {
           backgroundColor: 'rgba(124, 58, 237, 0.1)',
           titleFont: { size: 13, weight: 'bold' },

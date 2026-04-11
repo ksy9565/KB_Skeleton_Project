@@ -114,6 +114,7 @@ const renderChart = () => {
         legend: {
           display: false,
         },
+        datalabels: { display: false },
         tooltip: {
           backgroundColor: 'rgba(124, 58, 237, 0.1)',
           titleColor: '#1f2937',
