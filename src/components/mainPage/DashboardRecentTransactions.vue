@@ -18,7 +18,7 @@ const baseStore = useBaseStore();
 
 const { categories, paymentMethods } = storeToRefs(baseStore);
 const { transactions, currentMonth } = storeToRefs(transactionStore);
-const { addTransaction2 } = transactionStore;
+const { addTransaction } = transactionStore;
 
 // 초기 데이터 로드
 onMounted(async () => {

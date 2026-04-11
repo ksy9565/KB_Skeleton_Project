@@ -21,11 +21,11 @@ const toast = useToast();
 const userId = computed(() => authStore.currentUser?.id || 'guest');
 
 const { categories, paymentMethods } = storeToRefs(baseStore);
-const { addTransaction2 } = transactionStore;
+const { addTransaction } = transactionStore;
 
 const modalOpen = ref(false);
 const handleSave = async (data) => {
-  await addTransaction2(data);
+  await addTransaction(data);
   modalOpen.value = false;
 };
 
@@ -85,8 +85,10 @@ const groupedTransactions = computed(() => {
 const filteredCategories = computed(() => {
   if (editingItem.type === 'income') {
     // 수입(income)일 때는 ID 1~6만 표시
+    // 수입(income)일 때는 ID 1~6만 표시
     return categories.value.filter((cat) => cat.id >= 1 && cat.id <= 6);
   } else {
+    // 지출(expense)일 때는 ID 7 이상만 표시
     // 지출(expense)일 때는 ID 7 이상만 표시
     return categories.value.filter((cat) => cat.id >= 7);
   }
@@ -147,7 +149,7 @@ const handleDelete = async (id) => {
 
     cancelButtonColor: '#7c4dff',
     cancelButtonText: '취소',
-    position: 'center', // 이건 중앙이 제일 예쁩니다
+    position: 'center',
   });
   if (result.isConfirmed) {
     try {
@@ -175,12 +177,6 @@ const getCategoryName = (id) => {
 
 onMounted(async () => {
   await transactionStore.fetchTransactions();
-  try {
-    const response = await fetch('http://localhost:3000/catgories');
-    categories.value = await response.json();
-  } catch (error) {
-    console.error('카테고리 로드 실패:', error);
-  }
 });
 </script>
 
@@ -229,6 +225,12 @@ onMounted(async () => {
           <div class="col-actions">관리</div>
         </div>
 
+        <div
+          v-if="Object.keys(groupedTransactions).length === 0"
+          class="no-data-msg"
+        >
+          내역이 존재하지 않습니다.
+        </div>
         <div
           v-for="(items, date) in groupedTransactions"
           :key="date"
@@ -824,5 +826,15 @@ onMounted(async () => {
 .save-btn:active,
 .cancel-btn:active {
   transform: scale(0.98);
+}
+
+.no-data-msg {
+  padding: 50px 0;
+  text-align: center;
+  color: #999;
+  font-size: 1.1rem;
+  background: #ffffff;
+  border-radius: 12px;
+  margin-top: 10px;
 }
 </style>
