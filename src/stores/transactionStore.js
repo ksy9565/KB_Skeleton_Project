@@ -181,49 +181,56 @@ export const useTransactionStore = defineStore('transaction', () => {
   const getRecentTransactions = computed((limit = 10) => {});
 
   function getWeeklyStats() {
-    const weeksInMonth = new Map();
+    const weeklyStats = [];
+    const now = new Date();
 
-    monthlyTransactions.value.forEach((transaction) => {
-      const dayOfMonth = new Date(transaction.date).getDate();
-      const weekNumber = Math.ceil(dayOfMonth / 7);
+    // 1. 최근 5주를 역순으로 계산 (오늘 기준)
+    for (let i = 4; i >= 0; i--) {
+      const targetDate = new Date(now);
+      targetDate.setDate(now.getDate() - i * 7);
 
-      if (!weeksInMonth.has(weekNumber)) {
-        weeksInMonth.set(weekNumber, {
-          label: `${weekNumber}주`,
-          income: 0,
-          expense: 0,
-        });
-      }
+      const year = targetDate.getFullYear();
+      const month = targetDate.getMonth() + 1;
+      const date = targetDate.getDate();
 
-      const weeklyStat = weeksInMonth.get(weekNumber);
+      // 해당 주차 계산 (7일 단위)
+      const weekNumber = Math.ceil(date / 7);
+      const label = `${month}월 ${weekNumber}주`;
 
-      if (transaction.type === 'income') {
-        weeklyStat.income += transaction.amount;
-      }
+      // 2. 중요: 'allTransactions' 대신 스토어에 실제 정의된 변수명을 사용하세요.
+      // 만약 변수명이 'transactions'라면 아래처럼 수정합니다.
+      // 데이터가 없는 경우를 대비해 기본값 []를 둡니다.
+      const sourceData = transactions.value || [];
 
-      if (transaction.type === 'expense') {
-        weeklyStat.expense += transaction.amount;
-      }
-    });
+      const filtered = sourceData.filter((t) => {
+        const tDate = new Date(t.date);
+        // 연, 월, 주차가 모두 일치하는지 확인
+        return (
+          tDate.getFullYear() === year &&
+          tDate.getMonth() + 1 === month &&
+          Math.ceil(tDate.getDate() / 7) === weekNumber
+        );
+      });
 
-    const lastDayOfMonth = new Date(
-      Number(currentMonth.value.slice(0, 4)),
-      Number(currentMonth.value.slice(5, 7)),
-      0,
-    ).getDate();
-    const totalWeeks = Math.ceil(lastDayOfMonth / 7);
+      const income = filtered
+        .filter((t) => t.type === 'income')
+        .reduce((sum, t) => sum + t.amount, 0);
 
-    return Array.from({ length: totalWeeks }, (_, index) => {
-      const weekNumber = index + 1;
+      const expense = filtered
+        .filter((t) => t.type === 'expense')
+        .reduce((sum, t) => sum + t.amount, 0);
 
-      return (
-        weeksInMonth.get(weekNumber) ?? {
-          label: `${weekNumber}주`,
-          income: 0,
-          expense: 0,
-        }
-      );
-    });
+      const dateString = `${year}-${String(month).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+
+      weeklyStats.push({
+        label,
+        income,
+        expense,
+        date: dateString,
+      });
+    }
+
+    return weeklyStats;
   }
 
   function getMonthlyStats() {
@@ -235,12 +242,12 @@ export const useTransactionStore = defineStore('transaction', () => {
       .split('-')
       .map(Number);
 
-    for (let offset = 3; offset >= 0; offset -= 1) {
+    for (let offset = 4; offset >= 0; offset -= 1) {
       const date = new Date(currentYear, currentMonthNumber - 1 - offset, 1);
       const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
 
       monthStats.set(monthKey, {
-        label: `${monthFormatter.format(date)}월`,
+        label: `${monthFormatter.format(date)}`,
         income: 0,
         expense: 0,
       });
@@ -333,6 +340,7 @@ export const useTransactionStore = defineStore('transaction', () => {
     getCategoryStats,
     getWeeklyStats,
     getMonthlyStats,
+    updateTransaction,
     addTransaction2,
   };
 });

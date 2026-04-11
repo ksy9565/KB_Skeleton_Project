@@ -69,6 +69,14 @@ const calendarDays = [
   ['26', '27', '28', '29', '30', '', ''],
 ];
 
+const recentTransactions = [
+  { type: '지출', title: '점심 식사', amount: '-12,000원', date: '2026-04-08' },
+  { type: '수입', title: '급여', amount: '+3,000,000원', date: '2026-04-05' },
+  { type: '지출', title: '교통비', amount: '-9,500원', date: '2026-04-04' },
+  { type: '지출', title: '생활 용품', amount: '-39,000원', date: '2026-04-03' },
+  { type: '지출', title: '정기 구독', amount: '-15,000원', date: '2026-04-01' },
+];
+
 const weeklyBars = computed(() => transactionStore.getWeeklyStats());
 
 const monthlyBars = [
@@ -76,13 +84,6 @@ const monthlyBars = [
   { label: '2월', income: 42, expense: 24 },
   { label: '3월', income: 38, expense: 21 },
   { label: '4월', income: 55, expense: 26 },
-];
-
-const fixedExpenses = [
-  { label: '주거', value: '월세', amount: '~', helper: '자동이체' },
-  { label: '쇼핑', value: '정기 구독', amount: '~', helper: '정기 결제' },
-  { label: '교통', value: '교통카드', amount: '~', helper: '충전 예정' },
-  { label: '총계', value: '고정 지출', amount: '~', helper: '월간 합산' },
 ];
 </script>
 
@@ -100,7 +101,7 @@ const fixedExpenses = [
       />
 
       <section class="panel-grid upper-grid">
-        <DashboardCalendarPanel :days="calendarDays" />
+        <DashboardCalendarPanel />
         <DashboardRecentTransactions />
       </section>
 
