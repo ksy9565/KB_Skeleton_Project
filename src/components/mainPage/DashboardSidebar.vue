@@ -107,6 +107,8 @@ const handleLogin = () => {
 const getDisplayName = () =>
   authStore.currentUser?.name || authStore.currentUser?.username || '';
 
+const getProfileImageSrc = () => authStore.currentUser?.profileImage || '';
+
 watch(mobileMenuOpen, (isOpen) => {
   if (typeof document === 'undefined') {
     return;
@@ -152,7 +154,13 @@ onBeforeUnmount(() => {
         :disabled="authStore.isAuthenticated"
         @click="handleLogin"
       >
-        <i class="fa-solid fa-user"></i>
+        <img
+          v-if="authStore.isAuthenticated && getProfileImageSrc()"
+          :src="getProfileImageSrc()"
+          alt="프로필"
+          class="profile-avatar"
+        />
+        <i v-else class="fa-solid fa-user"></i>
         <span v-if="authStore.isAuthenticated"
           >{{ getDisplayName() }}님 환영합니다</span
         >
@@ -208,7 +216,13 @@ onBeforeUnmount(() => {
               :disabled="authStore.isAuthenticated"
               @click="handleLogin"
             >
-              <i class="fa-solid fa-user"></i>
+              <img
+                v-if="authStore.isAuthenticated && getProfileImageSrc()"
+                :src="getProfileImageSrc()"
+                alt="프로필"
+                class="profile-avatar"
+              />
+              <i v-else class="fa-solid fa-user"></i>
               <span v-if="authStore.isAuthenticated"
                 >{{ getDisplayName() }}님 환영합니다</span
               >
@@ -262,3 +276,13 @@ onBeforeUnmount(() => {
     </transition>
   </div>
 </template>
+
+<style scoped>
+.profile-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+}
+</style>

@@ -2,6 +2,25 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 export const useBaseStore = defineStore('base', () => {
+  const categoryPalette = [
+    '#4e79a7',
+    '#f28e2c',
+    '#e15759',
+    '#76b7b2',
+    '#59a14f',
+    '#edc949',
+    '#af7aa1',
+    '#ff9da7',
+    '#9c755f',
+    '#bab0ab',
+    '#86bc25',
+    '#00adc6',
+    '#0047bb',
+    '#bc4077',
+    '#633d8a',
+    '#d6616b',
+  ];
+
   const categories = ref([
     {
       id: 1,
@@ -115,17 +134,46 @@ export const useBaseStore = defineStore('base', () => {
   const getCategoryName = (id) =>
     categories.value.find((c) => c.id === id)?.name;
 
-  const getCategoryColor = (name) =>
-    categories.value.find((c) => c.name === name)?.color;
+  const getCategoryColor = (key) => {
+    const normalizedKey = typeof key === 'string' ? key.trim() : key;
+
+    const byId = categories.value.find((c) => c.id === Number(normalizedKey));
+    if (byId?.color) return byId.color;
+
+    const byName = categories.value.find((c) => c.name === normalizedKey);
+    if (byName?.color) return byName.color;
+
+    return categoryPalette[0];
+  };
+
+  const mergeCategoriesWithColors = (incomingCategories = []) => {
+    if (!Array.isArray(incomingCategories) || incomingCategories.length === 0) {
+      return;
+    }
+
+    const previous = categories.value;
+    categories.value = incomingCategories.map((incoming, index) => {
+      const matchById = previous.find((c) => c.id === Number(incoming.id));
+      const fallbackColor = categoryPalette[index % categoryPalette.length];
+
+      return {
+        ...incoming,
+        id: Number(incoming.id),
+        color: incoming.color || matchById?.color || fallbackColor,
+      };
+    });
+  };
 
   const getPaymentMethodsColor = (name) =>
     paymentMethods.value.find((c) => c.name === name)?.color;
 
   return {
+    categoryPalette,
     categories,
     paymentMethods,
     getCategoryName,
     getCategoryColor,
+    mergeCategoriesWithColors,
     getPaymentMethodsColor,
   };
 });

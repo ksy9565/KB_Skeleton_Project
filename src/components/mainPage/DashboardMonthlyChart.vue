@@ -20,7 +20,7 @@ Chart.register(
   Legend,
 );
 
-defineProps({
+const props = defineProps({
   items: {
     type: Array,
     default: () => [],
@@ -31,6 +31,12 @@ const transactionStore = useTransactionStore();
 const monthlyItems = computed(() => transactionStore.getMonthlyStats());
 const chartCanvas = ref(null);
 let chartInstance = null;
+
+const chartItems = computed(() =>
+  Array.isArray(props.items) && props.items.length > 0
+    ? props.items
+    : monthlyItems.value,
+);
 
 const renderChart = () => {
   if (!chartCanvas.value) return;
@@ -48,11 +54,11 @@ const renderChart = () => {
   chartInstance = new Chart(chartCanvas.value, {
     type: 'bar',
     data: {
-      labels: monthlyItems.value.map((item) => item.label),
+      labels: chartItems.value.map((item) => item.label),
       datasets: [
         {
           label: '수입',
-          data: monthlyItems.value.map((item) => item.income),
+          data: chartItems.value.map((item) => item.income),
           backgroundColor: createGradient(
             'rgba(51, 181, 64, 0.9)',
             'rgba(51, 181, 64, 0.1)',
@@ -68,7 +74,7 @@ const renderChart = () => {
         },
         {
           label: '지출',
-          data: monthlyItems.value.map((item) => item.expense),
+          data: chartItems.value.map((item) => item.expense),
           backgroundColor: createGradient(
             'rgba(214, 58, 58, 0.9)',
             'rgba(214, 58, 58, 0.1)',
@@ -150,7 +156,7 @@ onMounted(() => {
 });
 
 watch(
-  monthlyItems,
+  chartItems,
   () => {
     renderChart();
   },
@@ -167,7 +173,7 @@ onBeforeUnmount(() => {
 <template>
   <article class="panel chart-panel">
     <div class="panel-head">
-      <p class="panel-label">월간 기록 (최근 5개월)</p>
+      <p class="panel-label">월간 기록 (최근 4개월)</p>
     </div>
 
     <div

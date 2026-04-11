@@ -33,3 +33,15 @@ export const checkUsernameApi = async (username) => {
   const response = await api.get('/users', { params: { username } });
   return response.data.length > 0;
 };
+
+// 아이디 중복 검사 (본인 계정 제외)
+export const checkUsernameTakenByOtherApi = async (username, userId) => {
+  const response = await api.get('/users', { params: { username } });
+  return response.data.some((user) => user.id !== userId);
+};
+
+// 회원 정보 수정
+export const updateUserApi = async (userId, payload) => {
+  const response = await api.patch(`/users/${userId}`, payload);
+  return response.data;
+};

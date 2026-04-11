@@ -177,6 +177,13 @@ const getCategoryName = (id) => {
 
 onMounted(async () => {
   await transactionStore.fetchTransactions();
+  try {
+    const response = await fetch('http://localhost:3000/categories');
+    const apiCategories = await response.json();
+    baseStore.mergeCategoriesWithColors(apiCategories);
+  } catch (error) {
+    console.error('카테고리 로드 실패:', error);
+  }
 });
 </script>
 

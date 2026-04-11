@@ -5,6 +5,7 @@ import {
   registerUserApi,
   loginUserApi,
   checkUsernameApi,
+  updateUserApi,
 } from '@/services/userService';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -85,6 +86,7 @@ export const useAuthStore = defineStore('auth', () => {
         ...userData,
         balance: 0,
         layoutId: 1,
+        profileImage: null,
       };
 
       await registerUserApi(newUser);
@@ -124,6 +126,35 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
+  const updateCurrentUser = async (payload) => {
+    if (!currentUser.value?.id) {
+      error.value = '로그인한 사용자 정보가 없습니다.';
+      return false;
+    }
+
+    isLoading.value = true;
+    error.value = null;
+
+    try {
+      const updated = await updateUserApi(currentUser.value.id, payload);
+      currentUser.value = {
+        ...currentUser.value,
+        ...updated,
+      };
+
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('authUser', JSON.stringify(currentUser.value));
+      }
+
+      return true;
+    } catch (err) {
+      error.value = '회원 정보 저장에 실패했습니다.';
+      return false;
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   return {
     currentUser,
     isLoading,
@@ -135,6 +166,7 @@ export const useAuthStore = defineStore('auth', () => {
     getUserInfo,
     login,
     register,
+    updateCurrentUser,
     logout,
     updateBalance,
   };

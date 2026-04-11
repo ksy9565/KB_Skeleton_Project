@@ -81,4 +81,31 @@ export const transactionService = {
     const res = await axios.patch(`${BUDGET_BASE_URL}/${id}`, data);
     return res.data;
   },
+
+  async resetUserLedger(userId) {
+    if (!userId) {
+      throw new Error('userId가 필요합니다.');
+    }
+
+    const [transactionRes, budgetRes] = await Promise.all([
+      axios.get(BASE_URL, { params: { userId } }),
+      axios.get(BUDGET_BASE_URL, { params: { userId } }),
+    ]);
+
+    const deleteRequests = [
+      ...transactionRes.data.map((item) =>
+        axios.delete(`${BASE_URL}/${item.id}`),
+      ),
+      ...budgetRes.data.map((item) =>
+        axios.delete(`${BUDGET_BASE_URL}/${item.id}`),
+      ),
+    ];
+
+    await Promise.all(deleteRequests);
+
+    return {
+      deletedTransactions: transactionRes.data.length,
+      deletedBudgets: budgetRes.data.length,
+    };
+  },
 };
