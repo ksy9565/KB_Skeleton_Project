@@ -52,8 +52,8 @@
       "amount": 10000,
       "date": "2026-04-02",
       "title": "커피",
-      "categoryId": 7,
-      "paymentMethod": "체크카드",
+      "categoryId": 2,
+      "paymentMethod": "신용카드",
       "memo": "",
       "isFixed": false
     },
@@ -64,17 +64,6 @@
       "amount": 200000,
       "date": "2026-04-01",
       "title": "월급"
-    },
-    {
-      "userId": "user1",
-      "type": "expense",
-      "amount": 676763,
-      "categoryId": 8,
-      "paymentMethod": "현금",
-      "date": "2026-04-10",
-      "memo": "",
-      "isFixed": false,
-      "id": 4
     },
     {
       "id": 4,
@@ -111,6 +100,28 @@
       "paymentMethod": "현금",
       "memo": "초콜릿",
       "isFixed": false
+    },
+    {
+      "userId": "user1",
+      "type": "income",
+      "amount": 234,
+      "categoryId": 3,
+      "paymentMethod": "현금",
+      "date": "2026-04-08",
+      "memo": "234",
+      "isFixed": false,
+      "id": 7
+    },
+    {
+      "userId": "user1",
+      "type": "income",
+      "amount": 43234,
+      "categoryId": 3,
+      "paymentMethod": "현금",
+      "date": "2026-04-16",
+      "memo": "432234",
+      "isFixed": false,
+      "id": 8
     }
   ],
   "catgories": [
@@ -187,23 +198,7 @@
       "month": "2026-04"
     }
   ],
-  "paymentMethods": [
-    {
-      "id": 1,
-      "userId": 1,
-      "name": "체크카드"
-    },
-    {
-      "id": 2,
-      "userId": 1,
-      "name": "현금"
-    },
-    {
-      "id": 3,
-      "userId": 1,
-      "name": "신용카드"
-    }
-  ],
+  "paymentMethods": [],
   "layout": [
     {
       "id": 1,

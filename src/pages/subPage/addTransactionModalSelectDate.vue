@@ -7,7 +7,6 @@ const props = defineProps({
   categories: Array, // { id, name, color}
   paymentMethods: Array, // { name, color }
   incomePaymentMethods: Array, // { name, color }
-  selectedDay: String,
 });
 
 const emit = defineEmits(['close', 'save']);
@@ -19,7 +18,7 @@ const initialForm = {
   amount: null,
   categoryId: '',
   paymentMethod: '',
-  date: props.selectedDay,
+  date: new Date().toISOString().split('T')[0],
   memo: '',
   isFixed: false,
 };
@@ -61,13 +60,10 @@ watch(
 );
 
 watch(
-  () => [props.isOpen, props.userId, props.selectedDay],
-  ([isOpen, userId, selectedDay]) => {
+  () => [props.isOpen, props.userId],
+  ([isOpen, userId]) => {
     if (isOpen) {
       form.value.userId = userId ?? null;
-      if (selectedDay) {
-        form.value.date = selectedDay;
-      }
     }
   },
   { immediate: true },
@@ -99,14 +95,6 @@ const saveTransaction = () => {
   });
   closeModal();
 };
-
-// YYYY년 MM월 DD일 변환 표시
-const formattedDate = computed(() => {
-  if (!form.value.date) return '';
-
-  const [year, month, day] = form.value.date.split('-');
-  return `${year}년 ${month}월 ${day}일`;
-});
 </script>
 
 <template>
@@ -115,10 +103,13 @@ const formattedDate = computed(() => {
       <header class="modal-header">
         <h2>거래 내역 추가</h2>
       </header>
-      <div class="form-group">
-        <h3>{{ formattedDate }}</h3>
-      </div>
       <form @submit.prevent="saveTransaction" class="edit-form">
+        <!-- 날짜 선택 (새로 추가) -->
+        <div class="form-group">
+          <label>날짜</label>
+          <input type="date" v-model="form.date" required class="date-input" />
+        </div>
+
         <!-- 1. 수입/지출 선택 -->
         <div class="form-group">
           <label>구분</label>
@@ -202,11 +193,11 @@ const formattedDate = computed(() => {
         <!-- 7. 한줄 메모 -->
         <div class="form-group">
           <label>메모</label>
-          <input
-            type="text"
+          <textarea
             v-model="form.memo"
             placeholder="내용을 입력하세요"
-          />
+            rows="3"
+          ></textarea>
         </div>
 
         <!-- 하단 버튼 -->

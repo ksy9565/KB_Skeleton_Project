@@ -1,20 +1,39 @@
 <script setup>
 import { computed, onMounted, ref, reactive } from 'vue';
 import DashboardSidebar from '@/components/mainPage/DashboardSidebar.vue';
+import addTransactionModalSelectDate from '../subPage/addTransactionModalSelectDate.vue';
+
 import '@/styles/mainPage/logined.css';
+import { useToast } from 'vue-toastification';
+import Swal from 'sweetalert2';
 
 import { useAuthStore } from '@/stores/authStore';
 import { useTransactionStore } from '@/stores/transactionStore';
+import { useBaseStore } from '@/stores/commonStore';
 import { transactionService } from '@/services/transactionService';
+import { storeToRefs } from 'pinia';
 
 const authStore = useAuthStore();
 const transactionStore = useTransactionStore();
+const baseStore = useBaseStore();
+const toast = useToast();
+
+const userId = computed(() => authStore.currentUser?.id || 'guest');
+
+const { categories, paymentMethods } = storeToRefs(baseStore);
+const { addTransaction2 } = transactionStore;
+
+const modalOpen = ref(false);
+const handleSave = async (data) => {
+  await addTransaction2(data);
+  modalOpen.value = false;
+};
 
 const today = new Date();
 const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
 const collapsedGroups = ref({});
-const categories = ref([]);
+// const categories = ref([]); // 카테고리 목록 저장
 
 const viewDate = ref(new Date());
 
@@ -62,12 +81,27 @@ const groupedTransactions = computed(() => {
   }, {});
 });
 
+// 수입/지출 선택에 따른 카테고리 필터링
 const filteredCategories = computed(() => {
   if (editingItem.type === 'income') {
     return categories.value.filter((cat) => cat.id >= 1 && cat.id <= 6);
   } else {
     return categories.value.filter((cat) => cat.id >= 7);
   }
+});
+// 수입/지출 선택에 따른 결제수단 필터링
+const filteredMethods = computed(() => {
+  return paymentMethods.value.filter((pay) => {
+    if (editingItem.type === 'income') {
+      return ['현금', '계좌이체', '환불', '포인트적립/캐시백'].includes(
+        pay.name,
+      );
+    } else {
+      return ['신용카드', '체크카드', '교통카드', '현금', '계좌이체'].includes(
+        pay.name,
+      );
+    }
+  });
 });
 
 const toggleGroup = (date) => {
@@ -82,28 +116,50 @@ const closeEditModal = () => {
   isEditModalOpen.value = false;
 };
 const handleUpdateSubmit = async () => {
-  if (confirm('내역을 수정하시겠습니까?')) {
-    try {
-      await transactionStore.updateTransaction(editingItem.id, {
-        ...editingItem,
-      });
+  try {
+    await transactionStore.updateTransaction(editingItem.id, {
+      ...editingItem,
+    });
 
-      alert('수정되었습니다.');
-      closeEditModal();
-    } catch (error) {
-      console.error('수정 실패 상세:', error.response?.data || error);
-      alert('수정 중 오류가 발생했습니다.');
-    }
+    toast.success('수정되었습니다.', {
+      timeout: 2000,
+      position: 'bottom-center',
+    });
+
+    closeEditModal();
+  } catch (error) {
+    console.error('수정 실패 상세:', error.response?.data || error);
+    toast.error('수정 중 오류가 발생했습니다. 다시 시도해주세요.', {
+      timeout: 4000,
+    });
   }
 };
 const handleDelete = async (id) => {
-  if (confirm('정말 삭제하시겠습니까?')) {
+  const result = await Swal.fire({
+    title: '내역을 삭제하시겠습니까?',
+    text: '수정 후에는 이전 데이터로 복구할 수 없습니다.',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    confirmButtonText: '삭제',
+
+    cancelButtonColor: '#7c4dff',
+    cancelButtonText: '취소',
+    position: 'center', // 이건 중앙이 제일 예쁩니다
+  });
+  if (result.isConfirmed) {
     try {
       await transactionStore.deleteTransaction(id);
-      alert('삭제되었습니다.');
+
+      toast.success('삭제되었습니다.', {
+        timeout: 2000,
+        position: 'bottom-center',
+      });
     } catch (error) {
       console.error('삭제 중 에러 발생:', error);
-      alert('삭제 실패했습니다.');
+      toast.error('삭제 중 오류가 발생하였습니다. 다시 시도해주세요.', {
+        timeout: 4000,
+      });
     }
   }
 };
@@ -134,6 +190,7 @@ onMounted(async () => {
 
         { title: '설정', items: ['예산 설정', '카테고리 설정', '알림 설정'] },
       ]"
+      :show-battery="true"
     />
 
     <section class="content-area">
@@ -146,10 +203,30 @@ onMounted(async () => {
           <button class="month-btn" @click="moveMonth(1)">&gt;</button>
         </div>
 
-        <button class="write-btn">
+        <button class="write-btn" @click="modalOpen = true">
           가계부 작성 <span class="icon">✎</span>
         </button>
+        <addTransactionModalSelectDate
+          :is-open="modalOpen"
+          :userId="userId"
+          :categories="categories"
+          :paymentMethods="paymentMethods"
+          @close="modalOpen = false"
+          @save="handleSave"
+        />
       </div>
+
+      <article class="ledger-container">
+        <div class="list-header">
+          <div class="col-date">날짜</div>
+          <div class="col-type">구분</div>
+          <div class="col-cat">카테고리</div>
+          <div class="col-title">내용</div>
+          <div class="col-method">결제수단</div>
+          <div class="col-amount">금액(원)</div>
+          <div class="col-memo">메모</div>
+          <div class="col-actions">관리</div>
+        </div>
 
       <article class="ledger-container">
         <div class="list-header">
@@ -166,17 +243,21 @@ onMounted(async () => {
         <div
           v-for="(items, date) in groupedTransactions"
           :key="date"
-          class="date-group-row"
+          class="date-group-row-row"
         >
-          <div class="date-toggle-header" @click="toggleGroup(date)">
+          <div class="date-toggle-toggle-header" @click="toggleGroup(date)">
             <div class="col-date">
+              <div class="col-date">
               <span class="arrow" :class="{ rotated: collapsedGroups[date] }"
-                >▼</span
-              >
-              <span class="date-text">{{ date }}</span>
+                  >▼</span
+                >
+                <span class="date-text">{{ date }}</span>
             </div>
             <div class="col-summary">
+              </div>
+            <div class="col-summary">
               <span class="count">{{ items.length }}건</span>
+            </div>
             </div>
           </div>
 
@@ -225,14 +306,13 @@ onMounted(async () => {
           </div>
 
           <div class="form-group">
-            <label>분류</label>
+            <label>구분</label>
             <div class="radio-wrapper">
               <input
                 type="radio"
                 id="edit-expense"
                 value="expense"
                 v-model="editingItem.type"
-                @change="editingItem.paymentMethod = '체크카드'"
               />
               <label for="edit-expense" class="type-label expense">지출</label>
               <input
@@ -240,7 +320,6 @@ onMounted(async () => {
                 id="edit-income"
                 value="income"
                 v-model="editingItem.type"
-                @change="editingItem.paymentMethod = null"
               />
               <label for="edit-income" class="type-label income">수입</label>
             </div>
@@ -261,11 +340,15 @@ onMounted(async () => {
           </div>
 
           <div class="form-group" v-if="editingItem.type === 'expense'">
-            <label>자산(결제수단)</label>
+            <label>결제수단</label>
             <select v-model="editingItem.paymentMethod">
-              <option value="체크카드">체크카드</option>
-              <option value="신용카드">신용카드</option>
-              <option value="현금">현금</option>
+              <option
+                v-for="method in filteredMethods"
+                :key="method.name"
+                :value="method.name"
+              >
+                {{ method.name }}
+              </option>
             </select>
           </div>
 
@@ -279,11 +362,17 @@ onMounted(async () => {
             <textarea v-model="editingItem.memo" rows="3"></textarea>
           </div>
 
-          <div class="form-group check-group">
-            <label>
-              <input type="checkbox" v-model="editingItem.isFixed" />
-              고정 거래 여부
-            </label>
+          <div class="form-group" v-if="editingItem.type === 'expense'">
+            <label>지출 형태</label>
+            <div class="type-selector">
+              <button
+                type="button"
+                :class="{ active: editingItem.isFixed === true }"
+                @click="editingItem.isFixed = !editingItem.isFixed"
+              >
+                고정 지출
+              </button>
+            </div>
           </div>
 
           <footer class="modal-footer">
@@ -605,6 +694,8 @@ onMounted(async () => {
 }
 
 .modal-content {
+  max-height: 90vh;
+  overflow-y: auto;
   background: white;
   width: 100%;
   max-width: 500px;
@@ -670,23 +761,15 @@ onMounted(async () => {
   border-radius: 10px;
   border: 1px solid #edf2f7;
   cursor: pointer;
-  background: #f8fafc;
-  color: #a0aec0;
-  transition: all 0.2s;
 }
 
-#edit-expense:checked + .expense {
-  background: #fff5f5;
-  color: #e53e3e;
-  border-color: #feb2b2;
+.cancel-btn {
+  background: #eee;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
 }
-
-#edit-income:checked + .income {
-  background: #e6fffa;
-  color: #38b2ac;
-  border-color: #b2f5ea;
-}
-
 .modal-footer {
   display: flex;
   gap: 12px;
