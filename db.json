@@ -41,91 +41,92 @@
     {
       "id": 1,
       "userId": "user1",
-      "type": "income",
-      "amount": 50000,
-      "date": "2026-04-01",
-      "title": "용돈",
-      "categoryId": 3,
-      "paymentMethod": "현금",
-      "memo": "주간 용돈"
+      "type": "expense",
+      "amount": 15000,
+      "categoryId": 1,
+      "paymentMethod": "신용카드",
+      "date": "2026-04-08",
+      "memo": "점심"
     },
     {
       "id": 2,
       "userId": "user1",
       "type": "expense",
-      "amount": 10000,
-      "date": "2026-04-02",
-      "title": "커피",
-      "categoryId": 2,
-      "paymentMethod": "신용카드",
-      "memo": "",
-      "isFixed": false
+      "amount": 55000,
+      "categoryId": 10,
+      "paymentMethod": "계좌이체",
+      "date": "2026-04-05",
+      "memo": "알뜰폰 자동이체"
     },
     {
       "id": 3,
-      "userId": "user2",
+      "userId": "user1",
       "type": "income",
-      "amount": 200000,
+      "amount": 50000,
+      "categoryId": 3,
+      "paymentMethod": "현금",
       "date": "2026-04-01",
-      "title": "월급"
+      "memo": "부모님 용돈"
     },
     {
       "id": 4,
       "userId": "user1",
       "type": "expense",
-      "amount": 1250,
-      "date": "2026-04-03",
-      "title": "지하철 요금",
-      "categoryId": 5,
-      "paymentMethod": "교통카드",
-      "memo": "학원 등교",
-      "isFixed": true
+      "amount": 4500,
+      "categoryId": 7,
+      "paymentMethod": "체크카드",
+      "date": "2026-04-02",
+      "memo": "아이스 아메리카노"
     },
     {
-      "id": 5,
+      "id": 101,
       "userId": "user1",
       "type": "income",
-      "amount": 12000,
-      "date": "2026-04-05",
-      "title": "교보문고",
-      "categoryId": 3,
-      "paymentMethod": null,
-      "memo": "",
-      "isFixed": false
+      "amount": 2500000,
+      "categoryId": 1,
+      "paymentMethod": "계좌이체",
+      "date": "2026-03-25",
+      "memo": "3월 정기 급여"
     },
     {
-      "id": 6,
+      "id": 102,
       "userId": "user1",
       "type": "expense",
-      "amount": 4900,
-      "date": "2026-04-06",
-      "title": "편의점 간식",
-      "categoryId": 1,
-      "paymentMethod": "현금",
-      "memo": "초콜릿",
-      "isFixed": false
+      "amount": 500000,
+      "categoryId": 12,
+      "paymentMethod": "계좌이체",
+      "date": "2026-03-01",
+      "memo": "3월분 월세 납부"
     },
     {
+      "id": 103,
       "userId": "user1",
-      "type": "income",
-      "amount": 234,
-      "categoryId": 3,
-      "paymentMethod": "현금",
-      "date": "2026-04-08",
-      "memo": "234",
-      "isFixed": false,
-      "id": 7
+      "type": "expense",
+      "amount": 42000,
+      "categoryId": 8,
+      "paymentMethod": "교통카드",
+      "date": "2026-03-10",
+      "memo": "지하철 정기권 충전"
     },
     {
+      "id": 104,
+      "userId": "user1",
+      "type": "expense",
+      "amount": 28000,
+      "categoryId": 7,
+      "paymentMethod": "신용카드",
+      "date": "2026-03-15",
+      "memo": "배달"
+    },
+    {
+      "id": 105,
       "userId": "user1",
       "type": "income",
-      "amount": 43234,
-      "categoryId": 3,
+      "amount": 30000,
+      "categoryId": 4,
       "paymentMethod": "현금",
-      "date": "2026-04-16",
-      "memo": "432234",
-      "isFixed": false,
-      "id": 8
+      "date": "2026-03-20",
+      "memo": "중고 모니터 판매"
     }
   ],
   "catgories": [

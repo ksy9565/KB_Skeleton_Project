@@ -22,9 +22,6 @@ export const useTransactionStore = defineStore('transaction', () => {
     return transactions.value.filter((t) =>
       t.date.startsWith(currentMonth.value),
     );
-    return transactions.value.filter((t) =>
-      t.date.startsWith(currentMonth.value),
-    );
   });
 
   // 2. 이번 달 총 수입
@@ -153,11 +150,14 @@ export const useTransactionStore = defineStore('transaction', () => {
     return created;
   }
 
-  function addTransaction(transaction) {
-    // 1. 거래 추가
-    transactions.value.push({ ...transaction, id: Date.now() });
-
-    // 2. (선택사항) Auth 스토어의 잔액(balance) 업데이트 로직 연결 가능
+  async function addTransaction(data) {
+    try {
+      await transactionService.addTransaction(data);
+      console.log('스토어 업데이트 완료:');
+    } catch (error) {
+      console.error('스토어 업데이트 실패:', error);
+      throw error;
+    }
   }
 
   async function updateTransaction(id, data) {
@@ -301,38 +301,6 @@ export const useTransactionStore = defineStore('transaction', () => {
     }
   };
 
-  const addTransaction2 = async (formData) => {
-    try {
-      const userId = authStore.currentUser?.id;
-      // 새 객체 생성
-      const newTransaction = {
-        ...formData,
-        userId: formData.userId ?? userId ?? null,
-        amount: Number(formData.amount),
-      };
-
-      // db.json에 POST 요청으로 저장
-      const response = await axios.post(
-        'http://localhost:3000/transactions',
-        newTransaction,
-      );
-      const created = response.data;
-
-      if (
-        created?.userId === userId &&
-        typeof created?.date === 'string' &&
-        created.date.startsWith(currentMonth.value)
-      ) {
-        transactions.value.unshift(created);
-      }
-
-      return created;
-    } catch (error) {
-      console.error('거래 내역 저장 실패:', error);
-      throw error;
-    }
-  };
-
   return {
     transactions,
     isLoading,
@@ -353,6 +321,5 @@ export const useTransactionStore = defineStore('transaction', () => {
     getWeeklyStats,
     getMonthlyStats,
     updateTransaction,
-    addTransaction2,
   };
 });
