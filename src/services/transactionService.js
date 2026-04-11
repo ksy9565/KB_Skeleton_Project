@@ -6,6 +6,7 @@ const BUDGET_BASE_URL = 'http://localhost:3000/budgets';
 export const transactionService = {
   // 특정 유저의 전체 거래 내역 가져오기
   // GET /transactions?userId={userId}
+
   async getTransactionsByUserId(userId) {
     if (!userId) throw new Error('userId가 필요합니다.');
 
@@ -13,6 +14,29 @@ export const transactionService = {
       params: { userId },
     });
     return res.data;
+  },
+  async updateTransaction(id, data) {
+    try {
+      const response = await axios.patch(
+        `http://localhost:3000/transactions/${id}`,
+        data,
+      );
+      return response.data;
+    } catch (error) {
+      console.error('API 수정 요청 실패:', error);
+      throw error;
+    }
+  },
+  async deleteTransaction(id) {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/transactions/${id}`,
+      );
+      return response.data;
+    } catch (error) {
+      console.error('API 삭제 요청 실패:', error);
+      throw error;
+    }
   },
 
   async getBudgetByUserIdAndMonth(userId, month) {
