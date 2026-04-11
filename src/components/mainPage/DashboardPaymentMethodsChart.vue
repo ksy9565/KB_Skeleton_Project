@@ -9,15 +9,6 @@ import { useAuthStore } from '@/stores/authStore';
 import { useBaseStore } from '@/stores/commonStore';
 import { storeToRefs } from 'pinia';
 
-// Chart.js 필수 구성 요소 등록
-ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
-
-const transactionStore = useTransactionStore();
-const authStore = useAuthStore();
-const baseStore = useBaseStore();
-
-const { transactions, isLoading, currentMonth } = storeToRefs(transactionStore);
-const { categories } = storeToRefs(baseStore);
 // 현재 화면 상태
 const windowWidth = ref(window.innerWidth);
 
@@ -28,6 +19,16 @@ const updateWidth = debounce(() => {
 
 onMounted(() => window.addEventListener('resize', updateWidth));
 onUnmounted(() => window.removeEventListener('resize', updateWidth));
+
+// Chart.js 필수 구성 요소 등록
+ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
+
+const transactionStore = useTransactionStore();
+const authStore = useAuthStore();
+const baseStore = useBaseStore();
+
+const { transactions, isLoading, currentMonth } = storeToRefs(transactionStore);
+const { getPaymentMethodsColor } = baseStore;
 
 const loadCategoryData = async () => {
   const userId = authStore.currentUser?.id;
@@ -49,28 +50,24 @@ const items = computed(() => {
   // 데이터가 없으면 빈 배열 반환
   if (totalExpense === 0) return { labels: [], datasets: [] };
 
-  // 카테고리별 금액 합산
-  const categoryMap = expenses.reduce((acc, t) => {
-    const categoryKey = t.categoryId ?? t.category ?? t.title ?? '미분류';
-    acc[categoryKey] = (acc[categoryKey] || 0) + t.amount;
+  // 결제수단별 금액 합산
+  const methodsMap = expenses.reduce((acc, t) => {
+    const methodKey = t.paymentMethod || '미분류';
+    acc[methodKey] = (acc[methodKey] || 0) + t.amount;
     return acc;
   }, {});
 
-  return Object.keys(categoryMap)
-    .map((catId) => {
-      // categories 배열에서 일치하는 카테고리 정보 찾기
-      const categoryInfo = categories.value.find(
-        (c) => c.id === Number(catId) || c.name === catId,
-      );
-      const amount = categoryMap[catId];
+  return Object.keys(methodsMap)
+    .map((methodName, index) => {
+      const amount = methodsMap[methodName];
 
       // 퍼센티지 계산 (소수점 첫째 자리까지)
       const percentage = Number(((amount / totalExpense) * 100).toFixed(1));
 
       return {
-        label: categoryInfo?.name || String(catId),
+        label: methodName,
         value: percentage,
-        color: categoryInfo?.color || '#b8b3c9',
+        color: getPaymentMethodsColor(methodName), // 색상이 없을 경우 기본색
       };
     })
     .sort((a, b) => b.value - a.value);
@@ -101,7 +98,7 @@ const chartOptions = computed(() => ({
   plugins: {
     legend: { display: false }, // 기본 범례는 숨기고 기존 커스텀 범례 사용
     tooltip: {
-      enabled: true, // 호버 시 툴팁 활성화 기능
+      enabled: true, // 호버 시 툴팁 활성화 기능: mobile 아닐 때에만 적용
       callbacks: {
         label: (context) => {
           const label = context.label || '';
@@ -140,7 +137,7 @@ const chartOptions = computed(() => ({
 <template>
   <article class="panel chart-panel">
     <div class="panel-head">
-      <p class="panel-label">카테고리별 지출</p>
+      <p class="panel-label">결제수단별 지출</p>
       <div v-if="isLoading" class="loader">불러오는 중입니다.</div>
       <button type="button">이번 달</button>
     </div>
@@ -168,7 +165,7 @@ const chartOptions = computed(() => ({
           <span
             class="category-swatch"
             :style="{
-              backgroundColor: category.color,
+              backgroundColor: getPaymentMethodsColor(category.label),
             }"
           ></span>
           <div class="category-info">

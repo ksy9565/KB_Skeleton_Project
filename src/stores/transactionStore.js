@@ -2,6 +2,9 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { transactionService } from '@/services/transactionService';
 import { useAuthStore } from './authStore';
+import axios from 'axios';
+
+import { fetchTransactionsByDateApi } from '@/services/getCategoryService';
 
 export const useTransactionStore = defineStore('transaction', () => {
   // State
@@ -11,11 +14,14 @@ export const useTransactionStore = defineStore('transaction', () => {
   const currentBudget = ref(null);
   const currentMonth = ref(new Date().toISOString().slice(0, 7));
 
-  console.log(authStore.currentUser);
+  const isLoading = ref(false);
 
   // Getters
   // 1. 월별 거래내역 필터링
   const monthlyTransactions = computed(() => {
+    return transactions.value.filter((t) =>
+      t.date.startsWith(currentMonth.value),
+    );
     return transactions.value.filter((t) =>
       t.date.startsWith(currentMonth.value),
     );
@@ -268,10 +274,56 @@ export const useTransactionStore = defineStore('transaction', () => {
     return Array.from(monthStats.values());
   }
 
-  function getCategoryStats() {}
+  // 카테고리별 지출 내역 조회 함수
+  // 사용 모듈: src/services/categoryService.js
+  const getCategoryStats = async (userId, yearMonth) => {
+    isLoading.value = true;
+    try {
+      const data = await fetchTransactionsByDateApi(userId, yearMonth);
+      //가져온 데이터를 상태에 저장
+      transactions.value = data;
+    } catch (error) {
+      console.error('거래 내역 로드 실패: ', error);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  const addTransaction2 = async (formData) => {
+    try {
+      const userId = authStore.currentUser?.id;
+      // 새 객체 생성
+      const newTransaction = {
+        ...formData,
+        userId: formData.userId ?? userId ?? null,
+        amount: Number(formData.amount),
+      };
+
+      // db.json에 POST 요청으로 저장
+      const response = await axios.post(
+        'http://localhost:3000/transactions',
+        newTransaction,
+      );
+      const created = response.data;
+
+      if (
+        created?.userId === userId &&
+        typeof created?.date === 'string' &&
+        created.date.startsWith(currentMonth.value)
+      ) {
+        transactions.value.unshift(created);
+      }
+
+      return created;
+    } catch (error) {
+      console.error('거래 내역 저장 실패:', error);
+      throw error;
+    }
+  };
 
   return {
     transactions,
+    isLoading,
     budgets,
     currentBudget,
     currentMonth,
@@ -285,8 +337,10 @@ export const useTransactionStore = defineStore('transaction', () => {
     saveBudgetForCurrentMonth,
     addTransaction,
     deleteTransaction,
+    getCategoryStats,
     getWeeklyStats,
     getMonthlyStats,
     updateTransaction,
+    addTransaction2,
   };
 });

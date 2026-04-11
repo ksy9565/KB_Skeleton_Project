@@ -54,7 +54,9 @@ const groupedTransactions = computed(() => {
     (a, b) => new Date(b.date) - new Date(a.date),
   );
   return sorted.reduce((acc, item) => {
-    if (!acc[item.date]) acc[item.date] = [];
+    if (!acc[item.date]) {
+      acc[item.date] = [];
+    }
     acc[item.date].push(item);
     return acc;
   }, {});
@@ -149,73 +151,60 @@ onMounted(async () => {
         </button>
       </div>
 
-      <article class="table-container">
-        <div
-          v-for="(items, date) in groupedTransactions"
-          :key="date"
-          class="date-group"
-        >
-          <div class="date-header" @click="toggleGroup(date)">
-            <span class="arrow" :class="{ rotated: collapsedGroups[date] }"
-              >▼</span
-            >
-            <span class="date-text">{{ date }}</span>
-            <span class="count">{{ items.length }}건</span>
-          </div>
-
-          <table v-if="!collapsedGroups[date]" class="ledger-table">
-            <colgroup>
-              <col style="width: 80px" />
-              <col style="width: 120px" />
-              <col style="width: 100px" />
-              <col style="width: 150px" />
-              <col />
-              <col style="width: 120px" />
-            </colgroup>
-            <thead>
-              <tr>
-                <th>분류</th>
-                <th>카테고리</th>
-                <th>내용</th>
-                <th>결제수단</th>
-                <th>금액</th>
-                <th>메모</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in items" :key="item.id">
-                <td>
-                  <span :class="['badge', item.type]">
-                    {{ item.type === 'income' ? '수입' : '지출' }}
-                  </span>
-                </td>
-                <td>{{ getCategoryName(item.categoryId) }}</td>
-                <td class="title-cell">{{ item.title || '내용 없음' }}</td>
-                <td>{{ item.paymentMethod || '-' }}</td>
-                <td
-                  :class="['amount', item.type === 'income' ? 'plus' : 'minus']"
-                >
-                  {{ formatNumber(item.amount) }} <span class="unit">원</span>
-                </td>
-                <td class="memo">{{ item.memo }}</td>
-                <td class="actions text-right">
-                  <button class="edit-btn" @click="handleEdit(item)">
-                    수정
-                  </button>
-                  <button class="delete-btn" @click="handleDelete(item.id)">
-                    삭제
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <article class="ledger-container">
+        <div class="list-header">
+          <div class="col-date">날짜</div>
+          <div class="col-type">분류</div>
+          <div class="col-cat">카테고리</div>
+          <div class="col-title">내용</div>
+          <div class="col-method">결제수단</div>
+          <div class="col-amount">금액(원)</div>
+          <div class="col-memo">메모</div>
+          <div class="col-actions">관리</div>
         </div>
 
         <div
-          v-if="Object.keys(groupedTransactions).length === 0"
-          class="empty-msg"
+          v-for="(items, date) in groupedTransactions"
+          :key="date"
+          class="date-group-row"
         >
-          이번 달 내역이 없습니다.
+          <div class="date-toggle-header" @click="toggleGroup(date)">
+            <div class="col-date">
+              <span class="arrow" :class="{ rotated: collapsedGroups[date] }"
+                >▼</span
+              >
+              <span class="date-text">{{ date }}</span>
+            </div>
+            <div class="col-summary">
+              <span class="count">{{ items.length }}건</span>
+            </div>
+          </div>
+
+          <div v-if="!collapsedGroups[date]" class="date-content">
+            <div v-for="item in items" :key="item.id" class="transaction-row">
+              <div class="col-date"></div>
+              <div class="col-type">
+                <span :class="['badge', item.type]">{{
+                  item.type === 'income' ? '수입' : '지출'
+                }}</span>
+              </div>
+              <div class="col-cat">{{ getCategoryName(item.categoryId) }}</div>
+              <div class="col-title">{{ item.title || '내용 없음' }}</div>
+              <div class="col-method">{{ item.paymentMethod || '-' }}</div>
+              <div class="col-amount" :class="item.type">
+                {{ formatNumber(item.amount) }}
+              </div>
+              <div class="col-memo">{{ item.memo }}</div>
+              <div class="col-actions">
+                <button class="small-btn edit" @click="handleEdit(item)">
+                  수정
+                </button>
+                <button class="small-btn delete" @click="handleDelete(item.id)">
+                  삭제
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </article>
     </section>
@@ -272,7 +261,7 @@ onMounted(async () => {
           </div>
 
           <div class="form-group" v-if="editingItem.type === 'expense'">
-            <label>결제수단</label>
+            <label>자산(결제수단)</label>
             <select v-model="editingItem.paymentMethod">
               <option value="체크카드">체크카드</option>
               <option value="신용카드">신용카드</option>
@@ -310,165 +299,296 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.content-area {
-  padding: 30px;
-  background: #fcfcfc;
+.ledger-container {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  margin-top: 10px auto 0;
+  max-width: 1400px;
+  width: 95%;
 }
 
-.date-header {
-  display: flex;
+.list-header,
+.date-toggle-header,
+.transaction-row {
+  display: grid;
+  grid-template-columns:
+    140px
+    70px
+    110px
+    1fr
+    100px
+    120px
+    minmax(200px, 1fr)
+    110px;
+
   align-items: center;
-  padding: 12px 15px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  margin-top: 20px;
+  gap: 20px;
+  padding: 18px 24px;
+}
+
+.col-amount {
+  font-weight: 700;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.list-header {
+  background-color: #fcfaff;
+  border-bottom: 1px solid #eeeaff;
+  color: #718096;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.date-group-row {
+  border-bottom: 1px solid #f8f9fe;
+}
+
+.date-toggle-header {
+  background: #ffffff;
   cursor: pointer;
-  border: 1px solid #eee;
+  transition: background 0.2s;
+  border-bottom: 1px solid #f1f3f9;
 }
-.date-header .arrow {
-  margin-right: 10px;
-  transition: transform 0.3s;
-  font-size: 10px;
+
+.date-toggle-header:hover {
+  background: #fbfaff;
 }
-.date-header .arrow.rotated {
+
+.date-text {
+  font-weight: 700;
+  color: #2d3748;
+  font-size: 1rem;
+}
+
+.arrow {
+  display: inline-block;
+  margin-right: 12px;
+  color: #7c4dff;
+  transition: transform 0.3s ease;
+  font-size: 0.8rem;
+}
+
+.arrow.rotated {
   transform: rotate(-90deg);
 }
-.date-header .date-text {
-  font-weight: bold;
-  flex-grow: 1;
-}
-.date-header .count {
-  color: #888;
-  font-size: 12px;
+
+.col-summary .count {
+  background: #f0ebff;
+  color: #7c4dff;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
-.ledger-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 5px;
-}
-.ledger-table th {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-  text-align: left;
-  color: #888;
-  font-size: 13px;
-}
-.ledger-table td {
-  padding: 12px;
-  border-bottom: 1px solid #f9f9f9;
-  font-size: 14px;
-}
-
-.actions {
-  white-space: nowrap;
-}
-.edit-btn,
-.delete-btn {
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
+.transaction-row {
   background: white;
-  cursor: pointer;
-  font-size: 12px;
-  margin-left: 5px;
+  font-size: 0.95rem;
+  border-bottom: 1px dashed #f1f3f9;
 }
-.edit-btn:hover {
-  background: #f0f0f0;
-  color: #26c281;
-  border-color: #26c281;
+
+.transaction-row:last-child {
+  border-bottom: none;
 }
-.delete-btn:hover {
-  background: #fff5f5;
-  color: #ff7675;
-  border-color: #ff7675;
+
+.transaction-row:hover {
+  background-color: #f9f8ff;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+}
+
+.badge.income {
+  background-color: #e6fffa;
+  color: #38b2ac;
 }
 
 .badge.expense {
-  color: #ff7675;
-  font-weight: bold;
+  background-color: #fff5f5;
+  color: #e53e3e;
 }
-.badge.income {
-  color: #26c281;
-  font-weight: bold;
-}
-.amount {
-  color: #8b5cf6;
-  font-weight: 600;
-}
-.text-right {
+
+.col-amount {
+  font-weight: 700;
   text-align: right;
+  font-family: 'Pretendard', sans-serif;
 }
-.empty-msg {
-  text-align: center;
-  padding: 50px;
-  color: #aaa;
+.col-amount.income {
+  color: #38b2ac;
+}
+.col-amount.expense {
+  color: #e53e3e;
+}
+
+.col-title,
+.col-memo {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #4a5568;
+}
+
+.small-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.small-btn.edit:hover {
+  border-color: #7c4dff;
+  color: #7c4dff;
+}
+
+.small-btn.delete:hover {
+  background: #fff5f5;
+  border-color: #feb2b2;
+  color: #e53e3e;
+}
+
+@media (max-width: 1200px) {
+  .list-header,
+  .date-toggle-header,
+  .transaction-row {
+    grid-template-columns: 140px 70px 100px 1fr 100px 110px 100px;
+  }
+  .col-memo {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .ledger-container {
+    overflow-x: auto;
+  }
+  .list-header {
+    display: none;
+  }
+  .date-toggle-header,
+  .transaction-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 8px;
+    position: relative;
+  }
+  .date-toggle-header {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .date-toggle-header .col-date {
+    display: block;
+    width: auto;
+  }
+
+  .transaction-row .col-date {
+    display: none;
+  }
+  .col-date {
+    display: none;
+  }
+
+  .col-type,
+  .col-cat {
+    display: inline-flex;
+    width: auto;
+  }
+
+  .col-title {
+    white-space: normal;
+  }
+
+  .col-amount {
+    width: 100%;
+    text-align: right;
+    font-size: 1.2rem;
+    margin: 8px 0;
+  }
+
+  .col-actions {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid #f1f3f9;
+    padding-top: 12px;
+  }
 }
 .filter-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
-  padding: 10px 5px;
+  margin-top: 40px;
 }
 
 .month-viewer {
   display: flex;
   align-items: center;
-  gap: 12px;
-  background-color: #fff;
-  padding: 6px 12px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-}
-
-.current-month {
-  font-size: 18px;
-  font-weight: 700;
-  color: #333;
-  margin: 0;
-  min-width: 110px;
-  text-align: center;
+  background: white;
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 1px solid #eef0f5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .month-btn {
   background: none;
   border: none;
-  font-size: 18px;
-  color: #888;
+  color: #7c4dff;
+  font-size: 1.2rem;
+  font-weight: bold;
   cursor: pointer;
-  padding: 0 5px;
-  transition: color 0.2s;
+  padding: 0 10px;
+  transition: opacity 0.2s;
 }
 
 .month-btn:hover {
-  color: #4a72ff;
+  opacity: 0.6;
+}
+
+.current-month {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 15px;
 }
 
 .write-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  background: white;
+  color: #7c4dff;
+  border: 1px solid #7c4dff;
+  margin-right: 20px;
   padding: 10px 20px;
-  background-color: #fff;
-  color: #7c3aed;
-  border: 1px solid rgba(95, 72, 155, 0.08);
-  border-radius: 25px;
-  font-size: 14px;
+  border-radius: 50px;
   font-weight: 600;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(95, 72, 155, 0.08);
+  box-shadow: 0 4px 12px rgba(124, 77, 255, 0.1);
 }
 
 .write-btn:hover {
-  background-color: #f0f4ff;
-  box-shadow: 0 4px 8px rgba(74, 114, 255, 0.15);
-  transform: translateY(-1px);
-}
-
-.write-btn .icon {
-  font-size: 16px;
+  background: #7c4dff;
+  color: white;
+  transform: translateY(-2px);
 }
 .modal-overlay {
   position: fixed;
@@ -476,114 +596,126 @@ onMounted(async () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000;
+  z-index: 1000;
 }
 
 .modal-content {
   background: white;
-  padding: 32px;
+  width: 100%;
+  max-width: 500px;
   border-radius: 24px;
-  width: 480px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-  border: 1px solid rgba(124, 58, 237, 0.1);
+  padding: 32px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.modal-header h2 {
+  font-size: 1.5rem;
+  color: #2d3748;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.edit-form .form-group {
   margin-bottom: 20px;
 }
-.modal-header h2 {
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: #1f2937;
-  letter-spacing: -0.02em;
-}
 
-.edit-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-  padding: 12px 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 14px;
-  color: #1f2937;
-  background-color: #f9fafb;
-  transition: all 0.2s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: #7c3aed;
-  background-color: #fff;
-  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
-}
-.form-group label {
+.edit-form label {
+  display: block;
   font-size: 0.9rem;
-  font-weight: 700;
-  color: #4b5563;
-  margin-bottom: 4px;
+  font-weight: 600;
+  color: #718096;
+  margin-bottom: 8px;
 }
+
+.edit-form input[type='text'],
+.edit-form input[type='number'],
+.edit-form input[type='date'],
+.edit-form select,
+.edit-form textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #edf2f7;
+  background-color: #f8faff;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.edit-form input:focus,
+.edit-form select:focus {
+  outline: none;
+  border-color: #7c4dff;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.1);
+}
+
 .radio-wrapper {
-  display: flex;
-  gap: 10px;
-}
-.modal-footer {
-  margin-top: 30px;
   display: flex;
   gap: 12px;
 }
 
-.cancel-btn {
-  flex: 1;
-  background: #f3f4f6;
-  border: none;
-  padding: 14px;
-  border-radius: 14px;
-  font-weight: 600;
-  color: #6b7280;
-  transition: background 0.2s;
+.radio-wrapper input[type='radio'] {
+  display: none;
 }
 
-.cancel-btn:hover {
-  background: #e5e7eb;
+.type-label {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #edf2f7;
+  cursor: pointer;
+  background: #f8fafc;
+  color: #a0aec0;
+  transition: all 0.2s;
+}
+
+#edit-expense:checked + .expense {
+  background: #fff5f5;
+  color: #e53e3e;
+  border-color: #feb2b2;
+}
+
+#edit-income:checked + .income {
+  background: #e6fffa;
+  color: #38b2ac;
+  border-color: #b2f5ea;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.cancel-btn,
+.save-btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.1s;
+}
+
+.cancel-btn {
+  background: #f7fafc;
+  color: #718096;
 }
 
 .save-btn {
-  flex: 2;
-  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  background: #7c4dff;
   color: white;
-  border: none;
-  padding: 14px;
-  border-radius: 14px;
-  font-weight: 700;
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
 }
 
-.save-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3);
+.save-btn:active,
+.cancel-btn:active {
+  transform: scale(0.98);
 }
 </style>

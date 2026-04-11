@@ -40,7 +40,10 @@
       "type": "income",
       "amount": 50000,
       "date": "2026-04-01",
-      "title": "용돈"
+      "title": "용돈",
+      "categoryId": 3,
+      "paymentMethod": "현금",
+      "memo": "주간 용돈"
     },
     {
       "id": 2,
@@ -88,12 +91,12 @@
     {
       "id": 5,
       "userId": "user1",
-      "type": "expense",
+      "type": "income",
       "amount": 12000,
       "date": "2026-04-05",
       "title": "교보문고",
-      "categoryId": 6,
-      "paymentMethod": "체크카드",
+      "categoryId": 3,
+      "paymentMethod": null,
       "memo": "",
       "isFixed": false
     },
