@@ -196,7 +196,6 @@ onMounted(() => {
         :selectedDay="selectedDate"
         @close="modalOpen = false"
         @save="handleSave"
-        ;
       />
     </div>
   </article>

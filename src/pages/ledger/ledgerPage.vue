@@ -18,7 +18,7 @@ const transactionStore = useTransactionStore();
 const userId = computed(() => authStore.currentUser?.id || 'guest');
 const baseStore = useBaseStore();
 
-const { paymentMethods } = storeToRefs(baseStore);
+const { categories, paymentMethods } = storeToRefs(baseStore);
 const { addTransaction2 } = transactionStore;
 
 const handleSave = async (data) => {
@@ -30,7 +30,7 @@ const today = new Date();
 const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
 const collapsedGroups = ref({});
-const categories = ref([]); // 카테고리 목록 저장
+// const categories = ref([]); // 카테고리 목록 저장
 
 const viewDate = ref(new Date());
 
@@ -216,7 +216,6 @@ onMounted(async () => {
           :paymentMethods="paymentMethods"
           @close="modalOpen = false"
           @save="handleSave"
-          ;
         />
       </div>
 
