@@ -61,9 +61,7 @@ const editingItem = reactive({
 });
 
 const groupedTransactions = computed(() => {
-  const source = transactionStore.transactions.length
-    ? transactionStore.transactions
-    : []; //목데이터 대신 빈 배열->새로고침 시 발생하는 오류도 같이 고쳐짐
+  const source = transactionStore.transactions;
 
   const filtered = source.filter((item) => {
     const itemDate = new Date(item.date);
@@ -88,8 +86,10 @@ const groupedTransactions = computed(() => {
 const filteredCategories = computed(() => {
   if (editingItem.type === 'income') {
     // 수입(income)일 때는 ID 1~6만 표시
+    // 수입(income)일 때는 ID 1~6만 표시
     return categories.value.filter((cat) => cat.id >= 1 && cat.id <= 6);
   } else {
+    // 지출(expense)일 때는 ID 7 이상만 표시
     // 지출(expense)일 때는 ID 7 이상만 표시
     return categories.value.filter((cat) => cat.id >= 7);
   }
@@ -259,10 +259,7 @@ onMounted(async () => {
                   item.type === 'income' ? '수입' : '지출'
                 }}</span>
               </div>
-              <div class="col-cat">
-                {{ getCategoryName(item.categoryId) }}
-              </div>
-              <div class="col-title">{{ item.title || '내용 없음' }}</div>
+              <div class="col-cat">{{ getCategoryName(item.categoryId) }}</div>
               <div class="col-method">{{ item.paymentMethod || '-' }}</div>
               <div class="col-amount" :class="item.type">
                 {{ formatNumber(item.amount) }}
@@ -396,23 +393,16 @@ onMounted(async () => {
   display: grid;
   grid-template-columns:
     140px
-    70px
-    110px
-    1fr
-    100px
+    80px
     120px
-    minmax(200px, 1fr)
-    110px;
+    120px
+    120px
+    1fr
+    120px;
 
   align-items: center;
   gap: 20px;
   padding: 18px 24px;
-}
-
-.col-amount {
-  font-weight: 700;
-  text-align: right;
-  padding-right: 10px;
 }
 
 .list-header {
@@ -501,7 +491,6 @@ onMounted(async () => {
 
 .col-amount {
   font-weight: 700;
-  text-align: right;
   font-family: 'Pretendard', sans-serif;
 }
 .col-amount.income {
@@ -510,13 +499,14 @@ onMounted(async () => {
 .col-amount.expense {
   color: #e53e3e;
 }
-
-.col-title,
 .col-memo {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #4a5568;
+}
+.col-actions {
+  display: flex;
+  gap: 8px;
 }
 
 .small-btn {
@@ -546,9 +536,6 @@ onMounted(async () => {
   .transaction-row {
     grid-template-columns: 140px 70px 100px 1fr 100px 110px 100px;
   }
-  .col-memo {
-    display: none;
-  }
 }
 
 @media (max-width: 768px) {
@@ -558,48 +545,52 @@ onMounted(async () => {
   .list-header {
     display: none;
   }
+
   .date-toggle-header,
   .transaction-row {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding: 16px;
-    gap: 8px;
+    gap: 4px;
     position: relative;
   }
-  .date-toggle-header {
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-  }
 
-  .date-toggle-header .col-date {
+  .col-memo {
     display: block;
-    width: auto;
+    width: 100%;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1a202c;
+    order: 1;
+    margin-bottom: 4px;
   }
 
-  .transaction-row .col-date {
-    display: none;
-  }
-  .col-date {
-    display: none;
+  .col-type {
+    order: 0;
+    margin-bottom: 2px;
   }
 
-  .col-type,
   .col-cat {
     display: inline-flex;
-    width: auto;
+    order: 2;
+    color: #718096;
+    font-size: 0.95rem;
   }
 
-  .col-title {
-    white-space: normal;
+  .col-method {
+    order: 3;
+    font-size: 0.95rem;
+    color: #718096;
   }
 
   .col-amount {
     width: 100%;
     text-align: right;
-    font-size: 1.2rem;
-    margin: 8px 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 12px 0;
+    order: 4;
   }
 
   .col-actions {
@@ -608,6 +599,26 @@ onMounted(async () => {
     justify-content: flex-end;
     border-top: 1px solid #f1f3f9;
     padding-top: 12px;
+    margin-top: 8px;
+    order: 5;
+    gap: 8px;
+  }
+
+  .date-toggle-header {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    background-color: #f8fafc;
+  }
+
+  .date-toggle-header .col-date {
+    display: block;
+    width: auto;
+  }
+
+  .transaction-row .col-date,
+  .col-date {
+    display: none;
   }
 }
 .filter-bar {
