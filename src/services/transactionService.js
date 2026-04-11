@@ -15,6 +15,18 @@ export const transactionService = {
     });
     return res.data;
   },
+  async addTransaction(data) {
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/transactions/`,
+        data,
+      );
+      return response.data;
+    } catch (error) {
+      console.error('API 저장 요청 실패:', error);
+      throw error;
+    }
+  },
   async updateTransaction(id, data) {
     try {
       const response = await axios.patch(

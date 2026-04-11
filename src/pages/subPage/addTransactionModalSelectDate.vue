@@ -91,7 +91,6 @@ const saveTransaction = () => {
   }
   emit('save', {
     ...form.value,
-    userId: form.value.userId ?? props.userId ?? null,
   });
   closeModal();
 };

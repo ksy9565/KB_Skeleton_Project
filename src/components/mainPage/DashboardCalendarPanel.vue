@@ -21,11 +21,11 @@ const baseStore = useBaseStore();
 
 const { categories, paymentMethods } = storeToRefs(baseStore);
 const { transactions, currentMonth } = storeToRefs(transactionStore);
-const { addTransaction2 } = transactionStore;
+const { addTransaction } = transactionStore;
 
 const handleSave = async (data) => {
   try {
-    await addTransaction2(data);
+    await addTransaction(data);
 
     toast.success('저장되었습니다.', {
       timeout: 2000,

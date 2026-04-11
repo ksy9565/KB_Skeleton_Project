@@ -21,11 +21,11 @@ const toast = useToast();
 const userId = computed(() => authStore.currentUser?.id || 'guest');
 
 const { categories, paymentMethods } = storeToRefs(baseStore);
-const { addTransaction2 } = transactionStore;
+const { addTransaction } = transactionStore;
 
 const modalOpen = ref(false);
 const handleSave = async (data) => {
-  await addTransaction2(data);
+  await addTransaction(data);
   modalOpen.value = false;
 };
 
@@ -59,50 +59,10 @@ const editingItem = reactive({
   isFixed: false,
 });
 
-// 목데이터
-const mockTransactions = ref([
-  {
-    id: 1,
-    type: 'expense',
-    date: '2026-04-10',
-    categoryId: 7,
-    paymentMethod: '체크카드',
-    amount: 11600,
-    memo: '같이 커피 사먹음',
-  },
-  {
-    id: 2,
-    type: 'expense',
-    date: '2026-04-10',
-    categoryId: 7,
-    paymentMethod: '신용카드',
-    amount: 10000,
-    memo: '편의점',
-  },
-  {
-    id: 3,
-    type: 'expense',
-    date: '2026-04-05',
-    categoryId: 11,
-    paymentMethod: '체크카드',
-    amount: 45640,
-    memo: '이마트 장보기',
-  },
-  {
-    id: 4,
-    type: 'income',
-    date: '2026-04-01',
-    categoryId: 1,
-    paymentMethod: null,
-    amount: 650000,
-    memo: '용돈',
-  },
-]);
-
 const groupedTransactions = computed(() => {
   const source = transactionStore.transactions.length
     ? transactionStore.transactions
-    : mockTransactions.value;
+    : []; //목데이터 대신 빈 배열->새로고침 시 발생하는 오류도 같이 고쳐짐
 
   const filtered = source.filter((item) => {
     const itemDate = new Date(item.date);
@@ -189,7 +149,7 @@ const handleDelete = async (id) => {
 
     cancelButtonColor: '#7c4dff',
     cancelButtonText: '취소',
-    position: 'center', // 이건 중앙이 제일 예쁩니다
+    position: 'center',
   });
   if (result.isConfirmed) {
     try {
@@ -217,12 +177,6 @@ const getCategoryName = (id) => {
 
 onMounted(async () => {
   await transactionStore.fetchTransactions();
-  try {
-    const response = await fetch('http://localhost:3000/catgories');
-    categories.value = await response.json();
-  } catch (error) {
-    console.error('카테고리 로드 실패:', error);
-  }
 });
 </script>
 
@@ -273,6 +227,12 @@ onMounted(async () => {
         </div>
 
         <div
+          v-if="Object.keys(groupedTransactions).length === 0"
+          class="no-data-msg"
+        >
+          내역이 존재하지 않습니다.
+        </div>
+        <div
           v-for="(items, date) in groupedTransactions"
           :key="date"
           class="date-group-row"
@@ -297,7 +257,9 @@ onMounted(async () => {
                   item.type === 'income' ? '수입' : '지출'
                 }}</span>
               </div>
-              <div class="col-cat">{{ getCategoryName(item.categoryId) }}</div>
+              <div class="col-cat">
+                {{ getCategoryName(item.categoryId) }}
+              </div>
               <div class="col-title">{{ item.title || '내용 없음' }}</div>
               <div class="col-method">{{ item.paymentMethod || '-' }}</div>
               <div class="col-amount" :class="item.type">
@@ -854,5 +816,15 @@ onMounted(async () => {
 .save-btn:active,
 .cancel-btn:active {
   transform: scale(0.98);
+}
+
+.no-data-msg {
+  padding: 50px 0;
+  text-align: center;
+  color: #999;
+  font-size: 1.1rem;
+  background: #ffffff;
+  border-radius: 12px;
+  margin-top: 10px;
 }
 </style>
