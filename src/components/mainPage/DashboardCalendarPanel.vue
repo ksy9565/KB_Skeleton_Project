@@ -6,6 +6,10 @@ import addTransactionModal from '@/pages/subPage/addTransactionModal.vue';
 import { useBaseStore } from '@/stores/commonStore';
 import { useTransactionStore } from '@/stores/transactionStore';
 import { storeToRefs } from 'pinia';
+
+import { useToast } from 'vue-toastification';
+const toast = useToast();
+
 const modalOpen = ref(false);
 const selectedDate = ref(null);
 
@@ -20,8 +24,19 @@ const { transactions, currentMonth } = storeToRefs(transactionStore);
 const { addTransaction2 } = transactionStore;
 
 const handleSave = async (data) => {
-  await addTransaction2(data);
-  modalOpen.value = false;
+  try {
+    await addTransaction2(data);
+
+    toast.success('저장되었습니다.', {
+      timeout: 2000,
+      position: 'bottom-center',
+    });
+    modalOpen.value = false;
+  } catch (error) {
+    toast.error('저장 중 오류가 발생했습니다. 다시 시도해주세요.', {
+      timeout: 4000,
+    });
+  }
 };
 
 const year = computed(() => currentDate.value.getFullYear());

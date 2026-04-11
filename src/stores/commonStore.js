@@ -103,6 +103,7 @@ export const useBaseStore = defineStore('base', () => {
   const paymentMethods = ref([
     { name: '신용카드', color: '#3498db' },
     { name: '체크카드', color: '#2ecc71' },
+    { name: '교통카드', color: '#000080' },
     { name: '현금', color: '	#95a5a6' },
     { name: '계좌이체', color: '#e67e22' },
 
@@ -114,6 +115,9 @@ export const useBaseStore = defineStore('base', () => {
   const getCategoryName = (id) =>
     categories.value.find((c) => c.id === id)?.name;
 
+  const getCategoryColor = (name) =>
+    categories.value.find((c) => c.name === name)?.color;
+
   const getPaymentMethodsColor = (name) =>
     paymentMethods.value.find((c) => c.name === name)?.color;
 
@@ -121,6 +125,7 @@ export const useBaseStore = defineStore('base', () => {
     categories,
     paymentMethods,
     getCategoryName,
+    getCategoryColor,
     getPaymentMethodsColor,
   };
 });

@@ -1,4 +1,6 @@
 import './assets/main.css';
+import Toast from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
@@ -16,5 +18,9 @@ const authStore = useAuthStore(pinia);
 authStore.initializeAuth();
 
 app.use(router);
-
+app.use(Toast, {
+  transition: 'Vue-Toastification__bounce',
+  maxToasts: 20,
+  newestOnTop: true,
+});
 app.mount('#app');

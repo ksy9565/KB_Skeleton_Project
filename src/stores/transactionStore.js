@@ -174,8 +174,20 @@ export const useTransactionStore = defineStore('transaction', () => {
       throw error;
     }
   }
-  function deleteTransaction(id) {
-    transactions.value = transactions.value.filter((t) => t.id !== id);
+  async function deleteTransaction(id) {
+    try {
+      await transactionService.deleteTransaction(id);
+
+      const index = transactions.value.findIndex((t) => t.id === id);
+      if (index !== -1) {
+        transactions.value = transactions.value.filter((t) => t.id !== id);
+      }
+
+      return true;
+    } catch (error) {
+      console.error('스토어 업데이트 실패:', error);
+      throw error;
+    }
   }
 
   const getRecentTransactions = computed((limit = 10) => {});

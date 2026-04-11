@@ -70,7 +70,7 @@ const items = computed(() => {
       return {
         label: categoryInfo?.name || String(catId),
         value: percentage,
-        color: categoryInfo?.color || '#b8b3c9',
+        color: baseStore.getCategoryColor(categoryInfo?.name),
       };
     })
     .sort((a, b) => b.value - a.value);
@@ -140,9 +140,8 @@ const chartOptions = computed(() => ({
 <template>
   <article class="panel chart-panel">
     <div class="panel-head">
-      <p class="panel-label">카테고리별 지출</p>
+      <p class="panel-label">이번 달 카테고리별 지출</p>
       <div v-if="isLoading" class="loader">불러오는 중입니다.</div>
-      <button type="button">이번 달</button>
     </div>
 
     <div class="chart-area pie-layout">
