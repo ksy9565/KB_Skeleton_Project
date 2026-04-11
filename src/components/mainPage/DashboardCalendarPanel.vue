@@ -18,12 +18,9 @@ const baseStore = useBaseStore();
 const { categories, paymentMethods } = storeToRefs(baseStore);
 const { transactions, currentMonth } = storeToRefs(transactionStore);
 const { addTransaction2 } = transactionStore;
+
 const handleSave = async (data) => {
   await addTransaction2(data);
-  const currentUserId = authStore.currentUser?.id;
-  if (currentUserId) {
-    await transactionStore.getCategoryStats(currentUserId, currentMonth.value);
-  }
   modalOpen.value = false;
 };
 
@@ -190,34 +187,7 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <!--         <button
-          type="button"
-          v-for="(day, dayIndex) in week"
-          :key="`${weekIndex}-${dayIndex}`"
-          @click="openModalWithDate(day)"
-          class="calendar-day"
-          :class="{
-            empty: !day,
-            'sun-text': dayIndex === 0 && day,
-            'sat-text': dayIndex === 6 && day,
-          }"
-        >
-          <span class="day-number">{{ day || '' }}</span>
 
-          <div v-if="day && dailySummary[getDateKey(day)]" class="day-stats">
-            <span
-              v-if="dailySummary[getDateKey(day)].income > 0"
-              class="income-amount"
-              >`` +{{ dailySummary[getDateKey(day)].income.toLocaleString() }}
-            </span>
-            <span
-              v-if="dailySummary[getDateKey(day)].expense > 0"
-              class="expense-amount"
-            >
-              -{{ dailySummary[getDateKey(day)].expense.toLocaleString() }}
-            </span>
-          </div>
-        </button> -->
       <addTransactionModal
         :is-open="modalOpen"
         :userId="userId"

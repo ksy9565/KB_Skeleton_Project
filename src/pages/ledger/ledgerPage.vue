@@ -1,14 +1,30 @@
 <script setup>
 import { computed, onMounted, ref, reactive } from 'vue';
 import DashboardSidebar from '@/components/mainPage/DashboardSidebar.vue';
+import addTransactionModalSelectDate from '../subPage/addTransactionModalSelectDate.vue';
 import '@/styles/mainPage/logined.css';
 
 import { useAuthStore } from '@/stores/authStore';
 import { useTransactionStore } from '@/stores/transactionStore';
+import { useBaseStore } from '@/stores/commonStore';
 import { transactionService } from '@/services/transactionService';
+import { storeToRefs } from 'pinia';
+
+const modalOpen = ref(false);
 
 const authStore = useAuthStore();
 const transactionStore = useTransactionStore();
+
+const userId = computed(() => authStore.currentUser?.id || 'guest');
+const baseStore = useBaseStore();
+
+const { paymentMethods } = storeToRefs(baseStore);
+const { addTransaction2 } = transactionStore;
+
+const handleSave = async (data) => {
+  await addTransaction2(data);
+  modalOpen.value = false;
+};
 
 const today = new Date();
 const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -188,9 +204,18 @@ onMounted(async () => {
           <button class="month-btn" @click="moveMonth(1)">&gt;</button>
         </div>
 
-        <button class="write-btn">
+        <button class="write-btn" @click="modalOpen = true">
           가계부 작성 <span class="icon">✎</span>
         </button>
+        <addTransactionModalSelectDate
+          :is-open="modalOpen"
+          :userId="userId"
+          :categories="categories"
+          :paymentMethods="paymentMethods"
+          @close="modalOpen = false"
+          @save="handleSave"
+          ;
+        />
       </div>
 
       <article class="table-container">
