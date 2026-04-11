@@ -7,7 +7,6 @@ const props = defineProps({
   categories: Array, // { id, name, color}
   paymentMethods: Array, // { name, color }
   incomePaymentMethods: Array, // { name, color }
-  selectedDay: String,
 });
 
 const emit = defineEmits(['close', 'save']);
@@ -19,13 +18,13 @@ const initialForm = {
   amount: null,
   categoryId: '',
   paymentMethod: '',
-  date: props.selectedDay,
+  date: new Date().toISOString().split('T')[0],
   memo: '',
   isFixed: false,
 };
 
 const form = ref({ ...initialForm });
-console.log(form.value.date);
+
 // 수입/지출 선택에 따른 카테고리 필터링
 const filteredCategories = computed(() => {
   return props.categories.filter((cat) => {
@@ -59,13 +58,10 @@ watch(
 );
 
 watch(
-  () => [props.isOpen, props.userId, props.selectedDay],
-  ([isOpen, userId, selectedDay]) => {
+  () => [props.isOpen, props.userId],
+  ([isOpen, userId]) => {
     if (isOpen) {
       form.value.userId = userId ?? null;
-      if (selectedDay) {
-        form.value.date = selectedDay;
-      }
     }
   },
   { immediate: true },
@@ -97,14 +93,6 @@ const saveTransaction = () => {
   });
   closeModal();
 };
-
-// YYYY년 MM월 DD일 변환 표시
-const formattedDate = computed(() => {
-  if (!form.value.date) return '';
-
-  const [year, month, day] = form.value.date.split('-');
-  return `${year}년 ${month}월 ${day}일`;
-});
 </script>
 
 <template>
@@ -114,11 +102,13 @@ const formattedDate = computed(() => {
         <h2>거래 내역 추가</h2>
         <button class="close-btn" @click="closeModal">&times;</button>
       </header>
-
-      <div class="form-group">
-        <label>{{ formattedDate }}</label>
-      </div>
       <form @submit.prevent="saveTransaction">
+        <!-- 날짜 선택 (새로 추가) -->
+        <div class="form-group">
+          <label>날짜</label>
+          <input type="date" v-model="form.date" required class="date-input" />
+        </div>
+
         <!-- 1. 수입/지출 선택 -->
         <div class="form-group">
           <label>구분</label>
