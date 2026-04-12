@@ -291,156 +291,162 @@ const moveToLogin = () => {
 
 <template>
   <main class="settings-page">
-    <DashboardSidebar :groups="navigationGroups" :show-battery="true" />
+    <div class="dashboard-shell">
+      <DashboardSidebar :groups="navigationGroups" :show-battery="true" />
 
-    <section class="settings-content">
-      <header class="settings-header">
-        <p class="eyebrow">Settings</p>
-        <h1>계정 및 가계부 설정</h1>
-      </header>
+      <section class="content-area settings-content">
+        <header class="settings-header">
+          <p class="eyebrow">Settings</p>
+          <h1>계정 및 가계부 설정</h1>
+        </header>
 
-      <section v-if="!authStore.isAuthenticated" class="settings-card">
-        <p class="help-text">설정 기능은 로그인 후 사용할 수 있습니다.</p>
-        <button type="button" class="primary-btn" @click="moveToLogin">
-          로그인 하러가기
-        </button>
+        <section v-if="!authStore.isAuthenticated" class="settings-card">
+          <p class="help-text">설정 기능은 로그인 후 사용할 수 있습니다.</p>
+          <button type="button" class="primary-btn" @click="moveToLogin">
+            로그인 하러가기
+          </button>
+        </section>
+
+        <template v-else>
+          <section class="settings-card">
+            <h2>회원 정보 수정</h2>
+
+            <div class="profile-row">
+              <div class="avatar-wrap">
+                <img
+                  v-if="profilePreviewSrc"
+                  :src="profilePreviewSrc"
+                  alt="프로필 미리보기"
+                  class="avatar-image"
+                />
+                <div v-else class="avatar-fallback">
+                  <i class="fa-solid fa-user"></i>
+                </div>
+              </div>
+
+              <div class="profile-image-controls">
+                <div class="photo-actions">
+                  <label class="file-btn" for="profile-image-input"
+                    >프로필 사진 선택</label
+                  >
+                  <button
+                    type="button"
+                    class="secondary-btn"
+                    :disabled="isResettingProfileImage"
+                    @click="resetProfileImage"
+                  >
+                    {{
+                      isResettingProfileImage
+                        ? '초기화 중...'
+                        : '프로필 사진 초기화'
+                    }}
+                  </button>
+                </div>
+                <input
+                  id="profile-image-input"
+                  type="file"
+                  accept="image/*"
+                  @change="handleProfileImageChange"
+                />
+                <p class="help-text">권장: 800x800</p>
+              </div>
+            </div>
+
+            <div class="field-grid">
+              <label class="field">
+                <span>이름</span>
+                <input
+                  v-model="profileForm.name"
+                  type="text"
+                  placeholder="이름"
+                />
+              </label>
+
+              <label class="field">
+                <span>아이디</span>
+                <input
+                  v-model="profileForm.username"
+                  type="text"
+                  placeholder="아이디"
+                />
+              </label>
+            </div>
+
+            <p v-if="profileError" class="message error">{{ profileError }}</p>
+            <p v-if="profileMessage" class="message success">
+              {{ profileMessage }}
+            </p>
+
+            <button
+              type="button"
+              class="primary-btn"
+              :disabled="isSavingProfile"
+              @click="saveProfile"
+            >
+              {{ isSavingProfile ? '저장 중...' : '회원 정보 저장' }}
+            </button>
+          </section>
+
+          <section class="settings-card">
+            <h2>비밀번호 변경</h2>
+
+            <div class="field-grid">
+              <label class="field">
+                <span>현재 비밀번호</span>
+                <input v-model="passwordForm.currentPassword" type="password" />
+              </label>
+
+              <label class="field">
+                <span>새 비밀번호</span>
+                <input v-model="passwordForm.newPassword" type="password" />
+              </label>
+
+              <label class="field">
+                <span>새 비밀번호 확인</span>
+                <input v-model="passwordForm.confirmPassword" type="password" />
+              </label>
+            </div>
+
+            <p v-if="passwordError" class="message error">
+              {{ passwordError }}
+            </p>
+            <p v-if="passwordMessage" class="message success">
+              {{ passwordMessage }}
+            </p>
+
+            <button
+              type="button"
+              class="primary-btn"
+              :disabled="isSavingPassword"
+              @click="changePassword"
+            >
+              {{ isSavingPassword ? '변경 중...' : '비밀번호 변경' }}
+            </button>
+          </section>
+
+          <section class="settings-card danger-zone">
+            <h2>가계부 초기화</h2>
+            <p class="help-text">
+              현재 계정의 거래 내역과 예산 데이터가 모두 삭제됩니다.
+            </p>
+
+            <p v-if="resetError" class="message error">{{ resetError }}</p>
+            <p v-if="resetMessage" class="message success">
+              {{ resetMessage }}
+            </p>
+
+            <button
+              type="button"
+              class="danger-btn"
+              :disabled="isResettingLedger"
+              @click="resetLedger"
+            >
+              {{ isResettingLedger ? '초기화 중...' : '가계부 내용 초기화' }}
+            </button>
+          </section>
+        </template>
       </section>
-
-      <template v-else>
-        <section class="settings-card">
-          <h2>회원 정보 수정</h2>
-
-          <div class="profile-row">
-            <div class="avatar-wrap">
-              <img
-                v-if="profilePreviewSrc"
-                :src="profilePreviewSrc"
-                alt="프로필 미리보기"
-                class="avatar-image"
-              />
-              <div v-else class="avatar-fallback">
-                <i class="fa-solid fa-user"></i>
-              </div>
-            </div>
-
-            <div class="profile-image-controls">
-              <div class="photo-actions">
-                <label class="file-btn" for="profile-image-input"
-                  >프로필 사진 선택</label
-                >
-                <button
-                  type="button"
-                  class="secondary-btn"
-                  :disabled="isResettingProfileImage"
-                  @click="resetProfileImage"
-                >
-                  {{
-                    isResettingProfileImage
-                      ? '초기화 중...'
-                      : '프로필 사진 초기화'
-                  }}
-                </button>
-              </div>
-              <input
-                id="profile-image-input"
-                type="file"
-                accept="image/*"
-                @change="handleProfileImageChange"
-              />
-              <p class="help-text">권장: 800x800</p>
-            </div>
-          </div>
-
-          <div class="field-grid">
-            <label class="field">
-              <span>이름</span>
-              <input
-                v-model="profileForm.name"
-                type="text"
-                placeholder="이름"
-              />
-            </label>
-
-            <label class="field">
-              <span>아이디</span>
-              <input
-                v-model="profileForm.username"
-                type="text"
-                placeholder="아이디"
-              />
-            </label>
-          </div>
-
-          <p v-if="profileError" class="message error">{{ profileError }}</p>
-          <p v-if="profileMessage" class="message success">
-            {{ profileMessage }}
-          </p>
-
-          <button
-            type="button"
-            class="primary-btn"
-            :disabled="isSavingProfile"
-            @click="saveProfile"
-          >
-            {{ isSavingProfile ? '저장 중...' : '회원 정보 저장' }}
-          </button>
-        </section>
-
-        <section class="settings-card">
-          <h2>비밀번호 변경</h2>
-
-          <div class="field-grid">
-            <label class="field">
-              <span>현재 비밀번호</span>
-              <input v-model="passwordForm.currentPassword" type="password" />
-            </label>
-
-            <label class="field">
-              <span>새 비밀번호</span>
-              <input v-model="passwordForm.newPassword" type="password" />
-            </label>
-
-            <label class="field">
-              <span>새 비밀번호 확인</span>
-              <input v-model="passwordForm.confirmPassword" type="password" />
-            </label>
-          </div>
-
-          <p v-if="passwordError" class="message error">{{ passwordError }}</p>
-          <p v-if="passwordMessage" class="message success">
-            {{ passwordMessage }}
-          </p>
-
-          <button
-            type="button"
-            class="primary-btn"
-            :disabled="isSavingPassword"
-            @click="changePassword"
-          >
-            {{ isSavingPassword ? '변경 중...' : '비밀번호 변경' }}
-          </button>
-        </section>
-
-        <section class="settings-card danger-zone">
-          <h2>가계부 초기화</h2>
-          <p class="help-text">
-            현재 계정의 거래 내역과 예산 데이터가 모두 삭제됩니다.
-          </p>
-
-          <p v-if="resetError" class="message error">{{ resetError }}</p>
-          <p v-if="resetMessage" class="message success">{{ resetMessage }}</p>
-
-          <button
-            type="button"
-            class="danger-btn"
-            :disabled="isResettingLedger"
-            @click="resetLedger"
-          >
-            {{ isResettingLedger ? '초기화 중...' : '가계부 내용 초기화' }}
-          </button>
-        </section>
-      </template>
-    </section>
+    </div>
   </main>
 </template>
 
