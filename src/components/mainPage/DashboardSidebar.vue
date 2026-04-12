@@ -3,6 +3,7 @@ import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 import DashboardBudgetBattery from '@/components/mainPage/DashboardBudgetBattery.vue';
+import { RouterLink } from 'vue-router';
 
 const props = defineProps({
   groups: {
@@ -147,6 +148,13 @@ onBeforeUnmount(() => {
       v-if="!isMobile"
       class="dashboard-sidebar dashboard-sidebar--desktop"
     >
+      <RouterLink
+        :to="{ name: 'main' }"
+        class="app-logo-link"
+        aria-label="홈으로 이동"
+      >
+        <img src="@/images/logo.png" alt="logo" class="app-logo-image" />
+      </RouterLink>
       <button
         type="button"
         class="login-button"
@@ -279,8 +287,8 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .profile-avatar {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   object-fit: cover;
   flex: none;

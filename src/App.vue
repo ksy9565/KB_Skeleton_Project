@@ -1,13 +1,5 @@
 <template>
   <div class="app-shell">
-    <RouterLink
-      :to="{ name: 'main' }"
-      class="app-logo-link"
-      aria-label="홈으로 이동"
-    >
-      <img src="@/images/logo.png" alt="logo" class="app-logo-image" />
-    </RouterLink>
-
     <RouterView />
   </div>
 </template>
