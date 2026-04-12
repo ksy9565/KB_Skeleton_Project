@@ -3,131 +3,131 @@ import { ref } from 'vue';
 
 export const useBaseStore = defineStore('base', () => {
   const categoryPalette = [
-    '#4e79a7',
-    '#f28e2c',
-    '#e15759',
-    '#76b7b2',
-    '#59a14f',
-    '#edc949',
-    '#af7aa1',
-    '#ff9da7',
-    '#9c755f',
-    '#bab0ab',
-    '#86bc25',
-    '#00adc6',
-    '#0047bb',
-    '#bc4077',
-    '#633d8a',
-    '#d6616b',
+    '#AFCBEA',
+    '#F8C999',
+    '#F4B0B0',
+    '#BFE5DF',
+    '#B9E2B0',
+    '#F7E7A6',
+    '#DABDE8',
+    '#F7C6D0',
+    '#D9C3B1',
+    '#D8DADF',
+    '#D8E6A6',
+    '#B4E6EB',
+    '#B8D2F2',
+    '#F7D1A7',
+    '#CDEACC',
+    '#F3B8B1',
   ];
 
   const categories = ref([
     {
       id: 1,
       name: '급여',
-      color: '#4e79a7',
+      color: '#AFCBEA',
     },
 
     {
       id: 2,
       name: '상여',
-      color: '#f28e2c',
+      color: '#F8C999',
     },
 
     {
       id: 3,
       name: '용돈',
-      color: '#e15759',
+      color: '#F4B0B0',
     },
 
     {
       id: 4,
       name: '부동산',
-      color: '#76b7b2',
+      color: '#BFE5DF',
     },
 
     {
       id: 5,
       name: '금융',
-      color: '#59a14f',
+      color: '#B9E2B0',
     },
 
     {
       id: 6,
       name: '기타',
-      color: '#edc949',
+      color: '#F7E7A6',
     },
 
     {
       id: 7,
       name: '식비',
-      color: '#af7aa1',
+      color: '#DABDE8',
     },
 
     {
       id: 8,
       name: '패션/쇼핑',
-      color: '#ff9da7',
+      color: '#F7C6D0',
     },
 
     {
       id: 9,
       name: '뷰티/미용',
-      color: '#9c755f',
+      color: '#D9C3B1',
     },
 
     {
       id: 10,
       name: '교통',
-      color: '#bab0ab',
+      color: '#D8DADF',
     },
 
     {
       id: 11,
       name: '주거/통신',
-      color: '#86bc25',
+      color: '#D8E6A6',
     },
 
     {
       id: 12,
       name: '의료/건강',
-      color: '#00adc6',
+      color: '#B4E6EB',
     },
 
     {
       id: 13,
       name: '문화/여행',
-      color: '#0047bb',
+      color: '#B8D2F2',
     },
 
     {
       id: 14,
       name: '경조/선물',
-      color: '#bc4077',
+      color: '#F7D1A7',
     },
 
     {
       id: 15,
       name: '반려동물',
-      color: '#633d8a',
+      color: '#CDEACC',
     },
 
     {
       id: 16,
       name: '기타',
-      color: '#d6616b',
+      color: '#F3B8B1',
     },
   ]);
 
   const paymentMethods = ref([
-    { name: '신용카드', color: '#3498db' },
-    { name: '체크카드', color: '#2ecc71' },
-    { name: '교통카드', color: '#000080' },
-    { name: '현금', color: '	#95a5a6' },
-    { name: '계좌이체', color: '#e67e22' },
+    { name: '신용카드', color: '#AFCBEA' },
+    { name: '체크카드', color: '#F8C999' },
+    { name: '교통카드', color: '#B9E2B0' },
+    { name: '현금', color: '#D8DADF' },
+    { name: '계좌이체', color: '#F4B0B0' },
 
-    { name: '환불', color: '#3498db' },
-    { name: '포인트적립/캐시백', color: '#2ecc71' },
+    { name: '환불', color: '#BFE5DF' },
+    { name: '포인트적립/캐시백', color: '#DABDE8' },
   ]);
 
   // ID로 이름을 찾아주는 Getter 함수들
@@ -165,7 +165,8 @@ export const useBaseStore = defineStore('base', () => {
   };
 
   const getPaymentMethodsColor = (name) =>
-    paymentMethods.value.find((c) => c.name === name)?.color;
+    paymentMethods.value.find((c) => c.name === name)?.color ||
+    categoryPalette[0];
 
   return {
     categoryPalette,

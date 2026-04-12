@@ -60,32 +60,32 @@ const renderChart = () => {
           label: '수입',
           data: chartItems.value.map((item) => item.income),
           backgroundColor: createGradient(
-            'rgba(51, 181, 64, 0.9)',
-            'rgba(51, 181, 64, 0.1)',
+            'rgba(59, 130, 246, 0.9)',
+            'rgba(59, 130, 246, 0.1)',
           ),
-          borderColor: '#33B540',
+          borderColor: '#3B82F6',
           borderWidth: 1,
           borderRadius: 8,
           borderSkipped: false,
           hoverBackgroundColor: createGradient(
-            'rgba(51, 181, 64, 0.7)',
-            'rgba(51, 181, 64, 0.0)',
+            'rgba(59, 130, 246, 0.7)',
+            'rgba(59, 130, 246, 0.0)',
           ),
         },
         {
           label: '지출',
           data: chartItems.value.map((item) => item.expense),
           backgroundColor: createGradient(
-            'rgba(214, 58, 58, 0.9)',
-            'rgba(214, 58, 58, 0.1)',
+            'rgba(245, 158, 11, 0.9)',
+            'rgba(245, 158, 11, 0.1)',
           ),
-          borderColor: '#D63A3A',
+          borderColor: '#F59E0B',
           borderWidth: 1,
           borderRadius: 8,
           borderSkipped: false,
           hoverBackgroundColor: createGradient(
-            'rgba(214, 58, 58, 0.7)',
-            'rgba(214, 58, 58, 0.0)',
+            'rgba(245, 158, 11, 0.7)',
+            'rgba(245, 158, 11, 0.0)',
           ),
         },
       ],
@@ -105,10 +105,10 @@ const renderChart = () => {
         legend: { display: false },
         datalabels: { display: false },
         tooltip: {
-          backgroundColor: 'rgba(124, 58, 237, 0.1)',
+          backgroundColor: 'rgba(15, 23, 42, 0.92)',
           titleFont: { size: 13, weight: 'bold' },
-          titleColor: '#1f2937',
-          bodyColor: '#4b5563',
+          titleColor: '#ffffff',
+          bodyColor: '#e2e8f0',
           padding: 12,
           cornerRadius: 10,
           displayColors: true,
@@ -225,11 +225,11 @@ onBeforeUnmount(() => {
 }
 
 .income {
-  background-color: #33b540 !important;
-  box-shadow: 0 0 8px rgba(51, 181, 64, 0.3);
+  background-color: #3b82f6 !important;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
 }
 .expense {
-  background-color: #d63a3a !important;
-  box-shadow: 0 0 8px rgba(214, 58, 58, 0.3);
+  background-color: #f59e0b !important;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
 }
 </style>

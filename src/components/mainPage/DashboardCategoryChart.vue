@@ -81,8 +81,10 @@ const chartData = computed(() => {
       {
         data: items.value.map((i) => i.value),
         backgroundColor: items.value.map((i) => i.color),
-        borderWidth: 0,
-        hoverOffset: 0,
+        borderColor: 'rgba(255, 255, 255, 0.95)',
+        borderWidth: 3,
+        hoverOffset: 8,
+        hoverBorderWidth: 3,
       },
     ],
   };
@@ -106,10 +108,13 @@ const chartOptions = computed(() => ({
     },
     datalabels: {
       display: true,
-      color: '#000', // 글자 색상
+      color: '#1f2937',
       font: {
         size: 11,
+        weight: '700',
       },
+      textStrokeColor: 'rgba(255, 255, 255, 0.85)',
+      textStrokeWidth: 2,
       // 레이블 내용 설정 (항목명 + 퍼센트)
       formatter: (value, context) => {
         // value를 숫자로 변환 (이미 숫자라면 생략 가능)
@@ -179,6 +184,7 @@ const chartOptions = computed(() => ({
   padding: 20px;
   background: #fff;
   border-radius: 12px;
+  box-shadow: 0 18px 40px rgba(148, 163, 184, 0.16);
 }
 
 /* 기본 레이아웃: 세로 정렬 (모바일/좁은 화면) */
@@ -193,6 +199,7 @@ const chartOptions = computed(() => ({
   position: relative;
   width: 200px;
   height: 200px;
+  filter: drop-shadow(0 14px 24px rgba(148, 163, 184, 0.2));
 }
 
 /* 범례 그리드 설정 */
@@ -215,6 +222,9 @@ const chartOptions = computed(() => ({
   width: 10px;
   height: 10px;
   border-radius: 50%;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.95),
+    0 2px 8px rgba(148, 163, 184, 0.18);
 }
 
 .category-info .label {
