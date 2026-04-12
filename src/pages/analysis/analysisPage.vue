@@ -151,9 +151,7 @@ const buildMonthlyStats = (source, monthCount = 4) => {
   return Array.from(monthStats.values());
 };
 
-const weeklyItems = computed(() =>
-  buildWeeklyStats(sourceTransactions.value, 5),
-);
+const weeklyItems = computed(() => transactionStore.getWeeklyStats());
 const monthlyItems = computed(() =>
   buildMonthlyStats(sourceTransactions.value, 4),
 );

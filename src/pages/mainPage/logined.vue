@@ -63,12 +63,11 @@ const summaryCards = computed(() => [
 
 const weeklyBars = computed(() => transactionStore.getWeeklyStats());
 
-const monthlyBars = [
-  { label: '1월', income: 36, expense: 18 },
-  { label: '2월', income: 42, expense: 24 },
-  { label: '3월', income: 38, expense: 21 },
-  { label: '4월', income: 55, expense: 26 },
-];
+const monthlyBars = computed(() => transactionStore.getMonthlyStats());
+
+const fixedExpenses = computed(() =>
+  transactionStore.transactions.filter((t) => t.isFixed),
+);
 </script>
 
 <template>

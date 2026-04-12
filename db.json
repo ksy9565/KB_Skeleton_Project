@@ -6,8 +6,7 @@
       "password": "1234",
       "name": "철수",
       "balance": 1000000,
-      "layoutId": 1,
-      "profileImage": null
+      "layoutId": 1
     },
     {
       "id": "user2",
@@ -15,16 +14,14 @@
       "password": "1234",
       "name": "영희",
       "balance": 500000,
-      "layoutId": 2,
-      "profileImage": null
+      "layoutId": 2
     },
     {
       "username": "test",
-      "name": "ABC",
+      "name": "정준",
       "password": "1234",
       "balance": 0,
       "layoutId": 1,
-      "profileImage": null,
       "id": "n6K3AIp"
     },
     {
@@ -33,7 +30,6 @@
       "password": "1234",
       "balance": 0,
       "layoutId": 1,
-      "profileImage": null,
       "id": "-yx5KNy"
     }
   ],
@@ -43,20 +39,22 @@
       "userId": "user1",
       "type": "expense",
       "amount": 15000,
-      "categoryId": 1,
+      "categoryId": 7,
       "paymentMethod": "신용카드",
       "date": "2026-04-08",
-      "memo": "점심"
+      "memo": "점심",
+      "isFixed": false
     },
     {
       "id": 2,
       "userId": "user1",
       "type": "expense",
       "amount": 55000,
-      "categoryId": 10,
+      "categoryId": 11,
       "paymentMethod": "계좌이체",
       "date": "2026-04-05",
-      "memo": "알뜰폰 자동이체"
+      "memo": "알뜰폰 자동이체",
+      "isFixed": false
     },
     {
       "id": 3,
@@ -93,20 +91,22 @@
       "userId": "user1",
       "type": "expense",
       "amount": 500000,
-      "categoryId": 12,
+      "categoryId": 11,
       "paymentMethod": "계좌이체",
       "date": "2026-03-01",
-      "memo": "3월분 월세 납부"
+      "memo": "3월분 월세 납부",
+      "isFixed": false
     },
     {
       "id": 103,
       "userId": "user1",
       "type": "expense",
       "amount": 42000,
-      "categoryId": 8,
+      "categoryId": 10,
       "paymentMethod": "교통카드",
       "date": "2026-03-10",
-      "memo": "지하철 정기권 충전"
+      "memo": "지하철 정기권 충전",
+      "isFixed": false
     },
     {
       "id": 104,
@@ -127,6 +127,17 @@
       "paymentMethod": "현금",
       "date": "2026-03-20",
       "memo": "중고 모니터 판매"
+    },
+    {
+      "userId": "user1",
+      "type": "income",
+      "amount": 10000,
+      "categoryId": 2,
+      "paymentMethod": "계좌이체",
+      "date": "2026-03-12",
+      "memo": "",
+      "isFixed": false,
+      "id": 106
     }
   ],
   "catgories": [

@@ -29,19 +29,11 @@ const updateWidth = debounce(() => {
 onMounted(() => window.addEventListener('resize', updateWidth));
 onUnmounted(() => window.removeEventListener('resize', updateWidth));
 
-const loadCategoryData = async () => {
-  const userId = authStore.currentUser?.id;
-  if (!userId) return;
-
-  //예: 2026년 4월 데이터 조회
-  await transactionStore.getCategoryStats(userId, currentMonth.value);
-};
-
-onMounted(loadCategoryData);
-
 const items = computed(() => {
-  // 전체 중 지출만 남김
-  const expenses = transactions.value.filter((t) => t.type === 'expense');
+  // 전체 데이터 중 '이번 달' 지출만 필터링 (analysisPage의 방식)
+  const expenses = transactions.value.filter(
+    (t) => t.type === 'expense' && t.date.startsWith(currentMonth.value),
+  );
 
   // 전체 지출 합계 계산
   const totalExpense = expenses.reduce((sum, t) => sum + t.amount, 0);

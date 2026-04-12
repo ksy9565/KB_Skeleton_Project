@@ -5,6 +5,7 @@ import { useAuthStore } from './authStore';
 import axios from 'axios';
 
 import { fetchTransactionsByDateApi } from '@/services/getCategoryService';
+import { filter } from 'lodash-es';
 
 export const useTransactionStore = defineStore('transaction', () => {
   // State
@@ -196,33 +197,60 @@ export const useTransactionStore = defineStore('transaction', () => {
     const weeklyStats = [];
     const now = new Date();
 
-    // 1. 최근 5주를 역순으로 계산 (오늘 기준)
+    const formatDate = (d) => {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
+    const currentSunday = new Date(now);
+    currentSunday.setDate(now.getDate() - now.getDay());
+    currentSunday.setHours(0, 0, 0, 0);
+
     for (let i = 4; i >= 0; i--) {
-      const targetDate = new Date(now);
-      targetDate.setDate(now.getDate() - i * 7);
+      const sunday = new Date(currentSunday);
+      sunday.setDate(currentSunday.getDate() - i * 7);
 
-      const year = targetDate.getFullYear();
-      const month = targetDate.getMonth() + 1;
-      const date = targetDate.getDate();
+      const saturday = new Date(sunday);
+      saturday.setDate(sunday.getDate() + 6);
 
-      // 해당 주차 계산 (7일 단위)
-      const weekNumber = Math.ceil(date / 7);
-      const label = `${month}월 ${weekNumber}주`;
+      const sunStr = formatDate(sunday);
+      const satStr = formatDate(saturday);
 
-      // 2. 중요: 'allTransactions' 대신 스토어에 실제 정의된 변수명을 사용하세요.
-      // 만약 변수명이 'transactions'라면 아래처럼 수정합니다.
-      // 데이터가 없는 경우를 대비해 기본값 []를 둡니다.
+      let targetMonth = null;
+
+      for (let d = 0; d < 7; d++) {
+        const check = new Date(sunday);
+        check.setDate(sunday.getDate() + d);
+
+        if (check.getDate() === 1) {
+          targetMonth = check.getMonth();
+          break;
+        }
+      }
+
+      if (targetMonth === null) {
+        targetMonth = sunday.getMonth();
+      }
+
+      const year = sunday.getFullYear();
+
+      const firstOfMonth = new Date(year, targetMonth, 1);
+
+      const firstSunday = new Date(firstOfMonth);
+      firstSunday.setDate(firstOfMonth.getDate() - firstOfMonth.getDay());
+      firstSunday.setHours(0, 0, 0, 0);
+
+      const weekNumber =
+        Math.floor((sunday - firstSunday) / (7 * 24 * 60 * 60 * 1000)) + 1;
+
+      const label = `${targetMonth + 1}월 ${weekNumber}주`;
+
       const sourceData = transactions.value || [];
-
-      const filtered = sourceData.filter((t) => {
-        const tDate = new Date(t.date);
-        // 연, 월, 주차가 모두 일치하는지 확인
-        return (
-          tDate.getFullYear() === year &&
-          tDate.getMonth() + 1 === month &&
-          Math.ceil(tDate.getDate() / 7) === weekNumber
-        );
-      });
+      const filtered = sourceData.filter(
+        (t) => t.date >= sunStr && t.date <= satStr,
+      );
 
       const income = filtered
         .filter((t) => t.type === 'income')
@@ -232,13 +260,12 @@ export const useTransactionStore = defineStore('transaction', () => {
         .filter((t) => t.type === 'expense')
         .reduce((sum, t) => sum + t.amount, 0);
 
-      const dateString = `${year}-${String(month).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
-
       weeklyStats.push({
         label,
         income,
         expense,
-        date: dateString,
+        start: sunStr,
+        end: satStr,
       });
     }
 

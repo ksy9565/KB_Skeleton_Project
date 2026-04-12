@@ -178,7 +178,7 @@ const getCategoryName = (id) => {
 onMounted(async () => {
   await transactionStore.fetchTransactions();
   try {
-    const response = await fetch('http://localhost:3000/categories');
+    const response = await fetch('http://localhost:3000/catgories');
     const apiCategories = await response.json();
     baseStore.mergeCategoriesWithColors(apiCategories);
   } catch (error) {
