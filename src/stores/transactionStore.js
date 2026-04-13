@@ -153,8 +153,13 @@ export const useTransactionStore = defineStore('transaction', () => {
 
   async function addTransaction(data) {
     try {
-      await transactionService.addTransaction(data);
-      console.log('스토어 업데이트 완료:');
+      const created = await transactionService.addTransaction(data);
+
+      // 배열 참조를 교체해 달력/최근내역/차트가 즉시 반응하도록 처리
+      transactions.value = [...transactions.value, created];
+      console.log('스토어 추가 완료:', created);
+
+      return created;
     } catch (error) {
       console.error('스토어 업데이트 실패:', error);
       throw error;
@@ -163,13 +168,22 @@ export const useTransactionStore = defineStore('transaction', () => {
 
   async function updateTransaction(id, data) {
     try {
-      await transactionService.updateTransaction(id, data);
+      const updated = await transactionService.updateTransaction(id, data);
 
-      const index = transactions.value.findIndex((t) => t.id === id);
+      const index = transactions.value.findIndex(
+        (t) => String(t.id) === String(id),
+      );
       if (index !== -1) {
-        transactions.value[index] = { ...transactions.value[index], ...data };
-        console.log('스토어 업데이트 완료:', transactions.value[index]);
+        const nextTransactions = [...transactions.value];
+        nextTransactions[index] = {
+          ...nextTransactions[index],
+          ...updated,
+        };
+        transactions.value = nextTransactions;
+        console.log('스토어 수정 완료:', updated);
       }
+
+      return updated;
     } catch (error) {
       console.error('스토어 업데이트 실패:', error);
       throw error;
@@ -179,9 +193,13 @@ export const useTransactionStore = defineStore('transaction', () => {
     try {
       await transactionService.deleteTransaction(id);
 
-      const index = transactions.value.findIndex((t) => t.id === id);
+      const index = transactions.value.findIndex(
+        (t) => String(t.id) === String(id),
+      );
       if (index !== -1) {
-        transactions.value = transactions.value.filter((t) => t.id !== id);
+        transactions.value = transactions.value.filter(
+          (t) => String(t.id) !== String(id),
+        );
       }
 
       return true;
