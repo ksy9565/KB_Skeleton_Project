@@ -39,7 +39,7 @@
   ],
   "transactions": [
     {
-      "id": 1,
+      "id": "1",
       "userId": "user1",
       "type": "expense",
       "amount": 15000,
@@ -49,7 +49,7 @@
       "memo": "점심 식사"
     },
     {
-      "id": 2,
+      "id": "2",
       "userId": "user1",
       "type": "expense",
       "amount": 55000,
@@ -59,7 +59,7 @@
       "memo": "알뜰폰 자동이체"
     },
     {
-      "id": 3,
+      "id": "3",
       "userId": "user1",
       "type": "income",
       "amount": 50000,
@@ -69,7 +69,7 @@
       "memo": "부모님 용돈"
     },
     {
-      "id": 4,
+      "id": "4",
       "userId": "user1",
       "type": "expense",
       "amount": 4500,
@@ -79,7 +79,7 @@
       "memo": "아이스 아메리카노"
     },
     {
-      "id": 5,
+      "id": "5",
       "userId": "user1",
       "type": "expense",
       "amount": 12800,
@@ -89,7 +89,7 @@
       "memo": "저녁 식사"
     },
     {
-      "id": 6,
+      "id": "6",
       "userId": "user1",
       "type": "expense",
       "amount": 2500,
@@ -99,7 +99,7 @@
       "memo": "시내버스"
     },
     {
-      "id": 7,
+      "id": "7",
       "userId": "user1",
       "type": "income",
       "amount": 2800000,
@@ -109,7 +109,7 @@
       "memo": "5월 정기 급여"
     },
     {
-      "id": 8,
+      "id": "8",
       "userId": "user1",
       "type": "expense",
       "amount": 35000,
@@ -119,7 +119,7 @@
       "memo": "영화 관람"
     },
     {
-      "id": 9,
+      "id": "9",
       "userId": "user1",
       "type": "expense",
       "amount": 1200,
@@ -129,7 +129,7 @@
       "memo": "지하철"
     },
     {
-      "id": 10,
+      "id": "10",
       "userId": "user1",
       "type": "income",
       "amount": 12500,
@@ -139,7 +139,7 @@
       "memo": "쇼핑몰 반품"
     },
     {
-      "id": 11,
+      "id": "11",
       "userId": "user1",
       "type": "expense",
       "amount": 42000,
@@ -149,7 +149,7 @@
       "memo": "관리비"
     },
     {
-      "id": 12,
+      "id": "12",
       "userId": "user1",
       "type": "expense",
       "amount": 8900,
@@ -159,7 +159,7 @@
       "memo": "편의점"
     },
     {
-      "id": 13,
+      "id": "13",
       "userId": "user1",
       "type": "income",
       "amount": 2000,
@@ -169,7 +169,7 @@
       "memo": "리워드 앱 보상"
     },
     {
-      "id": 14,
+      "id": "14",
       "userId": "user1",
       "type": "expense",
       "amount": 150000,
@@ -179,7 +179,7 @@
       "memo": "대형마트 장보기"
     },
     {
-      "id": 15,
+      "id": "15",
       "userId": "user1",
       "type": "expense",
       "amount": 7500,
@@ -189,7 +189,7 @@
       "memo": "카페 디저트"
     },
     {
-      "id": 16,
+      "id": "16",
       "userId": "user1",
       "type": "expense",
       "amount": 3000,
@@ -199,7 +199,7 @@
       "memo": "마을버스"
     },
     {
-      "id": 17,
+      "id": "17",
       "userId": "user1",
       "type": "expense",
       "amount": 22000,
@@ -209,7 +209,7 @@
       "memo": "유튜브 프리미엄"
     },
     {
-      "id": 18,
+      "id": "18",
       "userId": "user1",
       "type": "income",
       "amount": 45000,
@@ -219,7 +219,7 @@
       "memo": "중고물품 직거래"
     },
     {
-      "id": 19,
+      "id": "19",
       "userId": "user1",
       "type": "expense",
       "amount": 5400,
@@ -229,7 +229,7 @@
       "memo": "서점 볼펜 구매"
     },
     {
-      "id": 20,
+      "id": "20",
       "userId": "user1",
       "type": "expense",
       "amount": 62000,
@@ -239,7 +239,7 @@
       "memo": "주말 외식"
     },
     {
-      "id": 21,
+      "id": "21",
       "userId": "user1",
       "type": "expense",
       "amount": 14000,
@@ -249,7 +249,7 @@
       "memo": "시장 간식"
     },
     {
-      "id": 22,
+      "id": "22",
       "userId": "user1",
       "type": "income",
       "amount": 1000,
@@ -259,7 +259,7 @@
       "memo": "캐시백 적립"
     },
     {
-      "id": 23,
+      "id": "23",
       "userId": "user1",
       "type": "expense",
       "amount": 120000,
@@ -269,7 +269,7 @@
       "memo": "적금 이체"
     },
     {
-      "id": 24,
+      "id": "24",
       "userId": "user1",
       "type": "expense",
       "amount": 9500,
@@ -279,7 +279,7 @@
       "memo": "빵집"
     },
     {
-      "id": 25,
+      "id": "25",
       "userId": "user1",
       "type": "expense",
       "amount": 2400,
@@ -289,7 +289,7 @@
       "memo": "지하철 환승"
     },
     {
-      "id": 26,
+      "id": "26",
       "userId": "user1",
       "type": "expense",
       "amount": 18000,
@@ -299,7 +299,7 @@
       "memo": "약국 상비약"
     },
     {
-      "id": 27,
+      "id": "27",
       "userId": "user1",
       "type": "income",
       "amount": 15000,
@@ -309,7 +309,7 @@
       "memo": "결제 취소 환불"
     },
     {
-      "id": 28,
+      "id": "28",
       "userId": "user1",
       "type": "expense",
       "amount": 45000,
@@ -319,7 +319,7 @@
       "memo": "도시가스 요금"
     },
     {
-      "id": 29,
+      "id": "29",
       "userId": "user1",
       "type": "expense",
       "amount": 13500,
@@ -329,7 +329,7 @@
       "memo": "떡볶이"
     },
     {
-      "id": 30,
+      "id": "30",
       "userId": "user1",
       "type": "expense",
       "amount": 2500,
@@ -339,7 +339,7 @@
       "memo": "버스 요금"
     },
     {
-      "id": 31,
+      "id": "31",
       "userId": "user1",
       "type": "income",
       "amount": 2750000,
@@ -349,7 +349,7 @@
       "memo": "4월 정기 급여"
     },
     {
-      "id": 32,
+      "id": "32",
       "userId": "user1",
       "type": "expense",
       "amount": 12000,
@@ -359,7 +359,7 @@
       "memo": "전시회 티켓"
     },
     {
-      "id": 33,
+      "id": "33",
       "userId": "user1",
       "type": "expense",
       "amount": 5500,
@@ -369,7 +369,7 @@
       "memo": "호떡"
     },
     {
-      "id": 34,
+      "id": "34",
       "userId": "user1",
       "type": "expense",
       "amount": 33000,
@@ -379,7 +379,7 @@
       "memo": "수도 요금"
     },
     {
-      "id": 35,
+      "id": "35",
       "userId": "user1",
       "type": "income",
       "amount": 3500,
@@ -389,7 +389,7 @@
       "memo": "카드사 포인트"
     },
     {
-      "id": 36,
+      "id": "36",
       "userId": "user1",
       "type": "expense",
       "amount": 6700,
@@ -399,7 +399,7 @@
       "memo": "편의점 간식"
     },
     {
-      "id": 37,
+      "id": "37",
       "userId": "user1",
       "type": "expense",
       "amount": 2800,
@@ -409,7 +409,7 @@
       "memo": "지하철 기본료"
     },
     {
-      "id": 38,
+      "id": "38",
       "userId": "user1",
       "type": "expense",
       "amount": 15000,
@@ -419,7 +419,7 @@
       "memo": "반찬가게"
     },
     {
-      "id": 39,
+      "id": "39",
       "userId": "user1",
       "type": "income",
       "amount": 20000,
@@ -429,7 +429,7 @@
       "memo": "당근마켓 판매"
     },
     {
-      "id": 40,
+      "id": "40",
       "userId": "user1",
       "type": "expense",
       "amount": 88000,
@@ -439,7 +439,7 @@
       "memo": "마트 생필품"
     },
     {
-      "id": 41,
+      "id": "41",
       "userId": "user1",
       "type": "expense",
       "amount": 4200,
@@ -449,7 +449,7 @@
       "memo": "커피 한 잔"
     },
     {
-      "id": 42,
+      "id": "42",
       "userId": "user1",
       "type": "expense",
       "amount": 13000,
@@ -459,7 +459,7 @@
       "memo": "넷플릭스 구독"
     },
     {
-      "id": 43,
+      "id": "43",
       "userId": "user1",
       "type": "expense",
       "amount": 2200,
@@ -469,7 +469,7 @@
       "memo": "버스 하차"
     },
     {
-      "id": 44,
+      "id": "44",
       "userId": "user1",
       "type": "income",
       "amount": 500,
@@ -479,7 +479,7 @@
       "memo": "걷기 앱 보상"
     },
     {
-      "id": 45,
+      "id": "45",
       "userId": "user1",
       "type": "expense",
       "amount": 11000,
@@ -489,7 +489,7 @@
       "memo": "김밥집"
     },
     {
-      "id": 46,
+      "id": "46",
       "userId": "user1",
       "type": "expense",
       "amount": 45000,
@@ -499,7 +499,7 @@
       "memo": "고깃집 외식"
     },
     {
-      "id": 47,
+      "id": "47",
       "userId": "user1",
       "type": "expense",
       "amount": 3100,
@@ -509,7 +509,7 @@
       "memo": "광역버스"
     },
     {
-      "id": 48,
+      "id": "48",
       "userId": "user1",
       "type": "income",
       "amount": 8000,
@@ -519,7 +519,7 @@
       "memo": "교재 반품"
     },
     {
-      "id": 49,
+      "id": "49",
       "userId": "user1",
       "type": "expense",
       "amount": 4900,
@@ -529,7 +529,7 @@
       "memo": "편의점 우유"
     },
     {
-      "id": 50,
+      "id": "50",
       "userId": "user1",
       "type": "expense",
       "amount": 1200,
@@ -539,7 +539,7 @@
       "memo": "지하철 이동"
     },
     {
-      "id": 51,
+      "id": "51",
       "userId": "user1",
       "type": "income",
       "amount": 2450000,
@@ -549,7 +549,7 @@
       "memo": "3월 정기 급여"
     },
     {
-      "id": 52,
+      "id": "52",
       "userId": "user1",
       "type": "expense",
       "amount": 550000,
@@ -559,7 +559,7 @@
       "memo": "월세 납부"
     },
     {
-      "id": 53,
+      "id": "53",
       "userId": "user1",
       "type": "expense",
       "amount": 34000,
@@ -569,7 +569,7 @@
       "memo": "인터넷 요금"
     },
     {
-      "id": 54,
+      "id": "54",
       "userId": "user1",
       "type": "income",
       "amount": 12000,
@@ -579,7 +579,7 @@
       "memo": "심부름 값"
     },
     {
-      "id": 55,
+      "id": "55",
       "userId": "user1",
       "type": "expense",
       "amount": 9000,
@@ -589,7 +589,7 @@
       "memo": "햄버거 세트"
     },
     {
-      "id": 56,
+      "id": "56",
       "userId": "user1",
       "type": "expense",
       "amount": 2800,
@@ -599,7 +599,7 @@
       "memo": "마을버스 왕복"
     },
     {
-      "id": 57,
+      "id": "57",
       "userId": "user1",
       "type": "expense",
       "amount": 15000,
@@ -609,7 +609,7 @@
       "memo": "동네 마트"
     },
     {
-      "id": 58,
+      "id": "58",
       "userId": "user1",
       "type": "income",
       "amount": 4500,
@@ -619,7 +619,7 @@
       "memo": "OK캐쉬백 전환"
     },
     {
-      "id": 59,
+      "id": "59",
       "userId": "user1",
       "type": "expense",
       "amount": 23000,
@@ -629,7 +629,7 @@
       "memo": "원데이 클래스"
     },
     {
-      "id": 60,
+      "id": "60",
       "userId": "user1",
       "type": "expense",
       "amount": 11000,
@@ -639,7 +639,7 @@
       "memo": "통신비 자동이체"
     },
     {
-      "id": 61,
+      "id": "61",
       "userId": "user1",
       "type": "expense",
       "amount": 1200,
@@ -649,7 +649,7 @@
       "memo": "버스 승차"
     },
     {
-      "id": 62,
+      "id": "62",
       "userId": "user1",
       "type": "income",
       "amount": 150000,
@@ -659,7 +659,7 @@
       "memo": "주식 배당금"
     },
     {
-      "id": 63,
+      "id": "63",
       "userId": "user1",
       "type": "expense",
       "amount": 28000,
@@ -669,7 +669,7 @@
       "memo": "파스타 식사"
     },
     {
-      "id": 64,
+      "id": "64",
       "userId": "user1",
       "type": "expense",
       "amount": 4500,
@@ -679,7 +679,7 @@
       "memo": "길거리 붕어빵"
     },
     {
-      "id": 65,
+      "id": "65",
       "userId": "user1",
       "type": "expense",
       "amount": 3200,
@@ -689,7 +689,7 @@
       "memo": "지하철 환승"
     },
     {
-      "id": 66,
+      "id": "66",
       "userId": "user1",
       "type": "income",
       "amount": 900,
@@ -699,7 +699,7 @@
       "memo": "네이버페이 포인트"
     },
     {
-      "id": 67,
+      "id": "67",
       "userId": "user1",
       "type": "expense",
       "amount": 89000,
@@ -709,7 +709,7 @@
       "memo": "봄옷 구매"
     },
     {
-      "id": 68,
+      "id": "68",
       "userId": "user1",
       "type": "expense",
       "amount": 12000,
@@ -719,7 +719,7 @@
       "memo": "샌드위치"
     },
     {
-      "id": 69,
+      "id": "69",
       "userId": "user1",
       "type": "expense",
       "amount": 2800,
@@ -729,7 +729,7 @@
       "memo": "버스 기본요금"
     },
     {
-      "id": 70,
+      "id": "70",
       "userId": "user1",
       "type": "income",
       "amount": 35000,
@@ -739,7 +739,7 @@
       "memo": "중고책 판매"
     },
     {
-      "id": 71,
+      "id": "71",
       "userId": "user1",
       "type": "expense",
       "amount": 5600,
@@ -749,7 +749,7 @@
       "memo": "편의점 컵라면"
     },
     {
-      "id": 72,
+      "id": "72",
       "userId": "user1",
       "type": "expense",
       "amount": 13000,
@@ -759,7 +759,7 @@
       "memo": "구독형 유틸 결제"
     },
     {
-      "id": 73,
+      "id": "73",
       "userId": "user1",
       "type": "expense",
       "amount": 2500,
@@ -769,7 +769,7 @@
       "memo": "귀가 버스"
     },
     {
-      "id": 74,
+      "id": "74",
       "userId": "user1",
       "type": "income",
       "amount": 12000,
@@ -779,7 +779,7 @@
       "memo": "배달 오류 취소"
     },
     {
-      "id": 75,
+      "id": "75",
       "userId": "user1",
       "type": "expense",
       "amount": 150000,
@@ -789,7 +789,7 @@
       "memo": "연금 저축"
     },
     {
-      "id": 76,
+      "id": "76",
       "userId": "user1",
       "type": "expense",
       "amount": 4500,
@@ -799,7 +799,7 @@
       "memo": "자판기 음료"
     },
     {
-      "id": 77,
+      "id": "77",
       "userId": "user1",
       "type": "expense",
       "amount": 3200,
@@ -809,7 +809,7 @@
       "memo": "마지막 날 지하철"
     },
     {
-      "id": 78,
+      "id": "78",
       "userId": "user1",
       "type": "expense",
       "amount": 15600,
@@ -819,7 +819,7 @@
       "memo": "주말 브런치"
     },
     {
-      "id": 79,
+      "id": "79",
       "userId": "user1",
       "type": "expense",
       "amount": 2200,
@@ -829,7 +829,7 @@
       "memo": "버스 요금"
     },
     {
-      "id": 80,
+      "id": "80",
       "userId": "user1",
       "type": "income",
       "amount": 15000,
@@ -839,7 +839,7 @@
       "memo": "중고나라 판매"
     },
     {
-      "id": 81,
+      "id": "81",
       "userId": "user1",
       "type": "expense",
       "amount": 34000,
@@ -849,7 +849,7 @@
       "memo": "영화관 나들이"
     },
     {
-      "id": 82,
+      "id": "82",
       "userId": "user1",
       "type": "expense",
       "amount": 8500,
@@ -859,7 +859,7 @@
       "memo": "편의점 도시락"
     },
     {
-      "id": 83,
+      "id": "83",
       "userId": "user1",
       "type": "expense",
       "amount": 1200,
@@ -869,7 +869,7 @@
       "memo": "지하철 이동"
     },
     {
-      "id": 84,
+      "id": "84",
       "userId": "user1",
       "type": "income",
       "amount": 2500,
@@ -879,7 +879,7 @@
       "memo": "페이백 적립"
     },
     {
-      "id": 85,
+      "id": "85",
       "userId": "user1",
       "type": "expense",
       "amount": 28000,
@@ -889,7 +889,7 @@
       "memo": "동호회 회비"
     },
     {
-      "id": 86,
+      "id": "86",
       "userId": "user1",
       "type": "expense",
       "amount": 4200,
@@ -899,7 +899,7 @@
       "memo": "동네 카페"
     },
     {
-      "id": 87,
+      "id": "87",
       "userId": "user1",
       "type": "expense",
       "amount": 3100,
@@ -909,7 +909,7 @@
       "memo": "광역 버스"
     },
     {
-      "id": 88,
+      "id": "88",
       "userId": "user1",
       "type": "income",
       "amount": 12000,
@@ -919,7 +919,7 @@
       "memo": "쿠팡 반품 환불"
     },
     {
-      "id": 89,
+      "id": "89",
       "userId": "user1",
       "type": "expense",
       "amount": 156000,
@@ -929,7 +929,7 @@
       "memo": "코스트코 쇼핑"
     },
     {
-      "id": 90,
+      "id": "90",
       "userId": "user1",
       "type": "expense",
       "amount": 9200,
@@ -939,7 +939,7 @@
       "memo": "김밥천국"
     },
     {
-      "id": 91,
+      "id": "91",
       "userId": "user1",
       "type": "expense",
       "amount": 1250,
@@ -949,7 +949,7 @@
       "memo": "지하철 편도"
     },
     {
-      "id": 92,
+      "id": "92",
       "userId": "user1",
       "type": "income",
       "amount": 50000,
@@ -959,7 +959,7 @@
       "memo": "할머니 용돈"
     },
     {
-      "id": 93,
+      "id": "93",
       "userId": "user1",
       "type": "expense",
       "amount": 24000,
@@ -969,7 +969,7 @@
       "memo": "보험료 자동이체"
     },
     {
-      "id": 94,
+      "id": "94",
       "userId": "user1",
       "type": "expense",
       "amount": 5500,
@@ -979,7 +979,7 @@
       "memo": "시장 떡볶이"
     },
     {
-      "id": 95,
+      "id": "95",
       "userId": "user1",
       "type": "expense",
       "amount": 2800,
@@ -989,7 +989,7 @@
       "memo": "버스 왕복"
     },
     {
-      "id": 96,
+      "id": "96",
       "userId": "user1",
       "type": "income",
       "amount": 1200,
@@ -999,7 +999,7 @@
       "memo": "앱테크 리워드"
     },
     {
-      "id": 97,
+      "id": "97",
       "userId": "user1",
       "type": "expense",
       "amount": 78000,
@@ -1009,7 +1009,7 @@
       "memo": "신발 구매"
     },
     {
-      "id": 98,
+      "id": "98",
       "userId": "user1",
       "type": "expense",
       "amount": 11500,
@@ -1019,7 +1019,7 @@
       "memo": "점심 부대찌개"
     },
     {
-      "id": 99,
+      "id": "99",
       "userId": "user1",
       "type": "expense",
       "amount": 3200,
@@ -1029,7 +1029,7 @@
       "memo": "지하철 환승"
     },
     {
-      "id": 100,
+      "id": "100",
       "userId": "user1",
       "type": "income",
       "amount": 25000,
@@ -1039,7 +1039,7 @@
       "memo": "친구 돈 갚음"
     },
     {
-      "id": 101,
+      "id": "101",
       "userId": "user1",
       "type": "expense",
       "amount": 4200,
@@ -1049,7 +1049,7 @@
       "memo": "자판기 커피"
     },
     {
-      "id": 102,
+      "id": "102",
       "userId": "user1",
       "type": "expense",
       "amount": 12500,
@@ -1059,7 +1059,7 @@
       "memo": "다이소 잡화"
     },
     {
-      "id": 103,
+      "id": "103",
       "userId": "user1",
       "type": "expense",
       "amount": 2800,
@@ -1069,7 +1069,7 @@
       "memo": "버스 이동"
     },
     {
-      "id": 104,
+      "id": "104",
       "userId": "user1",
       "type": "income",
       "amount": 5500,
@@ -1079,7 +1079,7 @@
       "memo": "현대카드 포인트"
     },
     {
-      "id": 105,
+      "id": "105",
       "userId": "user1",
       "type": "expense",
       "amount": 34000,
@@ -1089,7 +1089,7 @@
       "memo": "휴대폰 요금"
     },
     {
-      "id": 106,
+      "id": "106",
       "userId": "user1",
       "type": "expense",
       "amount": 18000,
@@ -1099,7 +1099,7 @@
       "memo": "치킨 포장"
     },
     {
-      "id": 107,
+      "id": "107",
       "userId": "user1",
       "type": "expense",
       "amount": 2200,
@@ -1109,7 +1109,7 @@
       "memo": "막차 버스"
     },
     {
-      "id": 108,
+      "id": "108",
       "userId": "user1",
       "type": "expense",
       "amount": 12500,
@@ -1119,7 +1119,7 @@
       "memo": "맥도날드"
     },
     {
-      "id": 109,
+      "id": "109",
       "userId": "user1",
       "type": "expense",
       "amount": 2500,
@@ -1129,7 +1129,7 @@
       "memo": "지하철 이동"
     },
     {
-      "id": 110,
+      "id": "110",
       "userId": "user1",
       "type": "income",
       "amount": 15000,
@@ -1139,7 +1139,7 @@
       "memo": "의류 취소 환불"
     },
     {
-      "id": 111,
+      "id": "111",
       "userId": "user1",
       "type": "expense",
       "amount": 38000,
@@ -1149,7 +1149,7 @@
       "memo": "교보문고 책"
     },
     {
-      "id": 112,
+      "id": "112",
       "userId": "user1",
       "type": "expense",
       "amount": 4200,
@@ -1159,7 +1159,7 @@
       "memo": "동네 빵집"
     },
     {
-      "id": 113,
+      "id": "113",
       "userId": "user1",
       "type": "expense",
       "amount": 3100,
@@ -1169,7 +1169,7 @@
       "memo": "마을버스 왕복"
     },
     {
-      "id": 114,
+      "id": "114",
       "userId": "user1",
       "type": "income",
       "amount": 3000,
@@ -1179,7 +1179,7 @@
       "memo": "해피포인트 적립"
     },
     {
-      "id": 115,
+      "id": "115",
       "userId": "user1",
       "type": "expense",
       "amount": 22000,
@@ -1189,7 +1189,7 @@
       "memo": "삼겹살 저녁"
     },
     {
-      "id": 116,
+      "id": "116",
       "userId": "user1",
       "type": "expense",
       "amount": 11000,
@@ -1199,7 +1199,7 @@
       "memo": "백반 정식"
     },
     {
-      "id": 117,
+      "id": "117",
       "userId": "user1",
       "type": "expense",
       "amount": 1250,
@@ -1209,7 +1209,7 @@
       "memo": "지하철 편도"
     },
     {
-      "id": 118,
+      "id": "118",
       "userId": "user1",
       "type": "income",
       "amount": 80000,
@@ -1219,7 +1219,7 @@
       "memo": "당근마켓 패딩"
     },
     {
-      "id": 119,
+      "id": "119",
       "userId": "user1",
       "type": "expense",
       "amount": 15600,
@@ -1229,7 +1229,7 @@
       "memo": "정기 구독료"
     },
     {
-      "id": 120,
+      "id": "120",
       "userId": "user1",
       "type": "expense",
       "amount": 5500,
@@ -1239,7 +1239,7 @@
       "memo": "분식"
     },
     {
-      "id": 121,
+      "id": "121",
       "userId": "user1",
       "type": "expense",
       "amount": 2800,
@@ -1249,7 +1249,7 @@
       "memo": "버스 이동"
     },
     {
-      "id": 122,
+      "id": "122",
       "userId": "user1",
       "type": "income",
       "amount": 2200,
@@ -1259,7 +1259,7 @@
       "memo": "네이버페이 포인트"
     },
     {
-      "id": 123,
+      "id": "123",
       "userId": "user1",
       "type": "expense",
       "amount": 64000,
@@ -1269,7 +1269,7 @@
       "memo": "마트 생필품"
     },
     {
-      "id": 124,
+      "id": "124",
       "userId": "user1",
       "type": "expense",
       "amount": 8500,
@@ -1279,7 +1279,7 @@
       "memo": "순대국밥"
     },
     {
-      "id": 125,
+      "id": "125",
       "userId": "user1",
       "type": "expense",
       "amount": 3200,
@@ -1289,7 +1289,7 @@
       "memo": "지하철 요금"
     },
     {
-      "id": 126,
+      "id": "126",
       "userId": "user1",
       "type": "income",
       "amount": 45000,
@@ -1299,7 +1299,7 @@
       "memo": "생일 선물 금조"
     },
     {
-      "id": 127,
+      "id": "127",
       "userId": "user1",
       "type": "expense",
       "amount": 12000,
@@ -1309,7 +1309,7 @@
       "memo": "국수 전문점"
     },
     {
-      "id": 128,
+      "id": "128",
       "userId": "user1",
       "type": "expense",
       "amount": 42000,
@@ -1319,7 +1319,7 @@
       "memo": "전기 요금"
     },
     {
-      "id": 129,
+      "id": "129",
       "userId": "user1",
       "type": "expense",
       "amount": 2500,
@@ -1329,7 +1329,7 @@
       "memo": "마지막 버스"
     },
     {
-      "id": 130,
+      "id": "130",
       "userId": "user1",
       "type": "income",
       "amount": 5400,
@@ -1339,7 +1339,7 @@
       "memo": "배송 지연 보상"
     },
     {
-      "id": 131,
+      "id": "131",
       "userId": "user1",
       "type": "expense",
       "amount": 9900,
@@ -1349,7 +1349,7 @@
       "memo": "이삭 토스트"
     },
     {
-      "id": 132,
+      "id": "132",
       "userId": "user1",
       "type": "expense",
       "amount": 1200,
@@ -1359,7 +1359,7 @@
       "memo": "버스 한 정거장"
     },
     {
-      "id": 133,
+      "id": "133",
       "userId": "user1",
       "type": "income",
       "amount": 1200,
@@ -1369,7 +1369,7 @@
       "memo": "페이백 리워드"
     },
     {
-      "id": 134,
+      "id": "134",
       "userId": "user1",
       "type": "expense",
       "amount": 145000,
@@ -1379,7 +1379,7 @@
       "memo": "청소기 구입"
     },
     {
-      "id": 135,
+      "id": "135",
       "userId": "user1",
       "type": "expense",
       "amount": 11000,
@@ -1389,7 +1389,7 @@
       "memo": "돈까스 정식"
     },
     {
-      "id": 136,
+      "id": "136",
       "userId": "user1",
       "type": "expense",
       "amount": 3200,
@@ -1399,7 +1399,7 @@
       "memo": "지하철 정기"
     },
     {
-      "id": 137,
+      "id": "137",
       "userId": "user1",
       "type": "income",
       "amount": 35000,
@@ -1409,7 +1409,7 @@
       "memo": "예금 이자 입금"
     },
     {
-      "id": 138,
+      "id": "138",
       "userId": "user1",
       "type": "expense",
       "amount": 5400,
@@ -1419,7 +1419,7 @@
       "memo": "편의점 음료"
     },
     {
-      "id": 139,
+      "id": "139",
       "userId": "user1",
       "type": "expense",
       "amount": 12800,
@@ -1429,7 +1429,7 @@
       "memo": "파스타 식사"
     },
     {
-      "id": 140,
+      "id": "140",
       "userId": "user1",
       "type": "expense",
       "amount": 2500,
@@ -1439,7 +1439,7 @@
       "memo": "마을 버스"
     },
     {
-      "id": 141,
+      "id": "141",
       "userId": "user1",
       "type": "income",
       "amount": 12000,
@@ -1449,7 +1449,7 @@
       "memo": "안 쓰는 책 판매"
     },
     {
-      "id": 142,
+      "id": "142",
       "userId": "user1",
       "type": "expense",
       "amount": 45000,
@@ -1459,7 +1459,7 @@
       "memo": "패밀리 레스토랑"
     },
     {
-      "id": 143,
+      "id": "143",
       "userId": "user1",
       "type": "expense",
       "amount": 9200,
@@ -1469,7 +1469,7 @@
       "memo": "볶음밥"
     },
     {
-      "id": 144,
+      "id": "144",
       "userId": "user1",
       "type": "expense",
       "amount": 1200,
@@ -1479,7 +1479,7 @@
       "memo": "버스 기본"
     },
     {
-      "id": 145,
+      "id": "145",
       "userId": "user1",
       "type": "income",
       "amount": 2500,
@@ -1489,7 +1489,7 @@
       "memo": "카드 캐시백"
     },
     {
-      "id": 146,
+      "id": "146",
       "userId": "user1",
       "type": "expense",
       "amount": 34000,
@@ -1499,7 +1499,7 @@
       "memo": "보안 서비스비"
     },
     {
-      "id": 147,
+      "id": "147",
       "userId": "user1",
       "type": "expense",
       "amount": 4500,
@@ -1509,7 +1509,7 @@
       "memo": "커피 반 값"
     },
     {
-      "id": 148,
+      "id": "148",
       "userId": "user1",
       "type": "expense",
       "amount": 3100,
@@ -1519,7 +1519,7 @@
       "memo": "광역 버스"
     },
     {
-      "id": 149,
+      "id": "149",
       "userId": "user1",
       "type": "income",
       "amount": 15000,
@@ -1529,7 +1529,7 @@
       "memo": "인터넷 쇼핑 취소"
     },
     {
-      "id": 150,
+      "id": "150",
       "userId": "user1",
       "type": "expense",
       "amount": 125000,
@@ -1539,7 +1539,7 @@
       "memo": "트레이더스 장"
     },
     {
-      "id": 151,
+      "id": "151",
       "userId": "user1",
       "type": "expense",
       "amount": 8800,
@@ -1549,7 +1549,7 @@
       "memo": "한식 부페"
     },
     {
-      "id": 152,
+      "id": "152",
       "userId": "user1",
       "type": "expense",
       "amount": 1250,
@@ -1559,7 +1559,7 @@
       "memo": "지하철 편도"
     },
     {
-      "id": 153,
+      "id": "153",
       "userId": "user1",
       "type": "income",
       "amount": 500000,
@@ -1569,7 +1569,7 @@
       "memo": "상여금 지급"
     },
     {
-      "id": 154,
+      "id": "154",
       "userId": "user1",
       "type": "expense",
       "amount": 28000,
@@ -1579,7 +1579,7 @@
       "memo": "어학 강좌"
     },
     {
-      "id": 155,
+      "id": "155",
       "userId": "user1",
       "type": "expense",
       "amount": 5500,
@@ -1589,7 +1589,7 @@
       "memo": "간식 만두"
     },
     {
-      "id": 156,
+      "id": "156",
       "userId": "user1",
       "type": "expense",
       "amount": 2800,
@@ -1599,7 +1599,7 @@
       "memo": "버스 환승"
     },
     {
-      "id": 157,
+      "id": "157",
       "userId": "user1",
       "type": "income",
       "amount": 1500,
@@ -1609,7 +1609,7 @@
       "memo": "엘포인트 전환"
     },
     {
-      "id": 158,
+      "id": "158",
       "userId": "user1",
       "type": "expense",
       "amount": 68000,
@@ -1619,7 +1619,7 @@
       "memo": "청바지 구매"
     },
     {
-      "id": 159,
+      "id": "159",
       "userId": "user1",
       "type": "expense",
       "amount": 11000,
@@ -1629,7 +1629,7 @@
       "memo": "육개장"
     },
     {
-      "id": 160,
+      "id": "160",
       "userId": "user1",
       "type": "expense",
       "amount": 3200,
@@ -1639,7 +1639,7 @@
       "memo": "지하철 기본"
     },
     {
-      "id": 161,
+      "id": "161",
       "userId": "user1",
       "type": "income",
       "amount": 10000,
@@ -1649,7 +1649,7 @@
       "memo": "더치페이 정산"
     },
     {
-      "id": 162,
+      "id": "162",
       "userId": "user1",
       "type": "expense",
       "amount": 4200,
@@ -1659,7 +1659,7 @@
       "memo": "동네 토스트"
     },
     {
-      "id": 163,
+      "id": "163",
       "userId": "user1",
       "type": "expense",
       "amount": 15600,
@@ -1669,7 +1669,7 @@
       "memo": "생활 용품"
     },
     {
-      "id": 164,
+      "id": "164",
       "userId": "user1",
       "type": "expense",
       "amount": 2200,
@@ -1679,7 +1679,7 @@
       "memo": "버스 귀가"
     },
     {
-      "id": 165,
+      "id": "165",
       "userId": "user1",
       "type": "income",
       "amount": 3500,
@@ -1689,7 +1689,7 @@
       "memo": "컬쳐랜드 적립"
     },
     {
-      "id": 166,
+      "id": "166",
       "userId": "user1",
       "type": "expense",
       "amount": 89000,
@@ -1699,7 +1699,7 @@
       "memo": "개인 연금"
     },
     {
-      "id": 167,
+      "id": "167",
       "userId": "user1",
       "type": "expense",
       "amount": 9500,
@@ -1709,7 +1709,7 @@
       "memo": "우동 전문점"
     },
     {
-      "id": 168,
+      "id": "168",
       "userId": "user1",
       "type": "expense",
       "amount": 2400,
@@ -1719,7 +1719,7 @@
       "memo": "지하철 구간"
     },
     {
-      "id": 169,
+      "id": "169",
       "userId": "user1",
       "type": "income",
       "amount": 28000,
@@ -1729,7 +1729,7 @@
       "memo": "주문 취소분"
     },
     {
-      "id": 170,
+      "id": "170",
       "userId": "user1",
       "type": "expense",
       "amount": 54000,
@@ -1739,7 +1739,7 @@
       "memo": "패밀리 외식"
     },
     {
-      "id": 171,
+      "id": "171",
       "userId": "user1",
       "type": "expense",
       "amount": 12000,
@@ -1749,7 +1749,7 @@
       "memo": "순대국"
     },
     {
-      "id": 172,
+      "id": "172",
       "userId": "user1",
       "type": "expense",
       "amount": 3100,
@@ -1759,7 +1759,7 @@
       "memo": "막차 버스"
     },
     {
-      "id": 173,
+      "id": "173",
       "userId": "user1",
       "type": "income",
       "amount": 500,
@@ -1769,7 +1769,7 @@
       "memo": "신한 쏠 퀴즈"
     },
     {
-      "id": 174,
+      "id": "174",
       "userId": "user1",
       "type": "expense",
       "amount": 14500,
@@ -1779,7 +1779,7 @@
       "memo": "파파존스"
     },
     {
-      "id": 175,
+      "id": "175",
       "userId": "user1",
       "type": "expense",
       "amount": 2500,
@@ -1789,7 +1789,7 @@
       "memo": "시내 버스"
     },
     {
-      "id": 176,
+      "id": "176",
       "userId": "user1",
       "type": "income",
       "amount": 15000,
@@ -1799,7 +1799,7 @@
       "memo": "중고 CD 판매"
     },
     {
-      "id": 177,
+      "id": "177",
       "userId": "user1",
       "type": "expense",
       "amount": 42000,
@@ -1809,7 +1809,7 @@
       "memo": "홈플러스"
     },
     {
-      "id": 178,
+      "id": "178",
       "userId": "user1",
       "type": "expense",
       "amount": 8800,
@@ -1819,7 +1819,7 @@
       "memo": "편의점 도시락"
     },
     {
-      "id": 179,
+      "id": "179",
       "userId": "user1",
       "type": "expense",
       "amount": 1200,
@@ -1829,7 +1829,7 @@
       "memo": "버스 하차"
     },
     {
-      "id": 180,
+      "id": "180",
       "userId": "user1",
       "type": "income",
       "amount": 2500,
@@ -1839,7 +1839,7 @@
       "memo": "카드 포인트 정산"
     },
     {
-      "id": 181,
+      "id": "181",
       "userId": "user1",
       "type": "expense",
       "amount": 23000,
@@ -1849,7 +1849,7 @@
       "memo": "전시 관람"
     },
     {
-      "id": 182,
+      "id": "182",
       "userId": "user1",
       "type": "expense",
       "amount": 15600,
@@ -1859,7 +1859,7 @@
       "memo": "라멘 한 그릇"
     },
     {
-      "id": 183,
+      "id": "183",
       "userId": "user1",
       "type": "expense",
       "amount": 3200,
@@ -1869,7 +1869,7 @@
       "memo": "지하철 환승"
     },
     {
-      "id": 184,
+      "id": "184",
       "userId": "user1",
       "type": "income",
       "amount": 50000,
@@ -1879,7 +1879,7 @@
       "memo": "친척 용돈"
     },
     {
-      "id": 185,
+      "id": "185",
       "userId": "user1",
       "type": "expense",
       "amount": 11000,
@@ -1889,7 +1889,7 @@
       "memo": "인터넷 자동"
     },
     {
-      "id": 186,
+      "id": "186",
       "userId": "user1",
       "type": "expense",
       "amount": 5500,
@@ -1899,7 +1899,7 @@
       "memo": "붕어빵 세트"
     },
     {
-      "id": 187,
+      "id": "187",
       "userId": "user1",
       "type": "expense",
       "amount": 2800,
@@ -1909,7 +1909,7 @@
       "memo": "마을 버스"
     },
     {
-      "id": 188,
+      "id": "188",
       "userId": "user1",
       "type": "income",
       "amount": 1500,
@@ -1919,7 +1919,7 @@
       "memo": "신세계 포인트"
     },
     {
-      "id": 189,
+      "id": "189",
       "userId": "user1",
       "type": "expense",
       "amount": 89000,
@@ -1929,7 +1929,7 @@
       "memo": "등산화"
     },
     {
-      "id": 190,
+      "id": "190",
       "userId": "user1",
       "type": "expense",
       "amount": 12000,
@@ -1939,7 +1939,7 @@
       "memo": "샌드위치 박스"
     },
     {
-      "id": 191,
+      "id": "191",
       "userId": "user1",
       "type": "expense",
       "amount": 1250,
@@ -1949,7 +1949,7 @@
       "memo": "지하철 이동"
     },
     {
-      "id": 192,
+      "id": "192",
       "userId": "user1",
       "type": "income",
       "amount": 20000,
@@ -1959,7 +1959,7 @@
       "memo": "모임비 환급"
     },
     {
-      "id": 193,
+      "id": "193",
       "userId": "user1",
       "type": "expense",
       "amount": 4200,
@@ -1969,7 +1969,7 @@
       "memo": "자판기 음료"
     },
     {
-      "id": 194,
+      "id": "194",
       "userId": "user1",
       "type": "expense",
       "amount": 15600,
@@ -1979,7 +1979,7 @@
       "memo": "욕실 용품"
     },
     {
-      "id": 195,
+      "id": "195",
       "userId": "user1",
       "type": "expense",
       "amount": 2200,
@@ -1989,7 +1989,7 @@
       "memo": "마지막 지하철"
     },
     {
-      "id": 196,
+      "id": "196",
       "userId": "user1",
       "type": "income",
       "amount": 3500,
@@ -1999,7 +1999,7 @@
       "memo": "하나카드 적립"
     },
     {
-      "id": 197,
+      "id": "197",
       "userId": "user1",
       "type": "expense",
       "amount": 54000,
@@ -2009,7 +2009,7 @@
       "memo": "손해보험료"
     },
     {
-      "id": 198,
+      "id": "198",
       "userId": "user1",
       "type": "expense",
       "amount": 11500,
@@ -2019,7 +2019,7 @@
       "memo": "제육 덮밥"
     },
     {
-      "id": 199,
+      "id": "199",
       "userId": "user1",
       "type": "expense",
       "amount": 3200,
@@ -2029,7 +2029,7 @@
       "memo": "버스 정류장"
     },
     {
-      "id": 200,
+      "id": "200",
       "userId": "user1",
       "type": "income",
       "amount": 25000,
@@ -2037,77 +2037,88 @@
       "paymentMethod": "환불",
       "date": "2026-03-28",
       "memo": "항공권 취소분"
+    },
+    {
+      "userId": "user1",
+      "type": "expense",
+      "amount": 50000,
+      "categoryId": 10,
+      "paymentMethod": "교통카드",
+      "date": "2026-04-01",
+      "memo": "교통비",
+      "isFixed": true,
+      "id": "YVdVSXBXdIs"
     }
   ],
   "catgories": [
     {
-      "id": 1,
+      "id": "1",
       "name": "급여"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "상여"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "용돈"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "부동산"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "금융"
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "기타"
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "식비"
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "패션/쇼핑"
     },
     {
-      "id": 9,
+      "id": "9",
       "name": "뷰티/미용"
     },
     {
-      "id": 10,
+      "id": "10",
       "name": "교통"
     },
     {
-      "id": 11,
+      "id": "11",
       "name": "주거/통신"
     },
     {
-      "id": 12,
+      "id": "12",
       "name": "의료/건강"
     },
     {
-      "id": 13,
+      "id": "13",
       "name": "문화/여행"
     },
     {
-      "id": 14,
+      "id": "14",
       "name": "경조/선물"
     },
     {
-      "id": 15,
+      "id": "15",
       "name": "반려동물"
     },
     {
-      "id": 16,
+      "id": "16",
       "name": "기타"
     }
   ],
   "budgets": [
     {
-      "id": 1,
+      "id": "1",
       "userId": "user1",
       "amount": 2500000,
       "month": "2026-04"
@@ -2116,26 +2127,27 @@
       "userId": "user2",
       "month": "2026-04",
       "amount": 11000,
-      "id": 2
+      "id": "2"
     }
   ],
   "paymentMethods": [],
   "layout": [
     {
-      "id": 1,
+      "id": "1",
       "shape": "normal"
     },
     {
-      "id": 2,
+      "id": "2",
       "shape": "minimal"
     },
     {
-      "id": 3,
+      "id": "3",
       "shape": "goal"
     },
     {
-      "id": 4,
+      "id": "4",
       "shape": "analysis"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
