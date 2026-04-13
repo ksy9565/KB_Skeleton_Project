@@ -16,7 +16,7 @@
 
 - **Language**: JavaScript (ES6+)
 - **Framework/Library**: Vue.js
-- **Styling**: BootStrap / FontAwesome
+- **Styling**: FontAwesome / Chart.js / SweetAlert2 / Vue-toastification
 - **Tooling**: Vite
 - **Design**: Figma
 - **Collaboration**: [GitHub](https://github.com/ksy9565/KB_Skeleton_Project), Slack, [Notion](https://www.notion.so/4-191773dc4068824a8fca812274d990b9).
@@ -29,6 +29,7 @@
 - **내역 추가 및 삭제**: Form을 통한 데이터 생성 및 상태 업데이트
 - **필터링 기능**: 수입/지출 선택적 보기 기능
 - **통계 요약**: 총 수입, 총 지출, 잔액 자동 계산
+- **가계부 분석**: 수입/지출에 따른 소비 성향 분석
 
 ## 4. 프로젝트 구조 (Directory Structure)
 
@@ -37,19 +38,21 @@ src/
  ┣ components/    # 재사용 가능한 UI 컴포넌트
  ┣ pages/         # 주요 페이지 구성 (Home, Stats 등)
  ┣ styles/        # 전역 스타일 및 공통 테마
- ┣ utils/         # 공통 함수 (금액 포맷팅 등)
- ┣ App.js         # 메인 라우터 및 상태 관리
+ ┣ router/        # 라우터 인덱스
+ ┣ services/      # axios - REST API 호출 함수
+ ┣ stores/        # pinia store 관리
+ ┣ App.vue         # 메인 라우터 및 상태 관리
  ┗ main.js        # 엔트리 포인트
 ```
 
 ## 5. 팀원 소개 및 역할
 
-| 이름(GitHub ID)                   | 역할 | 주요 구현 내용 |
-| --------------------------------- | ---- | -------------- |
-| 김세영(ksy9565@gmail.com)         | 팀장 |
-| 최이초(choeyicho1105@gmail.com)   | 팀원 |
-| 정준(jjeong2.001102@gmail.com)    | 팀원 |
-| 주진영(joojinyoung1027@gmail.com) | 팀원 |
+| 이름(GitHub ID)                   | 역할 | 주요 구현 내용                                           |
+| --------------------------------- | ---- | -------------------------------------------------------- |
+| 김세영(ksy9565@gmail.com)         | 팀장 | 파이차트 구현, 거래내역 작성창 구현, 버그 픽스           |
+| 최이초(choeyicho1105@gmail.com)   | 팀원 | 자산 요약 컴포넌트, 금융 캘린더                          |
+| 정준(jjeong2.001102@gmail.com)    | 팀원 | UI 설계, 사이드바 및 설정 페이지                         |
+| 주진영(joojinyoung1027@gmail.com) | 팀원 | 가계부 관리 페이지, 월간/주간 금융 그래프, 컴포넌트 구조 |
 
 ## 6. 협업 컨벤션
 
@@ -57,6 +60,7 @@ src/
 
 - `main` : 배포 가능한 상태의 최우선 브랜치
 - `dev` : 기능 개발을 합치는 베이스 브랜치
+- `contributorName` : 각 기여자들의 개발진행 브랜치
 - `feature/기능명` : 각 기능을 개별적으로 구현하는 브랜치
 
 **💬 Commit Message Convention**

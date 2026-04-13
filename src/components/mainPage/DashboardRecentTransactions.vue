@@ -29,7 +29,7 @@ const items = computed(() => {
       // 1. 날짜 기준 최신순 정렬
       .sort((a, b) => new Date(b.date) - new Date(a.date))
       // 2. 상위 10개만 추출
-      .slice(0, 10)
+      .slice(0, 6)
       // 3. 템플릿 변수명에 맞게 매핑
       .map((t) => ({
         title: t.memo || '내역 없음',
